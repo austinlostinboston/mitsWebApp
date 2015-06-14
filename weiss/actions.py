@@ -1,4 +1,4 @@
-from weiss.model import Comment, Entity, Type
+from weiss.models import Comment, Entity, Type
 import random
 import logging
 
@@ -33,7 +33,7 @@ def nextRandomCmt(curr_eid):
     """
     logger.DEBUG("next ran  cmt with curr_eid: %s" % curr_eid)
     idx = 0
-    if (curr_eid is None)
+    if curr_eid is None:
         num_cmt = Comment.objects.count()
         idx = random.randint(0, num_cmt - 1)
     else:
@@ -103,9 +103,9 @@ def nextRandomOppositeCmt(curr_sentiment):
     """
 
     logger.DEBUG("next ran oppo cmt with curr_sentiment: %s" % curr_sentiment)
-    if (curr_sentiment > 0):
+    if curr_sentiment > 0:
         return nextRandomNegativeCmt(curr_cmt)
-    else if (curr_sentiment < 0):
+    elif curr_sentiment < 0:
         return nextRandomPositiveCmt(curr_cmt)
     else:
         logger.DEBUG("Weiss does not talk about 0 sentiment comment, but Weiss would give one")
