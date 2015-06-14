@@ -1,0 +1,14 @@
+{% extends "weiss/base.html" %}
+
+{% block content %}
+
+  <h1>Login to Weiss' Dev Center</h1>
+
+  <form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="login-form">
+    <input type="text" name="username" placeholder="username" value="{{ username }}">
+    <input type="password" name="password" placeholder="password" value="{{ password}}">
+    <input type="submit" value="Login" class="btn btn-default btn-md" />
+    <input type="hidden" name="next" value="{{ next }}" />
+    {% csrf_token %}
+  </form>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "weiss/base.html" %}
+
+{% block content %}
+  <h3>Number of comments: {{ comments }}</h3>
+  <h3>Number of entities: {{ entities }}</h3>
+  <h3>Number of types: {{types }}</h3>
+
+  <br>
+
+  <div align="center">
+    <a class="spaced" href="/1">Articles</a>
+    <a class="spaced" href="/2">Restaurants</a>
+    <a class="spaced" href="/3">Movies</a>
+  </div>
+
+  <br>
+  
+  <table>
+    <tr>
+      <th>Entity Name</th>
+      <th>Comment Text</th>
+      <th>Sentiment</th>
+    </tr>
+    {% for comment in sampleComments %}
+    <tr>
+      <td>{{ comment.eid.name }}</td>
+      <td>{{ comment.body }}</td>
+      <td>{{ comment.sentiment }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Entity Name</th>
+      <th>Entity Description</th>
+    </tr>
+    {% for item in sampleEntities %}
+    <tr>
+      <td>{{ item.eid }}</td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.description }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+{% endblock %}

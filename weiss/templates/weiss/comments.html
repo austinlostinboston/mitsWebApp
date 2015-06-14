@@ -1,0 +1,42 @@
+{% extends "weiss/base.html" %}
+
+{% block content %}
+
+  <h3>Total Records: {{ all_reviews.count }}</h3>
+
+  <canvas id="myCanvas" width="900" height="120">
+  Your browser does not support the HTML5 canvas tag.
+  </canvas>
+  <script type="text/javascript" src="{{ STATIC_URL }}weiss/js/data.js"></script>
+  <script>
+    swingBar({{ pos_reviews }}, {{ neg_reviews }}, {{ neu_reviews }}, myCanvas);
+    //swingBar(10,10,10,myCanvas);
+  </script>
+
+  <table>
+    <tr>
+      <th>
+        Review Title
+      </th>
+      <th>
+        Review Body
+      </th>
+      <th>
+        Sentiment
+      </th>
+    <tr>
+    {% for record in all_reviews %}
+    <tr>
+      <td>
+        {{ record.title }}
+      </td>
+      <td>
+        {{ record.body }}
+      </td>
+      <td>
+        {{ record.sentiment }}
+      </td>
+    <tr>
+    {% endfor %}
+  </table>
+{% endblock %}

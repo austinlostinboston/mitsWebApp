@@ -1,0 +1,22 @@
+{% extends "weiss/base.html" %}
+
+{% block content %}
+<h1 align="center">Welcome to Weiss, the bot with an opinion!</h1>
+<br>
+<div class="col-lg-12">
+    <div class="input-group">
+        <input type="text" class="form-control input-lg" placeholder="Ask Weiss about Movies, Restaurants, News, or just have a chat!">
+        <div class="input-group-btn">
+            <button type="button" class="btn btn-default input-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Action <span class="caret"></span></button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li><a href="#">Next Random Comment</a></li>
+                <li><a href="#">Next Opposite Comment</a></li>
+                <li><a href="#">Next Positive Comment</a></li>
+                <li><a href="#">Next Negative Comment</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Next Entity</a></li>
+            </ul>
+        </div><!-- /btn-group -->
+    </div>
+</div>
+{% endblock %}
