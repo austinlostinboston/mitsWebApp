@@ -1,24 +1,28 @@
 body {
-  padding: 70px;
+    padding: 70px;
 }
 
 table, th, td {
-  border: 1px solid black;
+    border: 1px solid black;
 }
 
 td {
-  text-align: center;
+    text-align: center;
 }
 
 .warning {
-  color: red;
+    color: red;
 }
 
 .spaced {
-  padding: 20px;
+    padding: 20px;
 }
 
 button .btn {
-  display: block;
-  margin: 0 auto;
+    display: block;
+    margin: 0 auto;
 }
+
+.dialogbox {
+    max-width: 70%;
+} 

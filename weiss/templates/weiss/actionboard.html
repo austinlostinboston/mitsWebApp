@@ -2,21 +2,57 @@
 
 {% block content %}
 <h1 align="center">Welcome to Weiss, the bot with an opinion!</h1>
+<div>
+{% for speaker, did, body in dialog %}
+{% if speaker == "0" %}
+<div>
+<div class="well well-lg dialogbox" style="float:left" >
+    {{ body }}
+</div>
+<div style="clear:both"></div>
+</div>
+{% else %}
+<div>
+<div class="well well-lg dialogbox" style="float:right" >
+    {{ body }}
+</div>
+<div style="clear:both"></div>
+</div>
+{% endif %}
+{% endfor %}
+</div>
 <br>
 <div class="col-lg-12">
-    <div class="input-group">
-        <input type="text" class="form-control input-lg" placeholder="Ask Weiss about Movies, Restaurants, News, or just have a chat!">
-        <div class="input-group-btn">
-            <button type="button" class="btn btn-default input-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Action <span class="caret"></span></button>
-            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                <li><a href="/actionboard/0">Next Entity</a></li>
-                <li class="divider"></li>
-                <li><a href="/actionboard/1">Next Random Comment</a></li>
-                <li><a href="/actionboard/2">Next Positive Comment</a></li>
-                <li><a href="/actionboard/3">Next Negative Comment</a></li>
-                <li><a href="/actionboard/4">Next Opposite Comment</a></li>
-            </ul>
-        </div><!-- /btn-group -->
-    </div>
+    <form method="post" action="/actionboard" name="action" id="form">
+        {% csrf_token %}
+        <div class="input-group">
+            <input id="actioninput" type="text" class="form-control input-lg" placeholder="Ask Weiss about Movies, Restaurants, News, or just have a chat!" name="actioninput">
+            <input type="hidden" id="aid" name="aid" value="0" />
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default input-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false" name="actionname">Action <span class="caret"></span></button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li aid="0"><a href="#">Next Entity</a></li>
+                    <li class="divider"></li>
+                    <li aid="1"><a href="#">Next Random Comment</a></li>
+                    <li aid="2"><a href="#">Next Positive Comment</a></li>
+                    <li aid="3"><a href="#">Next Negative Comment</a></li>
+                    <li aid="4"><a href="#">Next Opposite Comment</a></li>
+                </ul>
+            </div><!-- /btn-group -->
+        </div>
+    </form>
 </div>
+<script>
+
+$(".dropdown-menu li a").click(function(){
+        //var selText = $(this).text();
+        var aid = $(this).parent().attr('aid');
+        $("#aid").val(aid);
+        //var text = $("#actioninput").val();
+        $("#form").submit();
+        //$(this).parents('.input-group-btn').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+        });
+</script>
 {% endblock %}
+
+

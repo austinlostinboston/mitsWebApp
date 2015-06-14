@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 ## Import from personal moduls
 from weiss.commentChooser import randomComment, pageRankComment
-import weiss.actions as action_util
+from weiss.actionUtil import dispatch, initSession
 
 # Create your views here.
 @login_required
@@ -34,13 +34,9 @@ def homepage(request):
 def actionboard(request, action_id="-1"):
     logger.debug("%s, action_id = %s" % (request, action_id))
     if request.method == 'POST':
-        if request.session.test_cookie_worked():
-            request.session.delete_test_cookie()
-            return action_util.dispatch(request)
-        else:
-            return HttpResponse("Please enable cookies and try again.")
+        return dispatch(request)
     else:
-        request.session.set_test_cookie()
+        initSession(request.session)
         return render(request, 'weiss/actionboard.html', {})
 
 @login_required
