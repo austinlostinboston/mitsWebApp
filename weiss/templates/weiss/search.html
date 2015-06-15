@@ -1,0 +1,54 @@
+{% extends "weiss/base.html" %}
+
+{% block content %}
+  Search {{ type.name }} Entities
+  <form method="GET" action="{{ type_id }}">
+    <input type="text" name="entity_search" placeholder="search terms" value="{{ entity_search }}">
+    <input type="hidden" value="{{ type_id }}">
+    <button type="Submit">Search</button>
+  </form>
+
+  <h3>Total Records: {{ all_entities.count }}</h3>
+
+  <table>
+    <tr>
+      <th>
+        Sentence Word Length
+      </th>
+      <th>
+        Frequency
+      </th>
+    </tr>
+    {% for i in sentenceLength %}
+    <tr>
+      <td>
+        {{ forloop.counter0 }}
+      </td>
+      <td>
+        {{ i }}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <table>
+    <tr>
+      <th>
+        Entity Name
+      </th>
+      <th>
+        Entity Description
+      </th>
+    <tr>
+    {% for record in all_entities %}
+    <tr>
+      <td>
+        <a href="{{ type_id }}/{{ record.eid }}">{{ record.name }}</a>
+      </td>
+      <td>
+        {{ record.description }}
+      </td>
+    <tr>
+    {% endfor %}
+  </table>
+{% endblock %}

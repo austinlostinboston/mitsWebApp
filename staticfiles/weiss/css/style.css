@@ -1,0 +1,19 @@
+body {
+  padding: 70px;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+td {
+  text-align: center;
+}
+
+.warning {
+  color: red;
+}
+
+.spaced {
+  padding: 20px;
+}
