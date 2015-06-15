@@ -15,9 +15,13 @@ from django.db.models import Q, Max, Min
 import random
 import csv
 import os
+import logging
 
-## Import from personal moduls
+logger = logging.getLogger(__name__)
+
+## Import from personal moduls`
 from weiss.commentChooser import randomComment, pageRankComment
+from weiss.actionUtil import dispatch, initSession
 
 # Create your views here.
 @login_required
@@ -27,13 +31,22 @@ def homepage(request):
 	return render(request,'weiss/index.html',context)
 
 @login_required
+def actionboard(request, action_id="-1"):
+    logger.debug("%s, action_id = %s" % (request, action_id))
+    if request.method == 'POST':
+        return dispatch(request)
+    else:
+        initSession(request.session)
+        return render(request, 'weiss/actionboard.html', {})
+
+@login_required
 def dashboard(request):
 	context = {}
 
 	## Choose 10 random records to show
 	num_entities = Entity.objects.all().count()
 	rand_entities = random.sample(range(num_entities),10)
-	sample_entities = Entity.objects.filter(eid__in = rand_entities)	
+	sample_entities = Entity.objects.filter(eid__in = rand_entities)
 
 	## Choose 10 random comments to show
 	num_comments = Comment.objects.all().count()
@@ -56,10 +69,10 @@ def dashboard(request):
 
 @login_required
 def types(request, type_id):
-	
+
 	context = {}
 	context['type_id'] = type_id
-	
+
 	if 'entity_search' in request.GET:
 		search_terms = request.GET['entity_search']
 		query = Q(tid = type_id, name__icontains = search_terms) | Q(tid = type_id, description__icontains = search_terms)
@@ -67,7 +80,7 @@ def types(request, type_id):
 	else:
 		context['type'] = Type.objects.get(tid=type_id)
 		all_entities = Entity.objects.filter(tid=type_id)
-	
+
 	context['all_entities'] = all_entities
 
 	entities = Entity.objects.filter(tid=type_id).values('eid')
@@ -80,7 +93,7 @@ def types(request, type_id):
 		sentences = text.split('.')
 		for sentence in sentences:
 			words = sentence.split(' ')
-			wordCount = len(words)		
+			wordCount = len(words)
 			if wordCount < 50:
 				lengthList[wordCount] += 1
 	context['sentenceLength'] = lengthList
@@ -126,7 +139,7 @@ def evaluate(request, eval_type='0'):
 	## Setup evaluation
 	if eval_type > 0:
      		rand_entity = MiniEntity.objects.order_by('?').first().eid
-		
+
 		last_eval = Evaluation.objects.order_by('evid').last().eid.eid
 		entities = list(MiniEntity.objects.values_list('eid', flat=True))
 		num_entities = len(entities)
@@ -134,7 +147,7 @@ def evaluate(request, eval_type='0'):
 		#entity_index = list_index  % num_entities
 		entity_id = entities[entity_index]
 
-		context['entity'] = Entity.objects.get(eid=rand_entity)	
+		context['entity'] = Entity.objects.get(eid=rand_entity)
 		## Setups eval framework for Text Summarization
 		if eval_type == 1:
 			pass
@@ -150,24 +163,24 @@ def evaluate(request, eval_type='0'):
 				maxmin_sent = Comment.objects.filter(eid=rand_entity).aggregate(Min('sentiment'))['sentiment__min']
 			sentiment_comment = Comment.objects.filter(eid=rand_entity, sentiment=maxmin_sent)[0]
 			comments = Comment.objects.filter(query)
-			
+
 			comment_list = []
 			for comment in comments:
 				comment_list.append(comment.body)
-			
+
 			if len(comment_list) > 0:
 				## Randomly choose indexes for single baseline comment and sample comments
 				num_sim_comments = len(comments)
 				random_single = random.randint(0,num_sim_comments-1)
 				random_multiple = random.sample(range(num_sim_comments),limit)
-			
+
 				## Determines most representative comment
 				index = pageRankComment(comment_list)
-				
+
 				prc = [comments[index], 2]
 				rc = [comments[random_single], 0]
 				sc = [sentiment_comment, 1]
-				
+
 				context['pagerank_choice'] = comments[index]
 				context['random_choice'] =  comments[random_single]
 				context['sentiment_choice'] = sentiment_comment
@@ -178,7 +191,7 @@ def evaluate(request, eval_type='0'):
 				context['randomized_list'] = randomized_list
 			else:
 				context['commentChoice'] = 'no comments'
-	
+
 	return render(request, webpage, context)
 
 def rep_vote(request):
