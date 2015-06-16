@@ -6,6 +6,10 @@ table, th, td {
     border: 1px solid black;
 }
 
+table .register {
+    border-style: none !important;
+}
+
 td {
     text-align: center;
 }

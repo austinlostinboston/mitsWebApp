@@ -13,4 +13,5 @@ urlpatterns = patterns('',
     url(r'^evaluate$', 'weiss.views.evaluate'),
     url(r'^evaluate/(?P<eval_type>\d+)$', 'weiss.views.evaluate'),
     url(r'^evaluate/rep_vote$', 'weiss.views.rep_vote'),
+    url(r'^register', 'weiss.views.register'),
 )

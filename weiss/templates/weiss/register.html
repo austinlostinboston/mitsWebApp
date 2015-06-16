@@ -1,0 +1,22 @@
+{% extends "weiss/base.html" %}
+
+{% block content %}
+<h1>Register as a Weiss Developer</h1>
+
+<form method="post" action="register">
+  <table class="register" border="0">
+    {{form}}
+  </table>
+  {% csrf_token %}
+  <input type="submit" value="Register" class="btn btn-default btn-md"/>
+</form>
+</br>
+{% if errors %}
+<div class="row">
+  <div class="col-md-3">
+    <div class="alert alert-info" role="alert">{{ errors }}</div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

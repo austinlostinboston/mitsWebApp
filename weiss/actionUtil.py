@@ -2,7 +2,7 @@ import logging
 import logging
 from weiss.actions import *
 from django.shortcuts import render_to_response
-from django.template.context_processors import csrf
+#from django.template.context_processors import csrf
 
 
 
@@ -25,7 +25,7 @@ def dispatch(request):
 
     logger.debug("Session: %s" % (request.session.keys()))
     c = {}
-    c.update(csrf(request))
+    #c.update(csrf(request))
     c['dialog'] = sessionToDialog(request.session)
     logger.debug(c)
     return render_to_response("weiss/actionboard.html", c)
