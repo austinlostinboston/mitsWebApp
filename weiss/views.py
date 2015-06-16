@@ -138,7 +138,7 @@ def evaluate(request, eval_type='0'):
 	webpage = 'weiss/eval.html'
 	## Setup evaluation
 	if eval_type > 0:
-    		rand_entity = MiniEntity.objects.order_by('?').first().eid
+    	#rand_entity = MiniEntity.objects.order_by('?').first().eid
 
 		last_eval = Evaluation.objects.order_by('evid').last().eid.eid
 		entities = list(MiniEntity.objects.values_list('eid', flat=True))
@@ -147,7 +147,7 @@ def evaluate(request, eval_type='0'):
 		#entity_index = list_index  % num_entities
 		entity_id = entities[entity_index]
 
-		context['entity'] = Entity.objects.get(eid=rand_entity)
+		context['entity'] = Entity.objects.get(eid=last_eval)
 		## Setups eval framework for Text Summarization
 		if eval_type == 1:
 			pass
@@ -156,12 +156,12 @@ def evaluate(request, eval_type='0'):
 			webpage = 'weiss/representative.html'
 			posNeg = random.randint(0,1)
 			if posNeg == 0:
-				query = Q(eid=rand_entity, sentiment__gt=0)
-				maxmin_sent = Comment.objects.filter(eid=rand_entity).aggregate(Max('sentiment'))['sentiment__max']
+				query = Q(eid=last_eval, sentiment__gt=0)
+				maxmin_sent = Comment.objects.filter(eid=last_eval).aggregate(Max('sentiment'))['sentiment__max']
 			else:
-				query = Q(eid=rand_entity, sentiment__lt=0)
-				maxmin_sent = Comment.objects.filter(eid=rand_entity).aggregate(Min('sentiment'))['sentiment__min']
-			sentiment_comment = Comment.objects.filter(eid=rand_entity, sentiment=maxmin_sent)[0]
+				query = Q(eid=last_eval, sentiment__lt=0)
+				maxmin_sent = Comment.objects.filter(eid=last_eval).aggregate(Min('sentiment'))['sentiment__min']
+			sentiment_comment = Comment.objects.filter(eid=last_eval, sentiment=maxmin_sent)[0]
 			comments = Comment.objects.filter(query)
 
 			comment_list = []
