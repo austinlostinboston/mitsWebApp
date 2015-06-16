@@ -31,7 +31,7 @@ from weiss.queryUtil import queryResolve, initDialogSession
 # Create your views here.
 @login_required
 def homepage(request):
-    logger.debug("%s, query_input = %s" % (request, request.POST.get('queryinput',False)))
+    #logger.debug("%s, query_input = %s" % (request, request.POST.get('queryinput',False)))
     if request.method == 'POST':
     	print ("result query:%s" % str(request.POST.get('queryinput',False)))
         return queryResolve(request)
