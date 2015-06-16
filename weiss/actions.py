@@ -58,6 +58,9 @@ def nextRandomCmt(session):
     else:
         curr_eid = int(curr_eid)
         idxs = Comment.objects.filter(eid=curr_eid).values_list('cid', flat=True)
+        if (len(idxs) == 0):
+            addNewDialog(session, WEISS, "No such comment")
+            return
         idx = random.sample(idxs, 1)[0]
 
     res = None
@@ -91,8 +94,11 @@ def nextRandomPositiveCmt(session):
     logger.debug("next ran positive cmt with curr_eid: %s, curr_cid: %s" % (curr_eid, curr_cid))
     idxs = Comment.objects.filter(sentiment__gt=0).values_list('cid', flat=True)
     idx = curr_cid
-    while (idx == curr_cir):
-        idx = random.sample(idxs, 1)[0]
+    if (len(idxs) == 0):
+        addNewDialog(session, WEISS, "No such comments")
+    else:
+        while (idx == curr_cid):
+            idx = random.sample(idxs, 1)[0]
 
     res = None
     try:
@@ -102,7 +108,8 @@ def nextRandomPositiveCmt(session):
         return nextRandomPositiveCmt(curr_eid, curr_cid)
 
     session['curr_cid'] = idx
-    addNewDialog(sesson, WEISS, res.body)
+    logger.debug("next ran pos cmt has decided to talk about %s" % res.cid)
+    addNewDialog(session, WEISS, res.body)
 
 
 def nextRandomNegativeCmt(session):
@@ -123,8 +130,11 @@ def nextRandomNegativeCmt(session):
     logger.debug("next ran negative cmt with curr_eid: %s, curr_cid: %s" % (curr_eid, curr_cid))
     idxs = Comment.objects.filter(sentiment__lt=0).values_list('cid', flat=True)
     idx = curr_cid
-    while (idx == curr_cir):
-        idx = random.sample(idxs, 1)[0]
+    if (len(idxs) == 0):
+        addNewDialog(session, WEISS, "No such comments")
+    else:
+        while (idx == curr_cid):
+            idx = random.sample(idxs, 1)[0]
 
     res = None
     try:
@@ -134,7 +144,8 @@ def nextRandomNegativeCmt(session):
         return nextRandomPositiveCmt(curr_eid, curr_cid)
 
     session['curr_cid'] = idx
-    addNewDialog(sessiom, WEISS, res.body)
+    logger.debug("next ran neg cmt has decided to talk about %s" % res.cid)
+    addNewDialog(session, WEISS, res.body)
 
 
 
@@ -153,16 +164,17 @@ def nextRandomOppositeCmt(session):
     curr_sentiment = None
 
     if curr_cid is not None:
-        curr_sentiment = Comment.object.get(cid=curr_cid)['sentiment']
+        curr_cmt = Comment.objects.get(cid=curr_cid)
+        curr_sentiment = curr_cmt.sentiment
 
     logger.debug("next ran oppo cmt with curr_sentiment: %s" % curr_sentiment)
     if curr_sentiment > 0:
-        return nextRandomNegativeCmt(curr_cmt)
+        return nextRandomNegativeCmt(session)
     elif curr_sentiment < 0:
-        return nextRandomPositiveCmt(curr_cmt)
+        return nextRandomPositiveCmt(session)
     else:
         logger.debug("Weiss does not talk about 0 sentiment comment, but Weiss would give one")
-        return nextRandomPositiveCmt(curr_cmt)
+        return nextRandomPositiveCmt(session)
 
 
 def addNewDialog(session, speaker, body):

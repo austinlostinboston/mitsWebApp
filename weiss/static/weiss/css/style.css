@@ -26,3 +26,7 @@ button .btn {
 .dialogbox {
     max-width: 70%;
 } 
+
+.padding {
+    padding-bottom: 200px
+}

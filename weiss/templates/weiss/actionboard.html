@@ -1,4 +1,4 @@
-{% extends "weiss/base.html" %}
+{% extends "weiss/scrollDownBase.html" %}
 
 {% block content %}
 <h1 align="center">Welcome to Weiss, the bot with an opinion!</h1>
@@ -22,21 +22,21 @@
 {% endfor %}
 </div>
 <br>
-<div class="col-lg-12">
+<div class="col-lg-12 padding">
     <form method="post" action="/actionboard" name="action" id="form">
         {% csrf_token %}
         <div class="input-group">
             <input id="actioninput" type="text" class="form-control input-lg" placeholder="Ask Weiss about Movies, Restaurants, News, or just have a chat!" name="actioninput">
             <input type="hidden" id="aid" name="aid" value="0" />
-            <div class="input-group-btn">
+            <div class="input-group-btn" id="actionbtn">
                 <button type="button" class="btn btn-default input-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false" name="actionname">Action <span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li aid="0"><a href="#">Next Entity</a></li>
+                    <li aid="0"><a href="#actionbtn">Next Entity</a></li>
                     <li class="divider"></li>
-                    <li aid="1"><a href="#">Next Random Comment</a></li>
-                    <li aid="2"><a href="#">Next Positive Comment</a></li>
-                    <li aid="3"><a href="#">Next Negative Comment</a></li>
-                    <li aid="4"><a href="#">Next Opposite Comment</a></li>
+                    <li aid="1"><a href="#actionbtn">Next Random Comment</a></li>
+                    <li aid="2"><a href="#actionbtn">Next Positive Comment</a></li>
+                    <li aid="3"><a href="#actionbtn">Next Negative Comment</a></li>
+                    <li aid="4"><a href="#actionbtn">Next Opposite Comment</a></li>
                 </ul>
             </div><!-- /btn-group -->
         </div>
@@ -51,6 +51,7 @@ $(".dropdown-menu li a").click(function(){
         //var text = $("#actioninput").val();
         $("#form").submit();
         //$(this).parents('.input-group-btn').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+        window.scrollTo(0,document.body.scrollHeight);
         });
 </script>
 {% endblock %}
