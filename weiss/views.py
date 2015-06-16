@@ -19,7 +19,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 ## Import from personal moduls
+=======
+## Import from personal moduls`
+>>>>>>> f50730d96cfc0fe8430499b0e55d8e8361c8d987
 from weiss.commentChooser import randomComment, pageRankComment
 from weiss.actionUtil import dispatch, initSession
 
@@ -138,13 +142,13 @@ def evaluate(request, eval_type='0'):
 	webpage = 'weiss/eval.html'
 	## Setup evaluation
 	if eval_type > 0:
-		rand_entity = MiniEntity.objects.order_by('?').first().eid
+    		rand_entity = MiniEntity.objects.order_by('?').first().eid
 
-		last_vote = Evaluation.objects.all().last().eid
+		last_eval = Evaluation.objects.order_by('evid').last().eid.eid
 		entities = list(MiniEntity.objects.values_list('eid', flat=True))
 		num_entities = len(entities)
-		list_index = entities.index(last_vote)
-		entity_index = list_index + 1 % num_entries
+		entity_index = entities.index(last_eval)
+		#entity_index = list_index  % num_entities
 		entity_id = entities[entity_index]
 
 		context['entity'] = Entity.objects.get(eid=rand_entity)
