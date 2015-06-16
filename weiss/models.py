@@ -10,7 +10,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Comment(models.Model):
     cid = models.BigIntegerField(primary_key=True)
@@ -51,7 +51,8 @@ class Type(models.Model):
 
 
 class Evaluation(models.Model):
-    evid = models.AutoField(primary_key=True)
+    evid = models.IntegerField(primary_key=True)
+    userid = models.ForeignKey(User, db_column='userid')
     eid = models.ForeignKey(Entity, db_column='eid')
     mid = models.ForeignKey('Method', db_column='mid')
     cid = models.ForeignKey(Comment, db_column='cid')
