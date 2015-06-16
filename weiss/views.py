@@ -19,11 +19,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-<<<<<<< HEAD
-## Import from personal moduls
-=======
 ## Import from personal moduls`
->>>>>>> f50730d96cfc0fe8430499b0e55d8e8361c8d987
 from weiss.commentChooser import randomComment, pageRankComment
 from weiss.actionUtil import dispatch, initSession
 

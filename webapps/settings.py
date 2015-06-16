@@ -27,7 +27,7 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 # Logging settings
-logpath = "./log/debug.log"
+#logpath = "/var/log/djangoDebug.log"
 
 
 # Application definition
@@ -102,7 +102,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR,'weiss/static'),)
 
 # logging settings
-LOGGING = {
+'''LOGGING = {
     'version': 1,
     'formatters': {
         'verbose': {
@@ -143,3 +143,4 @@ if DEBUG:
     # make all loggers use the console.
     for logger in LOGGING['loggers']:
         LOGGING['loggers'][logger]['handlers'] += ['console']
+'''
