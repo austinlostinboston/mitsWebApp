@@ -6,11 +6,11 @@ from django.template.context_processors import csrf
 from weiss.classifier import actionMapping
 
 
-actions = [nextRandomEntity,
-           nextRandomCmt,
+actions = [nextRandomCmt,
+           nextRandomOppositeCmt,
            nextRandomPositiveCmt,
            nextRandomNegativeCmt,
-           nextRandomOppositeCmt,
+           nextRandomEntity,
            ]
 
 action_list = {}
@@ -35,9 +35,11 @@ def queryResolve(request):
     #Classify Action id based on input query
     actionID = actionMapping(query)
     addNewDialog(request.session, WEISS, "Action:%s" % action_list[str(actionID)])
-
+    request.session['actioninput'] = str(actionID)
+    request.session['aid'] = str(actionID)
+    
     #Resolve Action
-    action = actions[int(actionID)]
+    action = actions[int(actionID)-1]
     action(request.session)
     
     #Send back response

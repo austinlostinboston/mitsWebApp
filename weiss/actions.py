@@ -24,7 +24,9 @@ def nextRandomEntity(session):
     Returns:
         a int that represents next entity id
     """
-    next_tid = int(session['actioninput'] or "3")
+    print "next random entity"
+    #next_tid = int(session['actioninput'] or "3")
+    next_tid = int(random.uniform(1, 3.5))
     curr_eid = int(session['curr_eid'] or "0")
     logger.debug("next ran entity with next_tid: %s, curr_eid: %s" % (next_tid, curr_eid))
     eids = Entity.objects.filter(tid=next_tid).values_list('eid', flat=True)
@@ -87,7 +89,6 @@ def nextRandomPositiveCmt(session):
     Returns:
         a dict that represents a new comment
     """
-
     curr_eid = session['curr_eid']
     curr_cid = session['curr_cid']
 
@@ -123,7 +124,6 @@ def nextRandomNegativeCmt(session):
     Returns:
         a dict that represents a new comment
     """
-
     curr_eid = session['curr_eid']
     curr_cid = session['curr_cid']
 

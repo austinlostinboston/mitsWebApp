@@ -6,11 +6,18 @@ from django.template.context_processors import csrf
 
 
 
-actions = [nextRandomEntity,
-           nextRandomCmt,
+#actions = [nextRandomEntity,
+#           nextRandomCmt,
+#           nextRandomPositiveCmt,
+#           nextRandomNegativeCmt,
+#           nextRandomOppositeCmt,
+#           ]
+
+actions = [nextRandomCmt,
+           nextRandomOppositeCmt,
            nextRandomPositiveCmt,
            nextRandomNegativeCmt,
-           nextRandomOppositeCmt,
+           nextRandomEntity,
            ]
 
 def dispatch(request):
