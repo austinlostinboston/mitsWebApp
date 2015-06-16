@@ -34,7 +34,7 @@ def nextRandomEntity(session):
 
     session['curr_eid'] = new_eid
     logger.debug("next ran entity has decided next eid: %s" % (new_eid))
-    addNewDialog(session, WEISS, "New eid = %s" % new_eid)
+    addNewDialog(session, WEISS, "Action:%s\nNew eid = %s" % action_list[5], new_eid)
     return new_eid
 
 def nextRandomCmt(session):

@@ -22,13 +22,18 @@ logger = logging.getLogger(__name__)
 ## Import from personal moduls`
 from weiss.commentChooser import randomComment, pageRankComment
 from weiss.actionUtil import dispatch, initSession
+from weiss.queryUtil import queryResolve, initDialogSession
 
 # Create your views here.
 @login_required
 def homepage(request):
-	context = {}
-
-	return render(request,'weiss/index.html',context)
+    logger.debug("%s, query_input = %s" % (request, request.POST.get('queryinput',False)))
+    if request.method == 'POST':
+    	print ("result query:%s" % str(request.POST.get('queryinput',False)))
+        return queryResolve(request)
+    else:
+        initDialogSession(request.session)
+        return render(request, 'weiss/index.html', {})
 
 @login_required
 def actionboard(request, action_id="-1"):
