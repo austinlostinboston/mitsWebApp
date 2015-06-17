@@ -90,4 +90,27 @@ class Summary(models.Model):
         db_table = 'summary'
         unique_together = (('cid', 'mid'),)
 
+class Action(models.Model):
+    aid = models.AutoField(primary_key=True)
+    name = models.TextField()
+
+    class Meta:
+        managed = False
+        db_table = 'action'
+
+
+class History(models.Model):
+    hid = models.BigIntegerField(primary_key=True)
+    userid = models.ForeignKey(User, db_column='userid')
+    query = models.TextField()
+    response = models.TextField()
+    time = models.DateTimeField(blank=True, null=True)
+    aid = models.ForeignKey(Action, db_column='aid')
+    eid = models.ForeignKey(Entity, db_column='eid')
+    feedback = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'history'
+
 

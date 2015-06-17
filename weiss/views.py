@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 
 # Imports model objects to access database
-from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation
+from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Action, History
 from django.db.models import Q, Max, Min
 
 # Import django forms
@@ -33,7 +33,7 @@ from weiss.queryUtil import queryResolve, initDialogSession
 def homepage(request):
     #logger.debug("%s, query_input = %s" % (request, request.POST.get('queryinput',False)))
     if request.method == 'POST':
-    	print ("result query:%s" % str(request.POST.get('queryinput',False)))
+        print ("result query:%s" % str(request.POST.get('queryinput',False)))
         return queryResolve(request)
     else:
         initDialogSession(request.session)
@@ -75,12 +75,12 @@ def register(request):
             return render(request, 'weiss/index.html', context)
         else:
             context['errors'] = "Sorry, you're not on our preappoved list. Try back later."
-    
+
     return render(request, webpage, context)
 
 @login_required
-def actionboard(request, action_id="-1"):
-    logger.debug("%s, action_id = %s" % (request, action_id))
+def actionboard(request):
+    logger.debug("%s" % (request))
     if request.method == 'POST':
         return dispatch(request)
     else:
@@ -196,11 +196,11 @@ def evaluate(request, eval_type='0'):
 
         if user_evals > 0:
             last_eval = Evaluation.objects.filter(userid=user_id).order_by('evid').last().eid.eid
-            
+
             entity_index = entities.index(last_eval)
         else:
             entity_index = 0
-        
+
         last_eval = entities[entity_index]
 
         context['entity'] = Entity.objects.get(eid=last_eval)
