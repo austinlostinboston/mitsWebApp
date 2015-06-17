@@ -21,6 +21,7 @@ import the package (commentChooser) and choose the specifc method
 import igraph
 import re
 import random
+import nltk
 
 ## Chooses random comment
 def randomComment(comment_list):
@@ -118,9 +119,7 @@ def importantNode(graph):
     return node
 
 def stopwords():
-	data_path = '/home/aankney/nltk_data/corpora/stopwords/english'
-
-	txt = open(data_path)
-	stopwords = txt.read().split('\n')
+    ## Creates list of stopwords
+	stopwords = nltk.corpus.stopwords.words('english')
 
 	return stopwords
