@@ -1,8 +1,8 @@
 import logging
 import logging
 from weiss.actions import *
-from django.shortcuts import render_to_response
-from django.template.context_processors import csrf
+from django.shortcuts import render
+#from django.template.context_processors import csrf
 from weiss.classifier import actionMapping
 
 
@@ -44,11 +44,11 @@ def queryResolve(request):
     
     #Send back response
     logger.debug("Session: %s" % (request.session.keys()))
-    c = {}
-    c.update(csrf(request))
-    c['dialog'] = sessionToDialog(request.session)
-    logger.debug(c)
-    return render_to_response("weiss/index.html", c)
+    context = {}
+    #c.update(csrf(request))
+    context['dialog'] = sessionToDialog(request.session)
+    logger.debug(context)
+    return render(request, "weiss/index.html", context)
 
 
 def sessionToDialog(session):

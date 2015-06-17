@@ -3,6 +3,8 @@ import sys
 import math
 import os
 
+from webapps.settings import BASE_DIR
+
 def stemming(sentences):
 	"""	
 		Input:  a list of cleaned sentences (i.e. stop words removed)
@@ -30,7 +32,7 @@ def stopword_removal(sentence):
 def naive_train(train):
 	counts = {}
 	vocab = set()
-	for line in open(os.path.abspath("/Users/Yao/Django/mitsWebApp/weiss/%s" % train)):
+	for line in open(os.path.abspath(BASE_DIR + "/weiss/%s" % train)):
 		tag,body = line.split("\t")
 		counts.setdefault(tag,0)
 		counts.setdefault("all",0)

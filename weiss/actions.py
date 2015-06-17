@@ -51,8 +51,9 @@ def nextRandomCmt(session):
     """
 
     curr_eid = session['curr_eid']
+    curr_cid = session['curr_cid']
 
-    logger.debug("next ran  cmt with curr_eid: %s" % curr_eid)
+    logger.debug("next ran cmt with curr_eid: %s" % curr_eid)
     idx = 0
     if curr_eid is None:
         num_cmt = Comment.objects.count()

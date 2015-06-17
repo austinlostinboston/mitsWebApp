@@ -36,13 +36,13 @@
 
 <!-- Query Input -->
 <div class="col-lg-12 padding">
-    <form method="post" action="/" name="action" id="form">
-        {% csrf_token %}
+    <form method="post" action="/" name="action">
         <div class="input-group">
-            <input id="queryinput" type="text" class="form-control input-lg" placeholder="Ask Weiss about Movies, Restaurants, News, or just have a chat!" name="queryinput">
+            <input type="text" class="form-control input-lg" placeholder="Ask Weiss about Movies, Restaurants, News, or just have a chat!" name="queryinput">
             <!--<input type="hidden" id="aid" name="aid" value="0" /> -->
-            <div class="input-group-btn" id="querybtn">
-                 <button type="button" class="btn btn-default input-lg " aria-expanded="false" name="queryinput">Ask Weiss! <span class="caret"></span></button>
+            {% csrf_token %}
+            <div class="input-group-btn" >
+                 <button type="submit" class="btn btn-default input-lg " aria-expanded="false" name="queryinput">Ask Weiss!</button>
             </div><!-- /btn-group -->
         </div>
     </form>
