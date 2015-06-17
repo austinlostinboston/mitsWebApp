@@ -31,13 +31,15 @@ from weiss.queryUtil import queryResolve, initDialogSession
 # Create your views here.
 @login_required
 def homepage(request):
+    context = {}
     #logger.debug("%s, query_input = %s" % (request, request.POST.get('queryinput',False)))
     if request.method == 'POST':
-    	print ("result query:%s" % str(request.POST.get('queryinput',False)))
+        print request.POST
+    	print ("result query: %s" % (str(request.POST['queryinput'])))
         return queryResolve(request)
     else:
         initDialogSession(request.session)
-        return render(request, 'weiss/index.html', {})
+        return render(request, 'weiss/index.html', context)
 
 def register(request):
     context = {}
