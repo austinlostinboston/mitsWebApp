@@ -290,7 +290,7 @@ def rep_vote(request):
         for method in all_opt:
             comment_id = method[0]
 
-            entity = Entity.objects.get(id=entity_id)
+            entity = Entity.objects.filter(id=entity_id).first()
             comment = Comment.objects.get(cid=comment_id)
             method_choice = Method.objects.get(mid=method[1])
 
