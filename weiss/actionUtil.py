@@ -1,5 +1,6 @@
 from weiss.actions import *
 from django.shortcuts import render
+from django.utils import timezone
 
 from weiss.models import History, Action
 
@@ -99,7 +100,8 @@ def flushNewLine(request, response):
                            userid=userid,
                            response=response,
                            aid=aid,
-                           eid=eid)
+                           eid=eid,
+                           time=timezone.now())
 
 def initNewLine(session, query, aid):
     '''

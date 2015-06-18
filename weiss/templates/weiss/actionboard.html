@@ -3,7 +3,7 @@
 {% block content %}
 <h1 align="center">Welcome to Weiss, the bot with an opinion!</h1>
 <div>
-    {% for line in dialog %}
+    {% for line in dialog reversed %}
     <div>
         <div class="well well-lg dialogbox" style="float:left" >
             {{ line.query }}
