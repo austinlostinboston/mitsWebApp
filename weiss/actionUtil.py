@@ -11,6 +11,29 @@ from weiss.models import History, Action
 # acitons is a dict mapping:  aid -> (acton name, action method)
 actions = None
 
+def dispatchFromQuery(request, query, aid):
+    print ("aid:%d" % aid)
+    #actioninput = request.POST['actioninput']
+    actioninput = ""
+
+    global actions
+    if actions is None:
+        getActions()
+    if not actions.has_key(aid):
+        logger.debug("No such aid %s, just throw a random comment" % aid)
+        aid = 1 # default 1 for next random comment
+
+    aname, action = actions[aid] # it is a tuple (name, method)
+    logger.debug("Dispatch action: %s, %s, %s" % (aid, aname, actioninput))
+
+    initNewLine(request.session, query, aid)
+
+    response = action(request.session)
+
+    flushNewLine(request, response)
+
+    return
+
 def dispatch(request):
     aid = int(request.POST['aid'])
     actioninput = request.POST['actioninput']

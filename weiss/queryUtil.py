@@ -1,72 +1,39 @@
+import os
 import logging
-import logging
+import pickle
+
+# Web import
 from weiss.actions import *
+from weiss.actionUtil import *
+from weiss.models import History, Action
 from django.shortcuts import render
+from webapps.settings import BASE_DIR
+
 #from django.template.context_processors import csrf
-from weiss.classifier import actionMapping
+
+from liblinearutil import *
+from feature import convert_query
 
 
-actions = [nextRandomCmt,
-           nextRandomOppositeCmt,
-           nextRandomPositiveCmt,
-           nextRandomNegativeCmt,
-           nextRandomEntity,
-           ]
-
-action_list = {}
-action_list["1"] = "Next Random Comment"
-action_list["2"] = "Opposite Comment"
-action_list["3"] = "Positive Comment"
-action_list["4"] = "Negative Comment"
-action_list["5"] = "Next Entity"
-
-def addNewDialog(session, speaker, body):
-    did = session['next_did']
-    session['%s%s' % (speaker, did)] = body
-    session['next_did'] += 1
+# initialized lazily by getActions()
+# acitons is a dict mapping:  aid -> (acton name, action method)
 
 def queryResolve(request):
     #Extract Add user query
-    query = str(request.POST['queryinput'])
-    addNewDialog(request.session, USER, query)
-    
-    logger.debug("Resolve query: %s" % (query))
+    query = str(request.POST.get('queryinput', False))
+    print ("query:%s" % query)
+    # Load the trained model, which is in the same directory as this script
+    m = load_model(os.path.abspath(BASE_DIR + "/weiss/%s" % 'model'))
+    # Load feature file, which is also in the same directory
+    infile = open(os.path.abspath(BASE_DIR + "/weiss/%s" % 'features'))
+    feature_list = pickle.load(infile)
+    # Class labels
+    y = [1,2,3,4,5]
+    # Convert query
+    x = convert_query(query, feature_list, 'test')
+    # Do the prediction
+    p_label, p_val = predict(y, x, m, '-b 0')
+    dispatchFromQuery(request, query, int(p_label[0]))
+    return
 
-    #Classify Action id based on input query
-    actionID = actionMapping(query)
-    addNewDialog(request.session, WEISS, "Action:%s" % action_list[str(actionID)])
-    request.session['actioninput'] = str(actionID)
-    request.session['aid'] = str(actionID)
-    
-    #Resolve Action
-    action = actions[int(actionID)-1]
-    action(request.session)
-    
-    #Send back response
-    logger.debug("Session: %s" % (request.session.keys()))
-    context = {}
-    #c.update(csrf(request))
-    context['dialog'] = sessionToDialog(request.session)
-    logger.debug(context)
-    return render(request, "weiss/index.html", context)
-
-
-def sessionToDialog(session):
-    keys = session.keys()
-    keys = filter(lambda x: type(x) in [unicode, str] and (x[0] == "0" or x[0] == "1"), keys)
-    dialog = map(lambda x: (x[0], int(x[1:]), session[x]), keys)
-    return sorted(dialog, key=lambda x: x[1])
-
-def initDialogSession(session):
-    default =[u'_auth_user_id', u'_auth_user_backend', u'_auth_user_hash']
-    keys = session.keys()
-    for key in keys:
-        if key not in default:
-            del session[key]
-    session['aid'] = None
-    session['curr_cid'] = None
-    session['curr_eid'] = None
-    session['curr_tid'] = None
-    session['queryinput'] = ""
-    session['next_did'] = 0
 

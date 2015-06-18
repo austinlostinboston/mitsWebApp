@@ -26,19 +26,36 @@ logger = logging.getLogger(__name__)
 ## Import from personal moduls`
 from weiss.commentChooser import randomComment, pageRankComment
 from weiss.actionUtil import dispatch, initSession, getActions, getDialogHistory
-from weiss.queryUtil import queryResolve, initDialogSession
+from weiss.queryUtil import queryResolve
 
 # Create your views here.
 @login_required
 def homepage(request):
-    #logger.debug("%s, query_input = %s" % (request, request.POST.get('queryinput',False)))
+    context = {}
     if request.method == 'POST':
-        print ("result query:%s" % str(request.POST.get('queryinput',False)))
-        return queryResolve(request)
+        conext = queryResolve(request)
     else:
-        initDialogSession(request.session)
-        return render(request, 'weiss/index.html', {})
+        initSession(request.session)
 
+    context['actions'] = getActions()
+    context['dialog'] = getDialogHistory(request.user)
+    return render(request, 'weiss/index.html', context)
+
+@login_required
+def actionboard(request):
+    logger.debug("%s" % (request))
+
+    context = {}
+
+    if request.method == 'POST':
+        dispatch(request)
+    else:
+        initSession(request.session)
+
+    context['actions'] = getActions()
+    context['dialog'] = getDialogHistory(request.user)
+    return render(request, 'weiss/actionboard.html', context)
+    
 def register(request):
     context = {}
     webpage = 'weiss/register.html'
@@ -77,21 +94,6 @@ def register(request):
             context['errors'] = "Sorry, you're not on our preappoved list. Try back later."
 
     return render(request, webpage, context)
-
-@login_required
-def actionboard(request):
-    logger.debug("%s" % (request))
-
-    context = {}
-
-    if request.method == 'POST':
-        dispatch(request)
-    else:
-        initSession(request.session)
-
-    context['actions'] = getActions()
-    context['dialog'] = getDialogHistory(request.user)
-    return render(request, 'weiss/actionboard.html', context)
 
 @login_required
 def dashboard(request):
