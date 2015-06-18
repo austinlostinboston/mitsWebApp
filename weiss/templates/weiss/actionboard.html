@@ -3,22 +3,19 @@
 {% block content %}
 <h1 align="center">Welcome to Weiss, the bot with an opinion!</h1>
 <div>
-    {% for speaker, did, body in dialog %}
-    {% if speaker == "0" %}
+    {% for line in dialog %}
     <div>
         <div class="well well-lg dialogbox" style="float:left" >
-            {{ body }}
+            {{ line.query }}
         </div>
         <div style="clear:both"></div>
     </div>
-    {% else %}
     <div>
         <div class="well well-lg dialogbox" style="float:right" >
-            {{ body }}
+            {{ line.response }}
         </div>
         <div style="clear:both"></div>
     </div>
-    {% endif %}
     {% endfor %}
 </div>
 <br>
@@ -26,16 +23,14 @@
     <form method="POST" action="/actionboard" name="action" id="form">
         <div class="input-group">
             <input id="actioninput" type="text" class="form-control input-lg" placeholder="Ask Weiss about Movies, Restaurants, News, or just have a chat!" name="actioninput">
-            <input type="hidden" id="aid" name="aid" value="0" />
+            <input type="hidden" id="aid" name="aid" value=5 />  <!-- dafault 5 for next entity -->
             <div class="input-group-btn" id="actionbtn">
                 <button type="submit" class="btn btn-default input-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false" name="actionname">Action <span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li aid="0"><a href="#">Next Entity</a></li>
-                    <li class="divider"></li>
-                    <li aid="1"><a href="#">Next Random Comment</a></li>
-                    <li aid="2"><a href="#">Next Positive Comment</a></li>
-                    <li aid="3"><a href="#">Next Negative Comment</a></li>
-                    <li aid="4"><a href="#">Next Opposite Comment</a></li>
+                    {% for aid, name in actions %}                
+                    <li aid={{ aid }}><a href="#">{{ name }}</a></li>
+                    <!-- <li class="divider"></li> -->
+                    {% endfor%}
                 </ul>
             </div><!-- /btn-group -->
         </div>

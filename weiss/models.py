@@ -93,6 +93,7 @@ class Summary(models.Model):
 class Action(models.Model):
     aid = models.AutoField(primary_key=True)
     name = models.TextField()
+    method = models.TextField()
 
     class Meta:
         managed = False
@@ -105,8 +106,8 @@ class History(models.Model):
     query = models.TextField()
     response = models.TextField()
     time = models.DateTimeField(blank=True, null=True)
-    aid = models.ForeignKey(Action, db_column='aid')
-    eid = models.ForeignKey(Entity, db_column='eid')
+    aid = models.ForeignKey(Action, db_column='aid', blank=True, null=True)
+    eid = models.ForeignKey(Entity, db_column='eid', blank=True, null=True)
     feedback = models.IntegerField(blank=True, null=True)
 
     class Meta:

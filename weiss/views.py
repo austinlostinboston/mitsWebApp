@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 ## Import from personal moduls`
 from weiss.commentChooser import randomComment, pageRankComment
-from weiss.actionUtil import dispatch, initSession
+from weiss.actionUtil import dispatch, initSession, getActions, getDialogHistory
 from weiss.queryUtil import queryResolve, initDialogSession
 
 # Create your views here.
@@ -81,11 +81,17 @@ def register(request):
 @login_required
 def actionboard(request):
     logger.debug("%s" % (request))
+
+    context = {}
+
     if request.method == 'POST':
-        return dispatch(request)
+        dispatch(request)
     else:
         initSession(request.session)
-        return render(request, 'weiss/actionboard.html', {})
+
+    context['actions'] = getActions()
+    context['dialog'] = getDialogHistory(request.user)
+    return render(request, 'weiss/actionboard.html', context)
 
 @login_required
 def dashboard(request):
