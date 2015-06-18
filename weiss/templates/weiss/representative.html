@@ -1,40 +1,55 @@
 {% extends "weiss/base.html" %}
 
 {% block rep %}
-<h2>Evaluation of Comment Selection</h2>
-<hr>
-<h3>Description of {{ entity.name }} taken from {{ entity.tid.name }}:</h3>
-{{ entity.description }} 
-<hr>
-<h4>3 randomly chosen comments of the same sentiment</h4>
-{% for comment in multiple_comments %}
-<p>{{ comment.body }} </p>
-<br>
-{% endfor %}
-<hr>
 
-<center>
-  <form action="/evaluate/2">
-    <button tlign="center" ype="submit" class="btn btn-default">Skip this vote</button>
-  </form>
+  {% if done %}
 
-  <h3>Choose the comment which best represents the three comments above.</h3>
-  <h4>Please skip any occurences where the same comment appears more than once below.</h4>
+  <h2>{{ done }}</h2>
+
+  {% else %}
+
+  <h2>Evaluation of Comment Selection</h2>
+  <hr>
+  <h3>Description of {{ entity.name }} taken from {{ entity.tid.name }}:</h3>
+  {{ entity.description }} 
+  <hr>
+  <h4>3 randomly chosen comments of the same sentiment</h4>
+  {% for comment in multiple_comments %}
+  <p>{{ comment.body }} </p>
   <br>
-</center>
-
-<div class="row">
-  {% for comment in randomized_list %}
-  <div class="col-md-4">
-    <form method="post" action="rep_vote">
-      <button type="submit" class="btn btn-default">This is better</button>
-      <p>{{ comment.0.body }}</p>
-      <input type="hidden" name="rep-eid" value="{{ comment.0.eid.id }}">
-      <input type="hidden" name="rep-cid" value="{{ comment.0.cid }}">
-      <input type="hidden" name="rep-mid" value="{{ comment.1 }}">
-      {% csrf_token %}
-    </form>
-  </div>
   {% endfor %}
-</div>
+  <hr>
+
+  <center>
+    <form action="/evaluate/2">
+      <button tlign="center" ype="submit" class="btn btn-default">Mix things up!</button>
+    </form>
+
+    <h3>Choose the comment which best represents the three comments above.</h3>
+    <h4>Please skip any occurences where the same comment appears more than once below.</h4>
+    <br>
+  </center>
+
+  <div class="row">
+
+    {% for comment in randomized_list %}
+    
+    <div class="col-md-4">
+      <form method="post" action="rep_vote">
+        <button type="submit" class="btn btn-default">This is better</button>
+        <p>{{ comment.0.body }}</p>
+        <input type="hidden" name="rep-eid" value="{{ comment.0.eid.id }}">
+        <input type="hidden" name="rep-cid" value="{{ comment.0.cid }}">
+        <input type="hidden" name="rep-mid" value="{{ comment.1 }}">
+        <input type="hidden" name="all_opt" value="{{ all_opt }}">
+        {% csrf_token %}
+      </form>
+    </div>
+
+    {% endfor %}
+
+  </div>
+
+  {% endif %}
+
 {% endblock %}

@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 
 # Imports model objects to access database
-from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Action, History
+from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Method, Action, History
 from django.db.models import Q, Max, Min
 
 # Import django forms
@@ -20,6 +20,7 @@ import random
 import csv
 import os
 import logging
+import ast
 
 logger = logging.getLogger(__name__)
 
@@ -31,13 +32,15 @@ from weiss.queryUtil import queryResolve, initDialogSession
 # Create your views here.
 @login_required
 def homepage(request):
+    context = {}
     #logger.debug("%s, query_input = %s" % (request, request.POST.get('queryinput',False)))
     if request.method == 'POST':
-        print ("result query:%s" % str(request.POST.get('queryinput',False)))
+        print request.POST
+        print ("result query: %s" % (str(request.POST['queryinput'])))
         return queryResolve(request)
     else:
         initDialogSession(request.session)
-        return render(request, 'weiss/index.html', {})
+        return render(request, 'weiss/index.html', context)
 
 def register(request):
     context = {}
@@ -193,25 +196,31 @@ def evaluate(request, eval_type='0'):
     context = {}
     context['eval'] = ""
     webpage = 'weiss/eval.html'
+
     ## Setup evaluation
     if eval_type > 0:
         user_evals = Evaluation.objects.filter(userid=user_id).count()
+        print user_evals
 
         entities = list(MiniEntity.objects.values_list('eid', flat=True))
         num_entities = len(entities)
 
         if user_evals > 0:
             last_eval = Evaluation.objects.filter(userid=user_id).order_by('evid').last().eid.eid
+            ## Checks to see if user has finished the list
+            if int(last_eval) == int(entities[-1]):
+                context['done'] = "You're finished!"
+                return render(request, webpage, context)
 
-            entity_index = entities.index(last_eval)
+            entity_index = entities.index(last_eval) + 1
         else:
             entity_index = 0
 
-        last_eval = entities[entity_index]
+        this_eval = entities[entity_index]
 
-        context['entity'] = Entity.objects.get(eid=last_eval)
+        context['entity'] = Entity.objects.get(eid=this_eval)
 
-        ## Setups eval framework for Text Summarization
+        ## Sets up eval framework for Text Summarization
         if eval_type == 1:
             pass
 
@@ -220,12 +229,12 @@ def evaluate(request, eval_type='0'):
             webpage = 'weiss/representative.html'
             posNeg = random.randint(0,1)
             if posNeg == 0:
-                query = Q(eid=last_eval, sentiment__gt=0)
-                maxmin_sent = Comment.objects.filter(eid=last_eval).aggregate(Max('sentiment'))['sentiment__max']
+                query = Q(eid=this_eval, sentiment__gt=0)
+                maxmin_sent = Comment.objects.filter(eid=this_eval).aggregate(Max('sentiment'))['sentiment__max']
             else:
-                query = Q(eid=last_eval, sentiment__lt=0)
-                maxmin_sent = Comment.objects.filter(eid=last_eval).aggregate(Min('sentiment'))['sentiment__min']
-            sentiment_comment = Comment.objects.filter(eid=last_eval, sentiment=maxmin_sent)[0]
+                query = Q(eid=this_eval, sentiment__lt=0)
+                maxmin_sent = Comment.objects.filter(eid=this_eval).aggregate(Min('sentiment'))['sentiment__min']
+            sentiment_comment = Comment.objects.filter(eid=this_eval, sentiment=maxmin_sent)[0]
             comments = Comment.objects.filter(query)
 
             comment_list = []
@@ -241,28 +250,61 @@ def evaluate(request, eval_type='0'):
                 ## Determines most representative comment
                 index = pageRankComment(comment_list)
 
-                prc = [comments[index], 2]
-                rc = [comments[random_single], 0]
+                ## Matches the comment to the method which was used to select it
                 sc = [sentiment_comment, 1]
+                prc = [comments[index], 2]
+                rc = [comments[random_single], 3]
 
+
+                ## Write info to context
                 context['pagerank_choice'] = comments[index]
                 context['random_choice'] =  comments[random_single]
                 context['sentiment_choice'] = sentiment_comment
                 context['multiple_comments'] = [comments[i] for i in random_multiple]
 
                 randomized_list = [rc, sc, prc]
+
+                ## loop through randomized list and grab each cid
+                all_opt = []
+                for comment in randomized_list:
+                    all_opt.append([int(comment[0].cid),comment[1]])
+
                 random.shuffle(randomized_list)
                 context['randomized_list'] = randomized_list
+                context['all_opt'] = all_opt
             else:
                 context['commentChoice'] = 'no comments'
 
     return render(request, webpage, context)
 
+@login_required
 def rep_vote(request):
     context = {}
     webpage = 'weiss/representative.html'
+    user = User.objects.get(username=request.user)
 
     if request.method == 'POST':
-        context['vote_outcome'] = request.POST['rep-mid']
+        ## Extract id's from POST params
+        method_id = request.POST['rep-mid']
+        entity_id = request.POST['rep-eid']
+
+        ## List of comments matched with their methods
+        all_opt = ast.literal_eval(request.POST['all_opt'])
+
+        ## Loop over the three methods
+        for method in all_opt:
+            comment_id = method[0]
+
+            entity = Entity.objects.filter(id=entity_id).first()
+            comment = Comment.objects.get(cid=comment_id)
+            method_choice = Method.objects.get(mid=method[1])
+
+            if int(method[1]) == int(method_id):
+                score = 1
+            else:
+                score = 0
+            new_eval = Evaluation(userid=user, eid=entity, mid=method_choice, cid=comment, score=score)
+            new_eval.save()
+
 
     return redirect('/evaluate/2')
