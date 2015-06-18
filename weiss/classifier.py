@@ -48,8 +48,8 @@ def naive_train(train):
 		counts.setdefault(tag+",*",0)
 		counts[tag+",*"] += len(tokens)
 	counts["vocab"] = len(vocab)
-	print str(len(vocab))
-	print counts
+	#print str(len(vocab))
+	#print counts
 
 	return counts
 

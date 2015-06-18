@@ -1,3 +1,12 @@
+'''
+Utility methods for queries
+A resolver of user query. 
+First step: take query as input, use classifier to map query to action
+Second step: use actionUtil to generate resonse.
+
+Author: Yao Zhou
+'''
+
 import os
 import logging
 import pickle
@@ -15,9 +24,6 @@ from liblinearutil import *
 from feature import convert_query
 
 
-# initialized lazily by getActions()
-# acitons is a dict mapping:  aid -> (acton name, action method)
-
 def queryResolve(request):
     #Extract Add user query
     query = str(request.POST.get('queryinput', False))
@@ -33,6 +39,10 @@ def queryResolve(request):
     x = convert_query(query, feature_list, 'test')
     # Do the prediction
     p_label, p_val = predict(y, x, m, '-b 0')
+
+    # p_label : real No of action in database
+    # p_val : the possibility of each action
+
     dispatchFromQuery(request, query, int(p_label[0]))
     return
 
