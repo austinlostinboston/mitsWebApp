@@ -1,3 +1,14 @@
+'''
+Utility methods for actions
+Note that, in practice, it is no need to import any from actions.py.
+Just import needed method from actionUtil.py
+
+
+Author: Ming Fang
+'''
+
+import datetime
+
 from weiss.actions import *
 from django.shortcuts import render
 from django.utils import timezone
@@ -43,7 +54,8 @@ def getDialogHistory(userid, limit=10):
     '''
     get lines from database for rendering the page
     '''
-    lines = History.objects.filter(userid=userid).order_by("-time")[:10]
+    tenMinAgo = timezone.now() - datetime.timedelta(minutes=10) # 10 min ago
+    lines = History.objects.filter(Q(userid=userid), Q(time__gt=tenMinAgo)).order_by("-time")[:10]
     return lines
 
 def initSession(session):
