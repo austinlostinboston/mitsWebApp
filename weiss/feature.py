@@ -213,7 +213,6 @@ def convert_query(query, feature_list, goal):
         except ValueError:
             #print '%s is not in the feature list' % f.lower()
             pass
-        return [onerow]
 
 def main():
     """Initially for debugging

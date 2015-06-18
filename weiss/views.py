@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 
 # Imports model objects to access database
-from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Method
+from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Method, Action, History
 from django.db.models import Q, Max, Min
 
 # Import django forms
@@ -26,22 +26,37 @@ logger = logging.getLogger(__name__)
 
 ## Import from personal moduls`
 from weiss.commentChooser import randomComment, pageRankComment
-from weiss.actionUtil import dispatch, initSession
-from weiss.queryUtil import queryResolve, initDialogSession
+from weiss.actionUtil import dispatch, initSession, getActions, getDialogHistory
+from weiss.queryUtil import queryResolve
 
 # Create your views here.
 @login_required
 def homepage(request):
     context = {}
-    #logger.debug("%s, query_input = %s" % (request, request.POST.get('queryinput',False)))
     if request.method == 'POST':
-        print request.POST
-    	print ("result query: %s" % (str(request.POST['queryinput'])))
-        return queryResolve(request)
+        conext = queryResolve(request)
     else:
-        initDialogSession(request.session)
-        return render(request, 'weiss/index.html', context)
+        initSession(request.session)
 
+    context['actions'] = getActions()
+    context['dialog'] = getDialogHistory(request.user)
+    return render(request, 'weiss/index.html', context)
+
+@login_required
+def actionboard(request):
+    logger.debug("%s" % (request))
+
+    context = {}
+
+    if request.method == 'POST':
+        dispatch(request)
+    else:
+        initSession(request.session)
+
+    context['actions'] = getActions()
+    context['dialog'] = getDialogHistory(request.user)
+    return render(request, 'weiss/actionboard.html', context)
+    
 def register(request):
     context = {}
     webpage = 'weiss/register.html'
@@ -78,17 +93,8 @@ def register(request):
             return render(request, 'weiss/index.html', context)
         else:
             context['errors'] = "Sorry, you're not on our preappoved list. Try back later."
-    
-    return render(request, webpage, context)
 
-@login_required
-def actionboard(request, action_id="-1"):
-    logger.debug("%s, action_id = %s" % (request, action_id))
-    if request.method == 'POST':
-        return dispatch(request)
-    else:
-        initSession(request.session)
-        return render(request, 'weiss/actionboard.html', {})
+    return render(request, webpage, context)
 
 @login_required
 def dashboard(request):
@@ -201,16 +207,15 @@ def evaluate(request, eval_type='0'):
 
         if user_evals > 0:
             last_eval = Evaluation.objects.filter(userid=user_id).order_by('evid').last().eid.eid
-            
             ## Checks to see if user has finished the list
             if int(last_eval) == int(entities[-1]):
                 context['done'] = "You're finished!"
                 return render(request, webpage, context)
-            
+
             entity_index = entities.index(last_eval) + 1
         else:
             entity_index = 0
-        
+
         this_eval = entities[entity_index]
 
         context['entity'] = Entity.objects.get(eid=this_eval)
@@ -249,7 +254,7 @@ def evaluate(request, eval_type='0'):
                 sc = [sentiment_comment, 1]
                 prc = [comments[index], 2]
                 rc = [comments[random_single], 3]
-                
+
 
                 ## Write info to context
                 context['pagerank_choice'] = comments[index]
@@ -263,7 +268,7 @@ def evaluate(request, eval_type='0'):
                 all_opt = []
                 for comment in randomized_list:
                     all_opt.append([int(comment[0].cid),comment[1]])
-    
+
                 random.shuffle(randomized_list)
                 context['randomized_list'] = randomized_list
                 context['all_opt'] = all_opt

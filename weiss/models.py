@@ -90,4 +90,49 @@ class Summary(models.Model):
         db_table = 'summary'
         unique_together = (('cid', 'mid'),)
 
+class Action(models.Model):
+    aid = models.AutoField(primary_key=True)
+    name = models.TextField()
+    method = models.TextField()
+
+    class Meta:
+        managed = False
+        db_table = 'action'
+
+class History(models.Model):
+    hid = models.BigIntegerField(primary_key=True)
+    userid = models.ForeignKey(User, db_column='userid')
+    query = models.TextField()
+    response = models.TextField()
+    time = models.DateTimeField()
+    aid = models.ForeignKey(Action, db_column='aid', blank=True, null=True)
+    desired_aid = models.IntegerField(blank=True, null=True)
+    eid = models.ForeignKey(Entity, db_column='eid', blank=True, null=True)
+    feedback = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'history'
+
+
+class SummaryBody(models.Model):
+    sbid = models.BigIntegerField(primary_key=True)
+    cid = models.ForeignKey(Comment, db_column='cid')
+    mid = models.ForeignKey(Method, db_column='mid')
+    body = models.TextField()
+
+    class Meta:
+        managed = False
+        db_table = 'summary_body'
+
+
+class SummarySource(models.Model):
+    ssid = models.BigIntegerField(primary_key=True)
+    sbid = models.ForeignKey(SummaryBody, db_column='sbid')
+    cid = models.ForeignKey(Comment, db_column='cid')
+
+    class Meta:
+        managed = False
+        db_table = 'summary_source'
+
 
