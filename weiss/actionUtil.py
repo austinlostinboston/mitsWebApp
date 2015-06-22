@@ -123,6 +123,7 @@ def flushNewLine(request, response):
     session = request.session
     print session['curr_eid']
     userid = request.user
+    print userid
     line = session['line']
     curr_eid = session['curr_eid']
     if curr_eid is None:
