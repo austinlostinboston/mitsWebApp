@@ -198,9 +198,15 @@ def evaluate(request, eval_type='0'):
     context['eval'] = ""
     webpage = 'weiss/eval.html'
 
+    ## Evaluation Dashboard
+    if eval_type == 0:
+        rep_count = Evaluation.objects.filter(userid=user_id).values('eid').distinct().count()
+        context['rep_count'] = rep_count
+        context['rep_perc'] = str(rep_count*100/30.0)[0:2]
+
     ## Setup evaluation
     if eval_type > 0:
-        user_evals = Evaluation.objects.filter(userid=user_id).count()
+        user_evals = Evaluation.objects.filter(userid=user_id, mid__in=[0,1,2]).count()
         print user_evals
 
         entities = list(MiniEntity.objects.values_list('eid', flat=True))
