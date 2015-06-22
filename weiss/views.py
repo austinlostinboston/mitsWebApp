@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 ## Import from personal moduls`
 from weiss.commentChooser import randomComment, pageRankComment
-from weiss.actionUtil import dispatch, initSession, getActions, getDialogHistory
+from weiss.actionUtil import dispatch, initSession, getActions, getDialogHistory,confirmAciton
 from weiss.queryUtil import queryResolve
 
 # Create your views here.
@@ -42,6 +42,19 @@ def homepage(request):
     context['actions'] = getActions()
     context['dialog'] = getDialogHistory(request.user)
     return render(request, 'weiss/index.html', context)
+
+@login_required
+def confirmaction(request, aid):
+    User = request.user
+    print ('aid:'+str(aid))
+    print ('user:'+str(User))
+    confirmAciton(User, aid)
+    context = {}
+    context['actions'] = getActions()
+    context['dialog'] = getDialogHistory(request.user)
+    context['msg'] = 'thanks for you feedback'
+    return render(request, 'weiss/index.html', context)
+    #return redirect('')
 
 @login_required
 def actionboard(request):

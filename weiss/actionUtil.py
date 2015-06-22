@@ -12,6 +12,7 @@ import datetime
 from weiss.actions import *
 from django.shortcuts import render
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 from weiss.models import History, Action
 
@@ -66,6 +67,18 @@ def dispatch(request):
 
     return
 
+def confirmAciton(UserName, ActionID):
+    print 'confirmAciton called'
+    #Find user
+    user= User.objects.get(username=UserName)
+    #Get last history record of that user
+    his= History.objects.filter(userid=user.id).order_by('-hid')[0]
+    #Modify ddid
+    print str(his.hid) + "," + str(his.userid) + "," + str(his.desired_aid)
+    his.desired_aid = ActionID
+    #Update database
+    his.save()
+    return
 
 def sessionToDialog(session):
     keys = session.keys()
