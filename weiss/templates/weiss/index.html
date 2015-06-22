@@ -21,15 +21,27 @@
           <button type="submit" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Intended Action <span class="caret"></span>
           </button>
-          <ul class="dropdown-menu">
+          <ul name="aid" class="dropdown-menu">
             {% for aid, name in actions %}
             <!--from context dict, use keyname = aid to grabe value-->
-            <li name="aid" value="{{ aid }}"><a href="#">{{ name }}</a></li>
+            <li value="{{ aid }}"><a{{ name }}</li>
             {% endfor%}
           </ul>
         </form>
       </div>
       {% endif %}
+      <form action="PageObjects" method="post">
+        <select >
+          <option selected="selected" disabled>Objects on page:</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="40">40</option>
+          <option value="50">50</option>
+        </select>
+        <input type="submit" value="Select">
+      </form>
+
       <div class="well well-lg dialogbox" style="float:right" >
         {{ line.response }}
       </div>

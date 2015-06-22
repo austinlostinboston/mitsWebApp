@@ -32,6 +32,7 @@ from weiss.queryUtil import queryResolve
 # Create your views here.
 @login_required
 def homepage(request):
+    print request.user
     context = {}
     if request.method == 'POST':
         conext = queryResolve(request)
