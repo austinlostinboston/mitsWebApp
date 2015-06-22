@@ -90,7 +90,7 @@ def register(request):
         return render(request, 'weiss/register.html', context)
 
     ## List of allowed usernames
-    whitelist = ['aankney','mingf','wenjunw','yaozhou']
+    whitelist = ['aankney','mingf','wenjunw','yaozhou','awb']
 
     if request.method == 'POST':
         username = request.POST['username']
