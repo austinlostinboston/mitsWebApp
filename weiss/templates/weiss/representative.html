@@ -7,8 +7,17 @@
   <h2>{{ done }}</h2>
 
   {% else %}
+  <h2>Evaluation of Representative Comment Selection</h2>
 
-  <h2>Evaluation of Comment Selection</h2>
+  <hr>
+  
+  <h3>Directions</h3>
+
+  <p>For this evaluation excercise, you will select the "most representative" comment from the three choices below.</p>
+  <p>Please read the description of the entity as well as the three randomly selected comments from this entity. These are to help give you context as to what the entity is and a general understand of the conversation surrounding the entity.</p>
+  <p>Next, read each comment provided as an option. Select the comment that best represents your understanding of the entity gained from the random comments</p>
+  <p>Use the "Mix things up" button to shuffle comments arround and possibly provide different options.</p>
+
   <hr>
   <h3>Description of {{ entity.name }} taken from {{ entity.tid.name }}:</h3>
   {{ entity.description }} 
