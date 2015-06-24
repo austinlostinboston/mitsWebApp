@@ -59,16 +59,25 @@ def confirmaction(request, aid):
 
 @login_required
 def verbalresponse(request):
-    #Get query
+    #Try to get query
     hid = request.GET['hid']
-    history = History.objects.filter(hid=hid)[0]
+    try:
+        history = History.objects.filter(hid=hid)[0]
+    except IndexError:
+        history = 'null'
+
+    if history == 'null':
+        context = {}
+        context['dialog'] = getDialogHistory(request.user)
+        return render(request, 'weiss/index.html', context)
+
     response = history.response
-    print "response:"+response
+    
     if(request.method == 'GET'):  
         #Write text to file
-        audio_file_path = os.path.abspath(BASE_DIR + "/weiss/audio/%s" % request.user)
+        audio_file_path = os.path.abspath(BASE_DIR + ("/weiss/audio/%s_%s" % (request.user,hid)))
 
-        conv = ('flite -t "%s" -o "%s"' % (response, audio_file_path))
+        conv = ('flite -voice awb -t "%s" -o "%s"' % (response, audio_file_path))
         print "command:"+conv
         os.system(conv)
         #response = commands.getoutput(conv)
