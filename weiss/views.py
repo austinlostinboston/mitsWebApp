@@ -28,6 +28,7 @@ logger = logging.getLogger(__name__)
 from weiss.commentChooser import randomComment, pageRankComment
 from weiss.actionUtil import dispatch, initSession, getActions, getDialogHistory,confirmAciton
 from weiss.queryUtil import queryResolve
+from webapps.settings import BASE_DIR
 
 # Create your views here.
 @login_required
@@ -60,15 +61,17 @@ def confirmaction(request, aid):
 def verbalresponse(request):
     #Get query
     hid = request.GET['hid']
-    history = History.objects.filter(hid=hid)
+    history = History.objects.filter(hid=hid)[0]
     response = history.response
-
+    print "response:"+response
     if(request.method == 'GET'):  
         #Write text to file
-        audio_file_path = '/user/share/project/test.wav'
+        audio_file_path = os.path.abspath(BASE_DIR + "/weiss/audio/%s" % request.user)
 
-        conv = 'flite -t "%s" -o "%s"' % (response, audio_file_path)
-        response = commands.getoutput(conv)
+        conv = ('flite -t "%s" -o "%s"' % (response, audio_file_path))
+        print "command:"+conv
+        os.system(conv)
+        #response = commands.getoutput(conv)
 
         #Get query from request
         response = HttpResponse()
