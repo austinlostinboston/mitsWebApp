@@ -57,6 +57,28 @@ def confirmaction(request, aid):
     #return redirect('')
 
 @login_required
+def verbalresponse(request):
+    #Get query
+    hid = request.GET['hid']
+    history = History.objects.filter(hid=hid)
+    response = history.response
+
+    if(request.method == 'GET'):  
+        #Write text to file
+        audio_file_path = '/user/share/project/test.wav'
+
+        conv = 'flite -t "%s" -o "%s"' % (response, audio_file_path)
+        response = commands.getoutput(conv)
+
+        #Get query from request
+        response = HttpResponse()
+        f = open(audio_file_path, 'rb')
+        response['Content-Type'] = 'audio/x-wav'
+        response.write(f.read())
+        f.close()
+    return response
+
+@login_required
 def actionboard(request):
     logger.debug("%s" % (request))
 
