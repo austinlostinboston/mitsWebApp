@@ -191,5 +191,17 @@ def nextRandomOppositeCmt(session):
         logger.debug("Weiss does not talk about 0 sentiment comment, but Weiss would give one")
         return nextRandomPositiveCmt(session)
 
+def typeSelection(session):
+    pass
+
+
+def entitySelectionByTitle(session):
+    pass
+
+def entitySelectionByDescription(session):
+    pass
+
+def sentimentStats(session):
+    pass
 
 
