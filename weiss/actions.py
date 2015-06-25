@@ -7,15 +7,15 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 from django.db.models import Q
 
 from weiss.models import Comment, Entity, Type
+from switch import switch
+from entitySelector import entitySelector
 import random
 import logging
 
 logger = logging.getLogger(__name__)
 
-#USER = 0
-#WEISS = 1
 
-def nextRandomEntity(session):
+def nextRandomEntity(session, args):
     """Start next conversation
 
     Args:
@@ -41,7 +41,7 @@ def nextRandomEntity(session):
     #addNewDialog(session, WEISS, new_eid)
     return new_eid
 
-def nextRandomCmt(session):
+def nextRandomCmt(session, args):
     """Give a random comment of given entity
 
     Args:
@@ -81,7 +81,7 @@ def nextRandomCmt(session):
     return res.body
 
 
-def nextRandomPositiveCmt(session):
+def nextRandomPositiveCmt(session, args):
     """Give a random positive comment of given entity
 
     Args:
@@ -121,7 +121,7 @@ def nextRandomPositiveCmt(session):
     return res.body
 
 
-def nextRandomNegativeCmt(session):
+def nextRandomNegativeCmt(session, args):
     """Give a random negative comment of given entity
 
     Args:
@@ -162,7 +162,7 @@ def nextRandomNegativeCmt(session):
 
 
 
-def nextRandomOppositeCmt(session):
+def nextRandomOppositeCmt(session, args):
     """Give a random opposite comment of given entity
 
     Args:
@@ -191,17 +191,63 @@ def nextRandomOppositeCmt(session):
         logger.debug("Weiss does not talk about 0 sentiment comment, but Weiss would give one")
         return nextRandomPositiveCmt(session)
 
-def typeSelection(session):
-    pass
+def typeSelection(session, args):
+    tid = args.get("tid", 3) # imdb by default :)
+    session['curr_tid'] = tid
+    type_obj = Type.objects.get(tid=tid)
+    return "What %s would you like to talk about?" % type_obj.name
 
 
-def entitySelectionByTitle(session):
-    pass
+def entitySelectionByTitle(session, args):
+    curr_tid = session["curr_tid"] or 3 # file by default
+    if args.has_key("keyword"):
+        keyword = args["keyword"]
+        query = Q(tid=curr_tid, name__icontains=keyword)
+        entities = Entity.objects.filter(query)
+        if len(entities) == 0:
+            return "No such entity."
+        entity = entitySelector(entities, curr_tid)
+        session["curr_eid"] = entity.eid
+        return "Sure, let's talk about %s" % entity.name
+    else:
+        # TODO: handle this case
+        return "What would you like to talk about?"
 
-def entitySelectionByDescription(session):
-    pass
 
-def sentimentStats(session):
-    pass
+def entitySelectionByDescription(session, args):
+    curr_tid = session["curr_tid"] or 3 # file by default
+    if args.has_key("keyword"):
+        keyword = args["keyword"]
+        query = Q(tid=curr_tid, description__icontains=keyword)
+        entities = Entity.objects.filter(query)
+        if len(entities) == 0:
+            return "No such entity."
+        entity = entitySelector(entities, curr_tid)
+        session["curr_eid"] = entity.eid
+        return "Sure, let's talk about %s" % entity.name
+    else:
+        # TODO: handle this case
+        return "What would you like to talk about?"
+
+def sentimentStats(session, args):
+    curr_eid = session['curr_eid']
+    if curr_eid is None:
+        return "What would you like to talk about?"
+    else:
+        query = Q(eid=curr_eid, sentiment__gt=0)
+        num_pos = Comment.objects.filter(query).count()
+        num_all = Comment.objects.filter(eid=curr_eid).count()
+        percent = float(num_pos) / num_all
+        if percent > .9:
+            return "Almost everyone thought it was good."
+        elif percent > .65:
+            return "Most of the people thought it was good."
+        elif percent > .35:
+            return "It was an even split between positive and negative reviews."
+        elif percent > .1:
+            return "Most of the people thought it wasn't good."
+        else:
+            return "Almost everyone thought it was bad."
+
 
 

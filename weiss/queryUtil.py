@@ -43,7 +43,7 @@ def queryResolve(request):
     # p_label : real No of action in database
     # p_val : the possibility of each action
 
-    dispatchFromQuery(request, query, int(p_label[0]))
+    dispatch(request, query, int(p_label[0]), None)
     return
 
 

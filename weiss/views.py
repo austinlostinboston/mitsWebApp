@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 ## Import from personal moduls`
 from weiss.commentChooser import randomComment, pageRankComment
-from weiss.actionUtil import dispatch, initSession, getActions, getDialogHistory,confirmAciton
+from weiss.actionUtil import dispatch, initSession, getActions, getDialogHistory, confirmAciton
 from weiss.queryUtil import queryResolve
 from webapps.settings import BASE_DIR
 
@@ -64,9 +64,9 @@ def verbalresponse(request):
     try:
         history = History.objects.filter(hid=hid)[0]
     except IndexError:
-        history = 'null'
+        history = None
 
-    if history == 'null':
+    if history is None:
         context = {}
         context['dialog'] = getDialogHistory(request.user)
         return render(request, 'weiss/index.html', context)
@@ -97,8 +97,10 @@ def actionboard(request):
     context = {}
 
     if request.method == 'POST':
-        aid = int(request.POST['aid'])
-        dispatchFromQuery(request, None, aid)
+        args = {}
+        args['aid'] = int(request.POST['aid'])
+        args['keyword'] = request.POST['queryinput']
+        dispatch(request, None, args)
     else:
         initSession(request.session)
 

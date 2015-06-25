@@ -9,12 +9,13 @@ Author: Ming Fang & Yao Zhou
 
 import datetime
 
-from weiss.actions import *
 from django.shortcuts import render
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+from weiss.actions import *
 from weiss.models import History, Action
+from switch import switch
 
 
 
@@ -23,7 +24,8 @@ from weiss.models import History, Action
 # acitons is a dict mapping:  aid -> (acton name, action method)
 actions = None
 
-def dispatchFromQuery(request, query, aid):
+def dispatch(request, query, args):
+    aid = args['aid']
     print ("aid:%d" % aid)
     #actioninput = request.POST['actioninput']
     actioninput = ""
@@ -36,33 +38,13 @@ def dispatchFromQuery(request, query, aid):
         aid = 1 # default 1 for next random comment
 
     aname, action = actions[aid] # it is a tuple (name, method)
+    if query is None:
+        query = aname + args['keyword']
     logger.debug("Dispatch action: %s, %s, %s" % (aid, aname, actioninput))
 
     initNewLine(request.session, query, aid)
 
-    response = action(request.session)
-
-    flushNewLine(request, response)
-
-    return
-
-# no longer supported
-def dispatch(request):
-    aid = int(request.POST['aid'])
-    actioninput = request.POST['actioninput']
-    global actions
-    if actions is None:
-        getActions()
-    if not actions.has_key(aid):
-        logger.debug("No such aid %s, just throw a random comment" % aid)
-        aid = 1 # default 1 for next random comment
-
-    aname, action = actions[aid] # it is a tuple (name, method)
-    logger.debug("Dispatch action: %s, %s, %s" % (aid, aname, actioninput))
-
-    initNewLine(request.session, aname, aid)
-
-    response = action(request.session)
+    response = action(request.session, args)
 
     flushNewLine(request, response)
 
@@ -164,6 +146,3 @@ def initNewLine(session, query, aid):
     '''
 
     session['line'] = {'query': query, 'curr_aid': aid}
-
-
-
