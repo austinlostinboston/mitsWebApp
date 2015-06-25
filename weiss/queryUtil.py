@@ -1,6 +1,6 @@
 '''
 Utility methods for queries
-A resolver of user query. 
+A resolver of user query.
 First step: take query as input, use classifier to map query to action
 Second step: use actionUtil to generate resonse.
 

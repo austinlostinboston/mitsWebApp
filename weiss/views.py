@@ -72,8 +72,8 @@ def verbalresponse(request):
         return render(request, 'weiss/index.html', context)
 
     response = history.response
-    
-    if(request.method == 'GET'):  
+
+    if(request.method == 'GET'):
         #Write text to file
         audio_file_path = os.path.abspath(BASE_DIR + ("/weiss/audio/%s_%s" % (request.user,hid)))
 
@@ -97,14 +97,15 @@ def actionboard(request):
     context = {}
 
     if request.method == 'POST':
-        dispatch(request)
+        aid = int(request.POST['aid'])
+        dispatchFromQuery(request, None, aid)
     else:
         initSession(request.session)
 
     context['actions'] = getActions()
     context['dialog'] = getDialogHistory(request.user)
     return render(request, 'weiss/actionboard.html', context)
-    
+
 def register(request):
     context = {}
     webpage = 'weiss/register.html'

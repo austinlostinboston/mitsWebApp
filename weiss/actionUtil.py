@@ -46,6 +46,7 @@ def dispatchFromQuery(request, query, aid):
 
     return
 
+# no longer supported
 def dispatch(request):
     aid = int(request.POST['aid'])
     actioninput = request.POST['actioninput']
