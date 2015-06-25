@@ -6,3 +6,6 @@ log/
 
 # lib
 liblinear*
+
+# audio
+weiss/audio
