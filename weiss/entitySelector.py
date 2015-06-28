@@ -47,7 +47,7 @@ def _selectByTitle(entities, query):
     entities = filter(lambda entity: query in entity.name, entities)
     return entities
 
-def _selectByNumOfreview(entities):
+def _selectByNumOfReview(entities):
     '''
     select from a list of entities based on # of reviews
     '''

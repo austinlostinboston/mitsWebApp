@@ -39,7 +39,7 @@ def dispatch(request, query, args):
 
     aname, action = actions[aid] # it is a tuple (name, method)
     if query is None:
-        query = aname + args['keyword']
+        query = aname + args['query']
     logger.debug("Dispatch action: %s, %s, %s" % (aid, aname, actioninput))
 
     initNewLine(request.session, query, aid)
