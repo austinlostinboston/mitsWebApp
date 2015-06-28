@@ -1,6 +1,10 @@
 # loggings
 log/
 
+# classifier models
+model_*
+features_*
+
 # python
 *.pyc
 

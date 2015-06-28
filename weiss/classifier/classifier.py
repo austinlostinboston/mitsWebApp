@@ -1,18 +1,28 @@
 """
+Main entry of classifier.
+
 TODO(wenjunw@cs.cmu.edu):
 - Reconsider the type words
+
+Dependencies: numpy
+Author: Wenjun Wang, Ming Fang
+
 """
+import os
 import pickle
 import datetime
 import nltk
 
 from feature import *
 from liblinearutil import *
+from webapps.settings import BASE_DIR
 
 class Classifier(object):
+    modeldir = os.path.abspath(BASE_DIR + "/weiss/classifier/models/")
+    stopword_path = modeldir + "/english.stp"
     def __init__(self):
         self.model = self._get_model()
-        self.stopwords = stopword('english.stp')
+        self.stopwords = stopword(self.stopword_path)
         self.feature_arg = parse_options('-uni -pos2')
         self.feature_list = self._get_feature_list()
         self.type_words = self._set_type_words()
@@ -20,20 +30,19 @@ class Classifier(object):
 
     def _get_model(self):
         date = str(datetime.date.today())
-        m = load_model('model_'+date)
+        m = load_model(self.modeldir + '/model_' + date)
         if m == None:
             date = str(datetime.date.fromordinal(datetime.date.today().toordinal()-1))
-            m = load_model('model_'+date)
-
+            m = load_model(self.modeldir + '/model_' + date)
         return m
 
     def _get_feature_list(self):
         date = str(datetime.date.today())
         try:
-            infile = open('features_'+date)
+            infile = open(self.modeldir + '/features_' + date)
         except IOError:
             date = str(datetime.date.fromordinal(datetime.date.today().toordinal()-1))
-            infile = open('features_'+date)
+            infile = open(self.modeldir + '/features_' + date)
 
         feature_list = pickle.load(infile)
         return feature_list
