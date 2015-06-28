@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 
 from weiss.actions import *
 from weiss.models import History, Action
-from switch import switch
+from weiss.utils.switch import switch
 
 
 

@@ -7,8 +7,8 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 from django.db.models import Q
 
 from weiss.models import Comment, Entity, Type
-from switch import switch
-from entitySelector import entitySelector
+from weiss.utils.switch import switch
+from weiss.actions.entitySelector import entitySelector
 import random
 import logging
 

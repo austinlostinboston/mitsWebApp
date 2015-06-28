@@ -12,12 +12,12 @@ import logging
 import pickle
 
 # Web import
-from weiss.actionUtil import dispatch
 from weiss.models import History, Action
 from django.shortcuts import render
 from webapps.settings import BASE_DIR
 
 from weiss.classifier.classifier import Classifier
+from weiss.actions.actionUtil import dispatch
 
 
 def queryResolve(request):
