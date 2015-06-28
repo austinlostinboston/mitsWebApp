@@ -75,7 +75,7 @@ def verbalresponse(request):
 
     if(request.method == 'GET'):
         #Write text to file
-        audio_file_path = os.path.abspath(BASE_DIR + ("/weiss/audio/%s_%s" % (request.user,hid)))
+        audio_file_path = os.path.abspath(BASE_DIR + ("/weiss/audio/%s.wav" % (request.user)))
 
         conv = ('flite -voice awb -t "%s" -o "%s"' % (response, audio_file_path))
         print "command:"+conv
