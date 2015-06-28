@@ -130,9 +130,9 @@ class Classifier(object):
 
     def _type_recognition(self, query, arguments):
         tokens = nltk.word_tokenize(query)
-        if tokens[-1].rstrip('s') in movie or tokens[-2].rstrip('s') in self.type_words['article']:
+        if tokens[-1].rstrip('s') in self.type_words['article'] or tokens[-2].rstrip('s') in self.type_words['article']:
             arguments['tid'] = 1
-        elif tokens[-1].rstrip('s') in movie or tokens[-2].rstrip('s') in self.type_words['restaurant']:
+        elif tokens[-1].rstrip('s') in self.type_words['restaurant'] or tokens[-2].rstrip('s') in self.type_words['restaurant']:
             arguments['tid'] = 2
-        elif tokens[-1].rstrip('s') in movie or tokens[-2].rstrip('s') in self.type_words['movie']:
+        elif tokens[-1].rstrip('s') in self.type_words['movie'] or tokens[-2].rstrip('s') in self.type_words['movie']:
             arguments['tid'] = 3
