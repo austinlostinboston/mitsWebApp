@@ -2,41 +2,70 @@ from switch import switch
 from weiss.models import Comment, Entity, Type
 
 
-def entitySelector(entities, tid):
+def entitySelector(entities, tid, query):
+    '''
+    Public main entry of this module.
+    Args:
+        entities: a list of entities to be selected from
+        tid: the type of these entities
+        query: user's query
+    Return:
+        a single entity selected
+    '''
     for case in switch(tid):
         if case(1):
             # Articles
-            return selectByNumOfReview(entities)
+            selected = _selectByTitle(entities, query)
+            if len(selected) > 0:
+                return _selectByNumOfReview(selected)
+            else:
+                return _selectByNumOfReview(entities)
         if case(2):
             # Restaurants
-            return selectByNumOfReview(entities)
+            selected = _selectByTitle(entities, query)
+            if len(selected) > 0:
+                return _selectByNumOfReview(selected)
+            else:
+                return _selectByNumOfReview(entities)
         if case(3):
             # Movies
-            return selectMovieByReleaseYear(entities)
+            selected = _selectByTitle(entities, query)
+            if len(selected) > 0:
+                return _selectByNumOfReview(selected)
+            else:
+                return _selectByNumOfReview(entities)
         if case():
             # #$%^&*
             return entities[0]
 
 
-def selectByNumOfreview(entities):
+def _selectByTitle(entities, query):
     '''
-    select a list of entities based on # of reviews
+    Select entities from a list of entities such that the name
+    of the entity fully contain the query
+    '''
+    entities = filter(lambda entity: query in entity.name, entities)
+    return entities
+
+def _selectByNumOfreview(entities):
+    '''
+    select from a list of entities based on # of reviews
     '''
     entities = map(lambda e: (e, Comment.objects.filter(eid=e.eid).count()), entities)
     entities.sort(key=lambda x: x[1], reverse=True)
     return entities[0][0]
 
 
-def selectMovieByReleaseYear(entities):
+def _selectMovieByReleaseYear(entities):
     '''
     select a entity from a list of entities based on the release year
     Assume that the entities are all film
     '''
-    entities = map(lambda e: (e, getYearFromDesc(e.description)), entities)
+    entities = map(lambda e: (e, _getYearFromDesc(e.description)), entities)
     entities.sort(key=lambda x: x[1], reverse=True)
     return entities[0][0]
 
-def getYearFromDesc(desc):
+def _getYearFromDesc(desc):
     '''
     return release year as int from the description of a film
     '''

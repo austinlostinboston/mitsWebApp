@@ -99,7 +99,7 @@ def actionboard(request):
     if request.method == 'POST':
         args = {}
         args['aid'] = int(request.POST['aid'])
-        args['keyword'] = request.POST['queryinput']
+        args['query'] = request.POST['queryinput']
         dispatch(request, None, args)
     else:
         initSession(request.session)

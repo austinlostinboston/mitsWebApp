@@ -197,7 +197,8 @@ def typeSelection(session, args):
     type_obj = Type.objects.get(tid=tid)
     return "What %s would you like to talk about?" % type_obj.name
 
-
+'''
+FIXME: deprecated
 def entitySelectionByTitle(session, args):
     curr_tid = session["curr_tid"] or 3 # file by default
     if args.has_key("keyword"):
@@ -228,6 +229,23 @@ def entitySelectionByDescription(session, args):
     else:
         # TODO: handle this case
         return "What would you like to talk about?"
+'''
+
+def entitySelection(session, args):
+    curr_tid = session["curr_tid"] or 3 # file by default
+    if args.has_key("query"):
+        keyword = args["query"]
+        query = Q(tid=curr_tid, description__icontains=keyword) | Q(tid=curr_tid, name__icontains=keyword)
+        entities = Entity.objects.filter(query)
+        if len(entities) == 0:
+            return "No such entity."
+        entity = entitySelector(entities, curr_tid, query)
+        session["curr_eid"] = entity.eid
+        return "Sure, let's talk about %s" % entity.name
+    else:
+        # TODO: handle this case
+        return "What would you like to talk about?"
+
 
 def sentimentStats(session, args):
     curr_eid = session['curr_eid']
