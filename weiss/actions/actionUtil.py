@@ -13,9 +13,9 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-from weiss.actions import *
 from weiss.models import History, Action
 from weiss.utils.switch import switch
+from weiss.actions.actions import *  # for action methods
 
 
 

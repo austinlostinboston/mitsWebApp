@@ -26,8 +26,8 @@ logger = logging.getLogger(__name__)
 
 ## Import from personal moduls`
 from weiss.commentChooser import randomComment, pageRankComment
-from weiss.actionUtil import dispatch, initSession, getActions, getDialogHistory, confirmAciton
-from weiss.queryUtil import queryResolve
+from weiss.actions.actionUtil import dispatch, initSession, getActions, getDialogHistory, confirmAciton
+from weiss.actions.queryUtil import queryResolve
 from webapps.settings import BASE_DIR
 
 # Create your views here.
@@ -99,7 +99,7 @@ def actionboard(request):
     if request.method == 'POST':
         args = {}
         args['aid'] = int(request.POST['aid'])
-        args['query'] = request.POST['queryinput']
+        args['keywords'] = request.POST['queryinput']
         dispatch(request, None, args)
     else:
         initSession(request.session)

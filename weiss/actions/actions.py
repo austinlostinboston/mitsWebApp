@@ -1,6 +1,9 @@
 """
-The fixed actions that Weiss supports.
+The fixed number of actions that Weiss supports.
 TODO: More edge cases, ex: there is no opposite cmt in the database
+
+Note: There is not need to import any methods dirtectly from here
+You probably want something in actionUtil.py
 
 Author: Ming Fang <mingf@cs.cmu.edu>
 """
@@ -233,8 +236,8 @@ def entitySelectionByDescription(session, args):
 
 def entitySelection(session, args):
     curr_tid = session["curr_tid"] or 3 # file by default
-    if args.has_key("query"):
-        user_query = args["query"]
+    if args.has_key("keywords"):
+        user_query = args["keywords"]
         q = Q(tid=curr_tid, description__icontains=user_query) | Q(tid=curr_tid, name__icontains=user_query)
         entities = Entity.objects.filter(q)
         if len(entities) == 0:

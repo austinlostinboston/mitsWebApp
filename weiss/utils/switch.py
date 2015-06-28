@@ -1,5 +1,7 @@
 '''
-Add switch statement for python
+This is a work around to support switch statement in python
+
+Author: Ming Fang
 '''
 class switch(object):
     def __init__(self, value):
