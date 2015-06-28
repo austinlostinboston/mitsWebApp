@@ -9,3 +9,6 @@ liblinear*
 
 # audio
 weiss/audio
+
+# misc
+.DS_Store
