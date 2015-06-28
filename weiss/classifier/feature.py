@@ -72,7 +72,7 @@ def _POSngram(n, tag_list, features):
 def stemming(token_list):
     """Stem all words in the list
 
-    Arg: 
+    Arg:
         token_list: tokens of a query
 
     Return:
@@ -93,7 +93,7 @@ def stopword_removal(token_list, stopwords):
         token_list: tokens of a query
 
     Return:
-        clean_sentence: stopwords-removed sentence, string format    
+        clean_sentence: stopwords-removed sentence, string format
     """
     clean_tokens = []
     while len(token_list) > 0:
