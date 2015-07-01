@@ -28,7 +28,7 @@ def queryResolve(request):
 
     curr_state = request.session['curr_state']
 
-    args = classifier.action_info(query, curr_state.getNextPossibleActions())
+    args = classifier.action_info(query, curr_state)
 
     dispatch(request, query, args)
     return

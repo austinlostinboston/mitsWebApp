@@ -15,7 +15,10 @@ class State(object):
         return self._name
 
     def getNextPossibleActions(self):
-        return _nps
+        """
+        get next possible acitons as set
+        """
+        return self._npa
 
     def __setitem__(self, aid, state):
         self._actions[aid] = state
