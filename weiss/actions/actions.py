@@ -200,51 +200,49 @@ def typeSelection(session, args):
     type_obj = Type.objects.get(tid=tid)
     return "What %s would you like to talk about?" % type_obj.name
 
-"""
-FIXME: deprecated
-def entitySelectionByTitle(session, args):
-    curr_tid = session["curr_tid"] or 3 # file by default
-    if args.has_key("keyword"):
-        keyword = args["keyword"]
-        query = Q(tid=curr_tid, name__icontains=keyword)
-        entities = Entity.objects.filter(query)
-        if len(entities) == 0:
-            return "No such entity."
-        entity = entitySelector(entities, curr_tid)
-        session["curr_eid"] = entity.eid
-        return "Sure, let's talk about %s" % entity.name
-    else:
-        # TODO: handle this case
-        return "What would you like to talk about?"
-
-
-def entitySelectionByDescription(session, args):
-    curr_tid = session["curr_tid"] or 3 # file by default
-    if args.has_key("keyword"):
-        keyword = args["keyword"]
-        query = Q(tid=curr_tid, description__icontains=keyword)
-        entities = Entity.objects.filter(query)
-        if len(entities) == 0:
-            return "No such entity."
-        entity = entitySelector(entities, curr_tid)
-        session["curr_eid"] = entity.eid
-        return "Sure, let's talk about %s" % entity.name
-    else:
-        # TODO: handle this case
-        return "What would you like to talk about?"
-"""
 
 def entitySelection(session, args):
-    curr_tid = session["curr_tid"] or 3 # file by default
+    """
+    The logic:
+        if no current tid, we talk about film
+        if no keywords, ask what to talk about
+        if there are 3 or more keywords:
+            get entities that contain all (up to 3) keywords
+                contain is defined as (description containing or title containing)
+        if no entity meets the requirement:
+            try one keyword at a time
+        if any entities are found, pass to entitySelector, and we are good
+        if no entity found by each one keyword: well, say sorry
+    """
+    curr_tid = session["curr_tid"] or 3 # film by default
     if args.has_key("keywords"):
-        user_query = args["keywords"]
-        q = Q(tid=curr_tid, description__icontains=user_query) | Q(tid=curr_tid, name__icontains=user_query)
+        # select by first 3 keywords
+        keywords = args["keywords"]
+        keywords = keywords.split("#")
+        if len(keywords) >= 3:
+            keywords = keywords[:3]
+        q = Q(tid=curr_tid)
+        for keyword in keywords:
+            q = q & (Q(description__icontains=keyword) | Q(name__icontains=keyword))
         entities = Entity.objects.filter(q)
-        if len(entities) == 0:
-            return "No such entity."
-        entity = entitySelector(entities, curr_tid, user_query)
-        session["curr_eid"] = entity.eid
-        return "Sure, let's talk about %s" % entity.name
+        if len(entities) > 0:
+            # good, we found some
+            entity = entitySelector(entities, curr_tid)
+            session["curr_eid"] = entity.eid
+            return "Sure, let's talk about %s" % entity.name
+        else:
+            # if there is no such entity, we loose the requirement
+            keywords = args["keywords"].split("#")
+            keywords.reverse()
+            while len(keywords) > 0:
+                keyword = keywords.pop()
+                q = Q(tid=curr_tid, description__icontains=keyword) | Q(tid=curr_tid, name__icontains=keyword)
+                entities = Entity.objects.filter(q)
+                if len(entities) > 0:
+                    entity = entitySelector(entities, curr_tid)
+                    session["curr_eid"] = entity.eid
+                    return "Sure, let's talk about %s" % entity.name
+            return "Sorry, I could not find a relevent entity to talk about."
     else:
         # TODO: handle this case
         return "What would you like to talk about?"
