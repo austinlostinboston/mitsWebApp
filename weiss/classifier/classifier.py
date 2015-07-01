@@ -22,7 +22,7 @@ class Classifier(object):
     def __init__(self):
         self.model = self._get_model()
         self.stopwords = stopword(self.stopword_path)
-        self.feature_arg = parse_options('-uni -pos2')
+        self.feature_arg = parse_options('-uni -pos2 -stem -stprm')
         self.feature_list = self._get_feature_list()
         self.type_words = self._set_type_words()
         self.labels = [1,2,3,4,5,6,7,8]
@@ -32,7 +32,7 @@ class Classifier(object):
         return m
 
     def _get_feature_list(self):
-        infile = open(self.modeldir + '/action_features' + date)
+        infile = open(self.modeldir + '/action_features')
 
         feature_list = pickle.load(infile)
         return feature_list
