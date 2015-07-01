@@ -1,6 +1,6 @@
 -------------------
 Author: Wenjun Wang
-Date: June 18, 2015
+Date: July 1, 2015
 -------------------
 In the training file, each line is a instance, which is started by a label.
 The definition of label is listed as follows:
@@ -11,3 +11,7 @@ Label	  Meaning
 3	Positive Comment
 4 	Negative Comment
 5	Next Entity
+6       Sentiment Statistics
+7       Entity Selection
+8       Type Selection
+9	Mixed (Multiple actions may need to be taken for one query)
