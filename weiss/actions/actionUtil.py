@@ -16,8 +16,7 @@ from django.contrib.auth.models import User
 from weiss.models import History, Action
 from weiss.utils.switch import switch
 from weiss.actions.actions import *  # for action methods
-
-
+from weiss.flows.states import * # for dialog control flow models
 
 
 # initialized lazily by getActions()
@@ -29,6 +28,9 @@ def dispatch(request, query, args):
     print ("aid:%d" % aid)
     #actioninput = request.POST['actioninput']
     actioninput = ""
+
+    # make a state transition
+    State.transit(request.session, aid)
 
     global actions
     if actions is None:
@@ -63,12 +65,14 @@ def confirmAciton(UserName, ActionID):
     his.save()
     return
 
+'''
+deprecated
 def sessionToDialog(session):
     keys = session.keys()
     keys = filter(lambda x: type(x) in [unicode, str] and (x[0] == "0" or x[0] == "1"), keys)
     dialog = map(lambda x: (x[0], int(x[1:]), session[x]), keys)
     return sorted(dialog, key=lambda x: x[1])
-
+'''
 def getDialogHistory(userid, limit=10):
     '''
     get lines from database for rendering the page
@@ -88,6 +92,7 @@ def initSession(session):
     session['curr_eid'] = None
     session['curr_tid'] = None
     session['actioninput'] = ""
+    session['curr_state'] = SystemInitiative  # init state
 
 
 def getActions():

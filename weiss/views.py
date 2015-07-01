@@ -22,13 +22,13 @@ import os
 import logging
 import ast
 
-logger = logging.getLogger(__name__)
-
-## Import from personal moduls`
+## Import from personal moduls
 from weiss.commentChooser import randomComment, pageRankComment
 from weiss.actions.actionUtil import dispatch, initSession, getActions, getDialogHistory, confirmAciton
 from weiss.actions.queryUtil import queryResolve
 from webapps.settings import BASE_DIR
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 @login_required

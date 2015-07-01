@@ -26,7 +26,9 @@ def queryResolve(request):
     query = str(request.POST.get('queryinput', False))
     print ("query:%s" % query)
 
-    args = classifier.action_info(query)
+    curr_state = request.session['curr_state']
+
+    args = classifier.action_info(query, curr_state.getNextPossibleActions())
 
     dispatch(request, query, args)
     return

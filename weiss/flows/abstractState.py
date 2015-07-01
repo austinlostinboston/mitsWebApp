@@ -30,4 +30,9 @@ class State(object):
     def __str__(self):
         return self._name
 
+    @staticmethod
+    def transit(session, aid):
+        state = sessioin['curr_state']
+        session['curr_state'] = state[aid]
+
 
