@@ -92,7 +92,7 @@ def initSession(session):
     session['curr_eid'] = None
     session['curr_tid'] = None
     session['actioninput'] = ""
-    session['curr_state'] = SystemInitiative  # init state
+    session['curr_sid'] = 1  # init state
 
 
 def getActions():

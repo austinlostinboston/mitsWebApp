@@ -12,5 +12,7 @@ def getClassifier():
     global _instance
     if _instance is None:
         _instance = Classifier()
+
+    print id(_instance)
     return _instance
 

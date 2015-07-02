@@ -18,6 +18,7 @@ from webapps.settings import BASE_DIR
 
 from weiss.classifier.factory import getClassifier
 from weiss.actions.actionUtil import dispatch
+from weiss.flows.abstractState import State
 
 
 def queryResolve(request):
@@ -26,9 +27,10 @@ def queryResolve(request):
     query = str(request.POST.get('queryinput', False))
     print ("query:%s" % query)
 
-    curr_state = request.session['curr_state']
+    curr_state = State.lookup(request.session['curr_sid'])
 
-    args = classifier.action_info(query, curr_state)
+    #args = classifier.action_info(query, curr_state)
+    args = classifier.action_info(query)
 
     dispatch(request, query, args)
     return

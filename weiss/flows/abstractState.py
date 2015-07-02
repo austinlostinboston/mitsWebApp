@@ -4,15 +4,23 @@ Abstract Flow state
 Author: Ming Fang <mingf@cs.cmu.edu>
 """
 
+StateTable = {}
+
+
 class State(object):
 
-    def __init__(self, name):
+    def __init__(self, name, sid):
+        self._sid = sid
         self._name = name
         self._actions = {} # int (aid) -> State
         self._npa = set()  # next possible actions
+        StateTable[sid] = self
 
     def getName(self):
         return self._name
+
+    def getSid(self):
+        return self._sid
 
     def getNextPossibleActions(self):
         """
@@ -35,7 +43,12 @@ class State(object):
 
     @staticmethod
     def transit(session, aid):
-        state = sessioin['curr_state']
-        session['curr_state'] = state[aid]
+        sid = session['curr_sid']
+        session['curr_sid'] = State.lookup(sid).getSid()
+
+    @staticmethod
+    def lookup(sid):
+        return StateTable[sid]
+
 
 

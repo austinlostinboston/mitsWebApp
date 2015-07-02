@@ -8,10 +8,10 @@ from weiss.flows.abstractState import State
 """
 Definitions of the system states
 """
-SystemInitiative = State("System Initiative")
-TypeSelected = State("Type Selected")
-EntitySelected = State("Entity Selected")
-CommentSelected = State("Comment Selected")
+SystemInitiative = State("System Initiative", 1)
+TypeSelected = State("Type Selected", 2)
+EntitySelected = State("Entity Selected", 3)
+CommentSelected = State("Comment Selected", 4)
 
 
 
