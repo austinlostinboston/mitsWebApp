@@ -10,7 +10,6 @@ Author: Wenjun Wang, Ming Fang
 """
 import os
 import pickle
-import datetime
 import nltk
 
 from feature import *
@@ -23,26 +22,17 @@ class Classifier(object):
     def __init__(self):
         self.model = self._get_model()
         self.stopwords = stopword(self.stopword_path)
-        self.feature_arg = parse_options('-uni -pos2')
+        self.feature_arg = parse_options('-uni -pos2 -stem -stprm')
         self.feature_list = self._get_feature_list()
         self.type_words = self._set_type_words()
         self.labels = [1,2,3,4,5,6,7,8]
 
     def _get_model(self):
-        date = str(datetime.date.today())
-        m = load_model(self.modeldir + '/model_' + date)
-        if m == None:
-            date = str(datetime.date.fromordinal(datetime.date.today().toordinal()-1))
-            m = load_model(self.modeldir + '/model_' + date)
+        m = load_model(self.modeldir + '/action_model')
         return m
 
     def _get_feature_list(self):
-        date = str(datetime.date.today())
-        try:
-            infile = open(self.modeldir + '/features_' + date)
-        except IOError:
-            date = str(datetime.date.fromordinal(datetime.date.today().toordinal()-1))
-            infile = open(self.modeldir + '/features_' + date)
+        infile = open(self.modeldir + '/action_features')
 
         feature_list = pickle.load(infile)
         return feature_list
