@@ -20,12 +20,14 @@ from weiss.classifier.factory import getClassifier
 from weiss.actions.actionUtil import dispatch
 from weiss.flows.abstractState import State
 
+logger = logging.getLogger(__name__)
+
 
 def queryResolve(request):
     classifier = getClassifier()
     #Extract Add user query
     query = str(request.POST.get('queryinput', False))
-    print ("query:%s" % query)
+    logger.debug("query:%s" % query)
 
     curr_state = State.lookup(request.session['curr_sid'])
 

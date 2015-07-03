@@ -33,7 +33,6 @@ logger = logging.getLogger(__name__)
 # Create your views here.
 @login_required
 def homepage(request):
-    print request.user
     context = {}
     if request.method == 'POST':
         conext = queryResolve(request)
@@ -47,8 +46,8 @@ def homepage(request):
 @login_required
 def confirmaction(request, aid):
     User = request.user
-    print ('aid:'+str(aid))
-    print ('user:'+str(User))
+    logger.debug('aid:'+str(aid))
+    logger.debug('user:'+str(User))
     confirmAciton(User, aid)
     context = {}
     context['actions'] = getActions()
@@ -78,7 +77,7 @@ def verbalresponse(request):
         audio_file_path = os.path.abspath(BASE_DIR + ("/weiss/audio/%s.wav" % (request.user)))
 
         conv = ('flite -voice awb -t "%s" -o "%s"' % (response, audio_file_path))
-        print "command:"+conv
+        logger.debug("command:"+conv)
         os.system(conv)
         #response = commands.getoutput(conv)
 
@@ -257,7 +256,7 @@ def evaluate(request, eval_type='0'):
     ## Setup evaluation
     if eval_type > 0:
         user_evals = Evaluation.objects.filter(userid=user_id, mid__in=[0,1,2]).count()
-        print user_evals
+        logger.debug(user_evals)
 
         entities = list(MiniEntity.objects.values_list('eid', flat=True))
         num_entities = len(entities)

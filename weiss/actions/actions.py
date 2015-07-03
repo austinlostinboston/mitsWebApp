@@ -29,7 +29,6 @@ def nextRandomEntity(session, args):
     Returns:
         a int that represents next entity id
     """
-    print "next random entity"
     #next_tid = int(session['actioninput'] or "3")
     next_tid = int(random.uniform(1, 3.5))
     curr_eid = int(session['curr_eid'] or "0")
@@ -223,6 +222,7 @@ def entitySelection(session, args):
         # select by first 3 keywords
         keywords = args["keywords"]
         keywords = keywords.split("#")
+        logger.debug(keywords)
         if len(keywords) >= 3:
             keywords = keywords[:3]
         q = Q(tid=curr_tid)

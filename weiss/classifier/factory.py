@@ -13,6 +13,5 @@ def getClassifier():
     if _instance is None:
         _instance = Classifier()
 
-    print id(_instance)
     return _instance
 
