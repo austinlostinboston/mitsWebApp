@@ -58,10 +58,9 @@ class Classifier(object):
 
         Return: Feature list
         """
-        infile = open(self.modeldir + '/action_features')
-
-        feature_list = pickle.load(infile)
-        return feature_list
+        with open(self.modeldir + '/action_features', 'r') as infile:
+            feature_list = pickle.load(infile)
+            return feature_list
 
     def _convert_query_to_dictionary(self, query):
         """Convert each user query to the format required by LibLINEAR
