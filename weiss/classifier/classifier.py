@@ -1,5 +1,5 @@
 """
-This script is the main entry for classifier. 
+This script is the main entry for classifier.
 It does action classification and extract keywords from the incoming query.
 ===========================================================================
 
@@ -10,7 +10,7 @@ TODO(wenjunw@cs.cmu.edu):
 - update _type_recognition function
 
 Usage: refer to demo.py
-Dependency: numpy
+Dependency: numpy, scipy, sklearn
 
 Author: Wenjun Wang<wenjunw@cs.cmu.edu>
 Date: July 1, 2015
@@ -18,11 +18,12 @@ Date: July 1, 2015
 import os
 import pickle
 import nltk
-
-from feature import *
-from liblinearutil import *
-from webapps.settings import BASE_DIR
 from sklearn.externals import joblib
+from liblinearutil import *
+
+from webapps.settings import BASE_DIR
+from weiss.classifier.feature import *
+from weiss.flows.states import *
 
 class Classifier(object):
     modeldir = os.path.abspath(BASE_DIR + "/weiss/classifier/models/")
@@ -31,9 +32,9 @@ class Classifier(object):
         """
         All variables which would be used by every query classification and parsing are listed here.
         Only need to create Classifier object once, i.e. initialize once
-        """    
+        """
         self.action_model, self.type_model = self._get_model()
-        self.stopwords = stopword('english.stp')
+        self.stopwords = stopword(self.stopword_path)
         self.feature_arg = parse_options('-uni -pos2 -stem -stprm')
         self.feature_list = self._get_feature_list()
         self.type_words = self._set_type_words()
@@ -97,14 +98,14 @@ class Classifier(object):
 
         return int(p_label[0]) # API changes here
 
-    def action_info(self, query, plausible):
+    def action_info(self, query, state):
         """API function in this script. Gives all info of an action
 
         This is the only function which will be called outside this script.
 
         Args:
             query: query need to classify and parse
-            plausible: a set of plausible actions at current step
+            state: current state, which contains every thing about this state
 
         Return:
             arguments: a dictionary contains all the info needed by calling function
@@ -112,11 +113,12 @@ class Classifier(object):
         """
         arguments = {}
         temp = -1
+        plausible = state.getNextPossibleActions()
         self._type_recognition(query, arguments)
         if arguments['aid'] == 8:
             temp = 8
         # State System Initiative and State Type Selected
-        if plausible < set([5,7,8]):
+        if state is SystemInitiative or state is TypeSelected:
             q = list2Vec(hashit(query))
             arguments['tid'] = self.type_model.predict(q)[0]
             self._entity_recognition(query,arguments)
@@ -144,6 +146,7 @@ class Classifier(object):
             if arguments['aid'] == 2 and 2 not in plausible:
                 arguments['aid'] = 1
 
+
         return arguments
 
     def _entity_recognition(self, query, arguments):
@@ -167,9 +170,9 @@ class Classifier(object):
         for i in entities:
             if isinstance(i,tuple):
                 if ((i[1][:2] == 'NN' or i[1][:2] == 'JJ')
-                    and i[0].lower() not in self.stopwords 
+                    and i[0].lower() not in self.stopwords
                     and i[0].rstrip('s') not in self.type_words['movie']
-                    and i[0].rstrip('s') not in self.type_words['article'] 
+                    and i[0].rstrip('s') not in self.type_words['article']
                     and i[0].rstrip('s') not in self.type_words['restaurant']):
                     tuples.append(i[0])
             elif isinstance(i,nltk.tree.Tree):

@@ -215,6 +215,10 @@ def entitySelection(session, args):
         if no entity found by each one keyword: well, say sorry
     """
     curr_tid = session["curr_tid"] or 3 # film by default
+    if args.has_key("tid"):
+        curr_tid = args["tid"]
+        session["curr_tid"] = curr_tid
+
     if args.has_key("keywords"):
         # select by first 3 keywords
         keywords = args["keywords"]

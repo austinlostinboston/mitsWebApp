@@ -41,6 +41,7 @@ Type selected state
 The followings should be determined:
     curr_tid
 """
+TypeSelected[5] = EntitySelected
 TypeSelected[7] = EntitySelected
 TypeSelected[8] = TypeSelected
 
@@ -57,7 +58,7 @@ EntitySelected[4] = CommentSelected
 EntitySelected[5] = EntitySelected
 EntitySelected[6] = EntitySelected
 EntitySelected[7] = EntitySelected
-EntitySelected[9] = EntitySelected
+#EntitySelected[9] = EntitySelected
 
 EntitySelected[8] = TypeSelected
 
@@ -77,7 +78,7 @@ CommentSelected[6] = CommentSelected
 
 CommentSelected[5] = EntitySelected
 CommentSelected[7] = EntitySelected
-CommentSelected[9] = EntitySelected
+#CommentSelected[9] = EntitySelected
 
 CommentSelected[8] = TypeSelected
 

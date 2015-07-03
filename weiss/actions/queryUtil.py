@@ -29,8 +29,8 @@ def queryResolve(request):
 
     curr_state = State.lookup(request.session['curr_sid'])
 
-    #args = classifier.action_info(query, curr_state)
-    args = classifier.action_info(query)
+    args = classifier.action_info(query, curr_state)
+    #args = classifier.action_info(query)
 
     dispatch(request, query, args)
     return
