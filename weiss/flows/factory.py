@@ -1,5 +1,5 @@
 '''
-Provide singleton for Classifier
+Provide singleton for flowManager
 
 Author: Ming Fang
 '''

@@ -1,5 +1,12 @@
 """
-Abstract Flow state and State manager
+Flow Mnager
+
+NOTE: this class should be created by signleton factory in factory.py
+
+this class is responsible for
+    1. create State, which is a inner class of flow manager.
+    2. loop up state by sid
+    3. make transit from one state based on a given action
 
 Author: Ming Fang <mingf@cs.cmu.edu>
 """
