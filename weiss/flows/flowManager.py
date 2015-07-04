@@ -28,7 +28,6 @@ class FlowManager:
         return state
 
     def lookUp(self, sid):
-        print self._stateTable
         return self._stateTable[sid]
 
     def nameOf(self, sid):
