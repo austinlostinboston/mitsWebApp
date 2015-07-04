@@ -3,15 +3,17 @@ This file defines the concrete control flow logic
 
 Author: Ming Fang
 """
-from weiss.flows.abstractState import State
+from weiss.flows.factory import getFlowManager
+
+fmgr = getFlowManager()
 
 """
 Definitions of the system states
 """
-SystemInitiative = State("System Initiative", 1)
-TypeSelected = State("Type Selected", 2)
-EntitySelected = State("Entity Selected", 3)
-CommentSelected = State("Comment Selected", 4)
+SystemInitiative = fmgr.createState("System Initiative")
+TypeSelected = fmgr.createState("Type Selected")
+EntitySelected = fmgr.createState("Entity Selected")
+CommentSelected = fmgr.createState("Comment Selected")
 
 
 

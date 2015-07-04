@@ -18,11 +18,12 @@ from weiss.models import History, Action
 from weiss.utils.switch import switch
 from weiss.actions.actions import *  # for action methods
 from weiss.flows.states import * # for dialog control flow models
-
+from weiss.flows.factory import getFlowManager
 
 # initialized lazily by getActions()
 # acitons is a dict mapping:  aid -> (acton name, action method)
 actions = None
+fmgr = getFlowManager() # flow manager
 
 def dispatch(request, query, args):
     aid = args['aid']
@@ -31,7 +32,7 @@ def dispatch(request, query, args):
     actioninput = ""
 
     # make a state transition
-    State.transit(request.session, aid)
+    fmgr.transit(request.session, aid)
 
     global actions
     if actions is None:
@@ -96,7 +97,7 @@ def initSession(session):
     session['curr_eid'] = None
     session['curr_tid'] = None
     session['actioninput'] = ""
-    session['curr_sid'] = 1  # init state
+    session['curr_sid'] = 0  # sid for init state
 
 
 def getActions():
