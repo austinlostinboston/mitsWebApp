@@ -91,7 +91,7 @@ class Classifier(object):
         Return: Action id
         """
         x = self._convert_query_to_dictionary(query)
-        p_label, p_val = predict(self.labels, x, self.model, '-b 0')
+        p_label, p_val = predict(self.labels, x, self.action_model, '-b 0')
         if p_val[0][int(p_label[0])-1] == 0:
             p_label[0] = -1
 
