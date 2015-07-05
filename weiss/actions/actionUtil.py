@@ -24,6 +24,7 @@ from weiss.flows.factory import getFlowManager
 # acitons is a dict mapping:  aid -> (acton name, action method)
 actions = None
 fmgr = getFlowManager() # flow manager
+parser = HTMLParser.HTMLParser() # html parser
 
 def dispatch(request, query, args):
     aid = args['aid']
@@ -81,7 +82,6 @@ def getDialogHistory(userid, limit=10):
     '''
     tenMinAgo = timezone.now() - datetime.timedelta(minutes=10) # 10 min ago
     lines = History.objects.filter(Q(userid=userid), Q(time__gt=tenMinAgo)).order_by("-time")[:10]
-    parser = HTMLParser.HTMLParser()
     for line in lines:
         line.response = parser.unescape(line.response)
     return lines

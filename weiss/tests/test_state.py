@@ -7,7 +7,6 @@ class StateTestCase(TestCase):
     def setUp(self):
         pass
 
-
     def test_next_possible_actions(self):
         self.assertEqual(set([7,8]), SystemInitiative.getNextPossibleActions());
         self.assertEqual(set([5,7,8]), TypeSelected.getNextPossibleActions());
