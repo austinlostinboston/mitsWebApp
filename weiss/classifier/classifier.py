@@ -20,6 +20,7 @@ import pickle
 import nltk
 from sklearn.externals import joblib
 from liblinearutil import *
+import timeit
 
 from webapps.settings import BASE_DIR
 from weiss.classifier.feature import *
@@ -33,8 +34,11 @@ class Classifier(object):
         All variables which would be used by every query classification and parsing are listed here.
         Only need to create Classifier object once, i.e. initialize once
         """
+        start = timeit.timeit()
         self.action_model, self.type_model = self._get_model()
+        end = timeit.timeit()
         self.stopwords = stopword(self.stopword_path)
+        print "Load time: " + str(start-end)
         self.feature_arg = parse_options('-uni -pos2 -stem -stprm')
         self.feature_list = self._get_feature_list()
         self.type_words = self._set_type_words()
@@ -119,7 +123,7 @@ class Classifier(object):
         # State System Initiative and State Type Selected
         if state is SystemInitiative or state is TypeSelected:
             q = list2Vec(hashit(query))
-            arguments['tid'] = self.type_model.predict(q)[0]
+            arguments['tid'] = int(self.type_model.predict(q)[0])
             self._entity_recognition(query,arguments)
             if 'keywords' in arguments:
                 arguments['aid'] = 7
