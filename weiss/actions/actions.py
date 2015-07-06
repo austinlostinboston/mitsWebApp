@@ -41,7 +41,8 @@ def nextRandomEntity(session, args):
     session['curr_eid'] = new_eid
     logger.debug("next ran entity has decided next eid: %s" % (new_eid))
     #addNewDialog(session, WEISS, new_eid)
-    return new_eid
+    entity = Entity.objects.get(eid=new_eid)
+    return "Sure, let's talk about %s" % entity.name
 
 def nextRandomCmt(session, args):
     """Give a random comment of given entity
