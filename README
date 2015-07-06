@@ -1,4 +1,14 @@
-To run the code, a set of settings for liblinear.so.2 is required. 
+## Dependencies
+
+> - **django**
+> - **MySQLdb** 
+> - **numpy** 
+> - **sklearn**
+> - **nltk**
+
+## Installation 
+
+## liblinear
 Steps:
 1. extract liblinear-1.96.zip
 2. cd liblinear-1.96
