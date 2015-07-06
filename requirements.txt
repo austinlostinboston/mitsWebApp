@@ -1,7 +1,6 @@
 django
 MySQLdb
 numpy
-sklear
+sklearn
 nltk
 python-igraph
-liblinear
