@@ -86,8 +86,9 @@ def getDialogHistory(userid, limit=10):
         line.response = parser.unescape(line.response)
     return lines
 
-def initSession(session):
+def initSession(request):
     default =[u'_auth_user_id', u'_auth_user_backend', u'_auth_user_hash']
+    session = request.session
     keys = session.keys()
     for key in keys:
         if key not in default:
@@ -98,6 +99,8 @@ def initSession(session):
     session['curr_tid'] = None
     session['actioninput'] = ""
     session['curr_sid'] = 0  # sid for init state
+    initNewLine(session, '', 9) # greeting aid and meaningless user query
+    flushNewLine(request, "Hi I'm Weiss. What would like to talk about, movies? news? or restaurants?")
 
 
 def getActions():

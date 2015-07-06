@@ -273,5 +273,8 @@ def sentimentStats(session, args):
         else:
             return "Almost everyone thought it was bad."
 
+def greeting(session, args):
+    '''dummy'''
+    pass
 
 

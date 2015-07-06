@@ -37,7 +37,7 @@ def homepage(request):
     if request.method == 'POST':
         conext = queryResolve(request)
     else:
-        initSession(request.session)
+        initSession(request)
 
     context['actions'] = getActions()
     context['dialog'] = getDialogHistory(request.user)
@@ -101,7 +101,7 @@ def actionboard(request):
         args['keywords'] = request.POST['queryinput']
         dispatch(request, None, args)
     else:
-        initSession(request.session)
+        initSession(request)
 
     context['actions'] = getActions()
     context['dialog'] = getDialogHistory(request.user)

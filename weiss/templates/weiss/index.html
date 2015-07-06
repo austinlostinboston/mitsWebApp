@@ -5,63 +5,65 @@
 
 {% block content %}
 <script type="text/javascript">
-  function play_response(hid) {
+function play_response(hid) {
     //hid = document.getElementById('responseplay'+hid).value;
     var audio = document.getElementById('player');
     audio.setAttribute('src', '/verbalresponse?hid=' + hid);
     audio.play();
-  }
+}
 </script>
 <audio id="player"></audio>
 
 <h1 align="center">Welcome to Weiss, the bot with an opinion!</h1>
 <div>
     {% for line in dialog reversed %}
+    {% if line.query != "" %}
     <div>
         <div class="well well-lg dialogbox" style="float:left" >
             {{ line.query }}
         </div>
         <div style="clear:both"></div>
     </div>
-     <div style="right">
-      <div class="well well-lg dialogbox" style="float:right" >
-        Action:{{ line.aid.name }}
-      </div>
+    <div style="right">
+        <div class="well well-lg dialogbox" style="float:right" >
+            Action:{{ line.aid.name }}
+        </div>
 
-      {% if forloop.last %}
-      <!-- Single button -->
-      <div align="right" class="btn-group">
-        <form method="POST" action="/confirmaction">
-          <button type="submit" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Intended Action <span class="caret"></span>
-          </button>
-          <ul name="aid" class="dropdown-menu">
-            {% for aid, name in actions %}
-            <!--from context dict, use keyname = aid to grabe value-->
-            <!-- <li value="{{ aid }}">{{ name }}</li> -->
-            <li aid="{{ aid }}"><a href="confirmaction-{{ aid }}">{{ name }}</a></li>
-            {% endfor%}
-          </ul>
-        </form>
-      </div>
-      {% endif %}
+        {% if forloop.last %}
+        <!-- Single button -->
+        <div align="right" class="btn-group">
+            <form method="POST" action="/confirmaction">
+                <button type="submit" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Intended Action <span class="caret"></span>
+                </button>
+                <ul name="aid" class="dropdown-menu">
+                    {% for aid, name in actions %}
+                    <!--from context dict, use keyname = aid to grabe value-->
+                    <!-- <li value="{{ aid }}">{{ name }}</li> -->
+                    <li aid="{{ aid }}"><a href="confirmaction-{{ aid }}">{{ name }}</a></li>
+                    {% endfor%}
+                </ul>
+            </form>
+        </div>
+        {% endif %}
+        {% endif %}
 
-      <div style="clear:both"></div>
+        <div style="clear:both"></div>
     </div>
     <div style="right">
-      <div class="well well-lg dialogbox" id = "responses area" style="float:right" >
-        {{ line.response }}
-        <button type="submit" id="responseplay"+"{{line.hid}}" class="btn btn-default input-lg " aria-expanded="false" onclick="play_response({{line.hid}});" value="{{ line.hid }}">
-          Verbal Response <span class="glyphicon glyphicon-volume-up"></span></button>
-      </div>
-      <div style="clear:both"></div>
+        <div class="well well-lg dialogbox" id = "responses area" style="float:right" >
+            {{ line.response }}
+            <button type="submit" id="responseplay"+"{{line.hid}}" class="btn btn-default input-lg " aria-expanded="false" onclick="play_response({{line.hid}});" value="{{ line.hid }}">
+                Verbal Response <span class="glyphicon glyphicon-volume-up"></span></button>
+        </div>
+        <div style="clear:both"></div>
     </div>
     {% endfor %}
 </div>
 <br>
 {% if msg %}
-  <!--<script>alert('thx for you feedback')</script>-->
-  <div class="alert alert-success" role="alert">thanks for you feedback</div>
+<!--<script>alert('thx for you feedback')</script>-->
+<div class="alert alert-success" role="alert">thanks for you feedback</div>
 {% endif %}
 <!-- Query Input -->
 <div class="col-lg-12 padding">
@@ -71,7 +73,7 @@
             <input type="hidden" name="aid" value="0">
             {% csrf_token %}
             <div class="input-group-btn" >
-                 <button type="submit" class="btn btn-default input-lg " aria-expanded="false">Ask Weiss!</button>
+                <button type="submit" class="btn btn-default input-lg " aria-expanded="false">Ask Weiss!</button>
             </div><!-- /btn-group -->
         </div>
     </form>
