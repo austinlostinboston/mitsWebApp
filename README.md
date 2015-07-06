@@ -1,5 +1,7 @@
 ## Dependencies
-## To install dependencies, type 'sudo pip install -R requirements.txt'
+
+To install dependencies, type 'sudo pip install -R requirements.txt'
+
 > - **django**
 > - **MySQLdb** 
 > - **numpy** 
