@@ -1,10 +1,12 @@
 ## Dependencies
-
+## To install dependencies, type 'sudo pip install -R requirements.txt'
 > - **django**
 > - **MySQLdb** 
 > - **numpy** 
 > - **sklearn**
 > - **nltk**
+> - **python-igraph**
+> - **liblinear**
 
 ## Installation 
 

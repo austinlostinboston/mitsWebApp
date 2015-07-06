@@ -1,0 +1,7 @@
+django
+MySQLdb
+numpy
+sklear
+nltk
+python-igraph
+liblinear
