@@ -65,6 +65,5 @@ def _getYearFromDesc(desc):
     '''
     return release year as int from the description of a film
     '''
-    start = desc.find("Title:")
-    year = desc.find("(", start)
-    return int(desc[year+1:year+5])
+    year = desc.split("\n")[2]
+    return int(year[-5:-1])
