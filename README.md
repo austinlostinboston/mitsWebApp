@@ -35,6 +35,10 @@ To install dependencies, type 'sudo pip install -R requirements.txt'
   
   `1#Let's talk about movie#0#8`
 
-  To stop Django from capturing `stdout`, add `NOSE_ARGS = ['--nocapture', '--nologcapture',]` to `settings.py`. To run test, simply use the following:
+  To stop Django from capturing `stdout, add `NOSE_ARGS = ['--nocapture', '--nologcapture',]` to `settings.py`. 
+
+  To run test without creating test db, add `TEST_RUNNER = 'weiss.tests.testUtils.NoDbTestRunner'` to `settings.py`.
+
+  To run test, simply use the following:
 
   `python manage.py test`
