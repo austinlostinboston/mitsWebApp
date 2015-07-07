@@ -4,3 +4,4 @@ numpy
 sklearn
 nltk
 python-igraph
+termcolor

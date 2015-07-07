@@ -9,6 +9,7 @@ To install dependencies, type 'sudo pip install -R requirements.txt'
 > - **nltk**
 > - **python-igraph**
 > - **liblinear**
+> - **termcolor**
 
 ## Installation 
 
