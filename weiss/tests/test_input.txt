@@ -41,4 +41,14 @@ Let's talk about frozen#1#7
 How about titanic?#1#7
 How do people think?#2#6
 Do people like it ?#2#6
+<<<<<<< HEAD
 >>>>>>> b4fde78... add test cases
+=======
+Anything bad about it?#2#4
+Give me a positive comment.#2#3
+Say some bad words.#2#4
+Any different ideas?#3#2
+Give me a comment#2#1
+Let's talk about something else#3#5
+Let's talk about another movie#3#8
+>>>>>>> 6e6df71... add test cases
