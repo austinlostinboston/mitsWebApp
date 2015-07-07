@@ -17,6 +17,7 @@
 
 
 
+<<<<<<< HEAD
 # Start with System Initiative
 
 <<<<<<< HEAD
@@ -26,22 +27,35 @@
 4#Is this place any good?#2#3
 >>>>>>> 1c69829... avoid test harness from stopping running if one case failed in the middle; add color print
 =======
+=======
+# Start with System Initiative, sid =  #0
+restaurant#0#8
+>>>>>>> 85c9b34... a little format for test_input.txt
 Let's talk about movie#0#8
 I'm hungry for chinese food#0#7
 news#0#8
+where can i get pizza?#0#7
+any Italian food recommendation#0#7
+action movie#0#7
+Let's talk about news#0#8
+Let's talk about news articles#0#8
 
-# Start with Type Selected
-Is this place any good?#2#6
-
-# Start with Entity Selected
-
-# Start with Comment Selected
-
-What's a bad review?#3#4
-What was something positive?#2#3
+# Start with Type Selected, sid =  #1
 Let's talk about Frozen#1#7
 Let's talk about frozen#1#7
 How about titanic?#1#7
+I want to know something about Little Aisa#1#7
+I want to know something about little asia#1#7
+action movie#1#7
+recomment a romance movie for me#1#7
+where can i get pizza?#1#7
+Let's discuss news#1#8
+Give me another movie#1#5
+Let's talk about greece#1#7
+
+# Start with Entity Selected, sid =  #2
+What was something positive?#2#3
+Is this place any good?#2#6
 How do people think?#2#6
 Do people like it ?#2#6
 <<<<<<< HEAD
@@ -50,8 +64,17 @@ Do people like it ?#2#6
 Anything bad about it?#2#4
 Give me a positive comment.#2#3
 Say some bad words.#2#4
-Any different ideas?#3#2
 Give me a comment#2#1
+Let's talk about news articles#2#8
+Tell me something about Grexit#2#7
+How about another restaurant#2#5
+What do people think about Grexit ?#2#6
+How good is it?#2#3
+One comment#2#1
+
+# Start with Comment Selected, sid = #3
+What's a bad review?#3#4
+Any different ideas?#3#2
 Let's talk about something else#3#5
 Let's talk about another movie#3#8
 <<<<<<< HEAD
@@ -59,40 +82,26 @@ Let's talk about another movie#3#8
 >>>>>>> 6e6df71... add test cases
 =======
 Another comment#3#1
-I want to know something about Little Aisa#1#7
-I want to know something about little asia#1#7
-restaurant#0#8
-action movie#1#7
-recomment a romance movie for me#1#7
-where can i get pizza?#1#7
 any italian food recommendation#3#7
-where can i get pizza?#0#7
-any Italian food recommendation#0#7
 what do people think#3#6
 Is it a bad movie ?#3#6
 Anything good ?#3#3
-action movie#0#7
-Let's discuss news#1#8
-Let's talk about news articles#2#8
-Let's talk about news#0#8
 How about restaurant#3#8
-Tell me something about Grexit#2#7
-Give me another movie#1#5
-How about another restaurant#2#5
-What do people think about Grexit ?#2#6
 Tell me another news#3#5
 Does anyone think it's a bad idea ?#3#6
 Give me one negative review.#3#4
 Show me a negative comment.#3#4
 Show me a positive review.#3#3
-How good is it?#2#3
 Is there any opposite idea ?#3#2
 Does anyone think it differently ?#3#2
 What do people of the other side say ?#3#2
 One more comment#3#1
+<<<<<<< HEAD
 One comment#2#1
 >>>>>>> 4476f96... add test cases
 =======
 Let's talk about news articles#0#8
 Let's talk about greece#1#7
 >>>>>>> 725d394... add more test cases
+=======
+>>>>>>> 85c9b34... a little format for test_input.txt
