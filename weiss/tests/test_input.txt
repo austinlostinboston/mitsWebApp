@@ -24,8 +24,21 @@ Action ID:
 
 
 
+<<<<<<< HEAD
 1#Let's talk about movie#0#8
 2#I'm hungry for chinese food#0#7
 3#What's a bad review?#3#4
 4#Is this place any good?#2#3
 >>>>>>> 1c69829... avoid test harness from stopping running if one case failed in the middle; add color print
+=======
+Let's talk about movie#0#8
+I'm hungry for chinese food#0#7
+What's a bad review?#3#4
+Is this place any good?#2#3
+What was something positive?#2#3
+Let's talk about Frozen#1#7
+Let's talk about frozen#1#7
+How about titanic?#1#7
+How do people think?#2#6
+Do people like it ?#2#6
+>>>>>>> b4fde78... add test cases
