@@ -46,6 +46,7 @@ Give me a comment#2#1
 Let's talk about something else#3#5
 Let's talk about another movie#3#8
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 6e6df71... add test cases
 =======
 Another comment#3#1
@@ -82,3 +83,7 @@ What do people of the other side say ?#3#2
 One more comment#3#1
 One comment#2#1
 >>>>>>> 4476f96... add test cases
+=======
+Let's talk about news articles#0#8
+Let's talk about greece#1#7
+>>>>>>> 725d394... add more test cases
