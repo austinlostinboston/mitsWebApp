@@ -1,4 +1,31 @@
+<<<<<<< HEAD
 Let's talk about movie#0#8
 What was something positive?#2#3
 Let's talk about Frozen#1#7
 Let's talk about frozen#1#7
+=======
+State ID:
+0 - SystemInitiative
+1 - TypeSelected
+2 - EntitySelected
+3 - CommentSelected
+Action ID:
+1 - Next Random Comment
+2 - Next Random Opposite Comment
+3 - Next Random Positive Comment
+4 - Next Random Negative Comment
+5 - Next Random Entity
+6 - Sentiment Statistics
+7 - Entity Selection
+8 - Type Selection
+9 - Greeting
+
+
+
+
+
+1#Let's talk about movie#0#8
+2#I'm hungry for chinese food#0#7
+3#What's a bad review?#3#4
+4#Is this place any good?#2#3
+>>>>>>> 1c69829... avoid test harness from stopping running if one case failed in the middle; add color print
