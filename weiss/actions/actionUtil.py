@@ -68,14 +68,6 @@ def confirmAciton(UserName, ActionID):
     his.save()
     return
 
-'''
-deprecated
-def sessionToDialog(session):
-    keys = session.keys()
-    keys = filter(lambda x: type(x) in [unicode, str] and (x[0] == "0" or x[0] == "1"), keys)
-    dialog = map(lambda x: (x[0], int(x[1:]), session[x]), keys)
-    return sorted(dialog, key=lambda x: x[1])
-'''
 def getDialogHistory(userid, limit=10):
     '''
     get lines from database for rendering the page
@@ -99,6 +91,9 @@ def initSession(request):
     session['curr_tid'] = None
     session['actioninput'] = ""
     session['curr_sid'] = 0  # sid for init state
+    line = History.objects.filter(Q(userid=request.user)).order_by("-time")[:1]
+    if len(line) > 0 and line[0].aid.aid == 9: # the previous record is not a greeting
+        return
     initNewLine(session, '', 9) # greeting aid and meaningless user query
     flushNewLine(request, "Hi I'm Weiss. What would like to talk about, movies? news? or restaurants?")
 
