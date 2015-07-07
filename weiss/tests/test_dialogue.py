@@ -52,7 +52,7 @@ def readCases():
 
 
 
-class StateTestCase(TestCase):
+class ClassifierTestCase(TestCase):
     def setUp(self):
         self.classifier = getClassifier()
         self.cases = readCases()
