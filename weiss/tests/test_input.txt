@@ -71,6 +71,8 @@ How about another restaurant#2#5
 What do people think about Grexit ?#2#6
 How good is it?#2#3
 One comment#2#1
+I want to know something good about it#2#3
+Any thoughts about it?#2#1
 
 # Start with Comment Selected, sid = #3
 What's a bad review?#3#4
