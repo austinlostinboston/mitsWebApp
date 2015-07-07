@@ -23,13 +23,13 @@ class Case(object):
 
     def __str__(self):
         if self.check():
-            return PASSED + \
-                    " query: %s, curr_state: %s, expected: %s, actual: %s" % \
-                    (self.query, self.curr_state, self.expected, self.actual)
+            return  "query: %s\ncurr_state: %s\nexpected: %s\nactual: %s\n" %   \
+                    (self.query, self.curr_state, self.expected, self.actual) \
+                    + PASSED + "\n"
         else:
-            return FAILED + \
-                    " query: %s, curr_state: %s, expected: %s, actual: %s" % \
-                    (self.query, self.curr_state, self.expected, self.actual)
+            return  "query: %s\ncurr_state: %s\nexpected: %s\nactual: %s\n" %   \
+                    (self.query, self.curr_state, self.expected, self.actual) \
+                    + FAILED + "\n"
 
 
     def check(self):
@@ -41,13 +41,16 @@ class Case(object):
             return self.check()
 
 def CaseFactory(line):
+    if line.startswith("#") or line == "\n":
+        return None
     line = line.split('#')
     return Case(line)
 
 def readCases():
     tfile = BASE_DIR + "/weiss/tests/test_input.txt"
     with open(tfile, 'r') as f:
-        cases = map(CaseFactory, f.readlines()[20:])  # skip first 20 lines
+        cases = map(CaseFactory, f.readlines())
+        cases = filter(lambda x : x is not None, cases)
     return cases
 
 

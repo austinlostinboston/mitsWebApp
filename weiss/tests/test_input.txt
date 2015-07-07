@@ -1,22 +1,23 @@
-State ID:
-0 - SystemInitiative
-1 - TypeSelected
-2 - EntitySelected
-3 - CommentSelected
-Action ID:
-1 - Next Random Comment
-2 - Next Random Opposite Comment
-3 - Next Random Positive Comment
-4 - Next Random Negative Comment
-5 - Next Random Entity
-6 - Sentiment Statistics
-7 - Entity Selection
-8 - Type Selection
-9 - Greeting
+# State ID:
+# 0 - SystemInitiative
+# 1 - TypeSelected
+# 2 - EntitySelected
+# 3 - CommentSelected
+# Action ID:
+# 1 - Next Random Comment
+# 2 - Next Random Opposite Comment
+# 3 - Next Random Positive Comment
+# 4 - Next Random Negative Comment
+# 5 - Next Random Entity
+# 6 - Sentiment Statistics
+# 7 - Entity Selection
+# 8 - Type Selection
+# 9 - Greeting
 
 
 
 
+# Start with System Initiative
 
 <<<<<<< HEAD
 1#Let's talk about movie#0#8
@@ -27,8 +28,16 @@ Action ID:
 =======
 Let's talk about movie#0#8
 I'm hungry for chinese food#0#7
-What's a bad review?#3#4
+news#0#8
+
+# Start with Type Selected
 Is this place any good?#2#6
+
+# Start with Entity Selected
+
+# Start with Comment Selected
+
+What's a bad review?#3#4
 What was something positive?#2#3
 Let's talk about Frozen#1#7
 Let's talk about frozen#1#7
@@ -52,7 +61,6 @@ Let's talk about another movie#3#8
 Another comment#3#1
 I want to know something about Little Aisa#1#7
 I want to know something about little asia#1#7
-news#0#8
 restaurant#0#8
 action movie#1#7
 recomment a romance movie for me#1#7
@@ -66,6 +74,7 @@ Anything good ?#3#3
 action movie#0#7
 Let's discuss news#1#8
 Let's talk about news articles#2#8
+Let's talk about news#0#8
 How about restaurant#3#8
 Tell me something about Grexit#2#7
 Give me another movie#1#5
