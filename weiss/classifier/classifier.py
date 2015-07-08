@@ -25,6 +25,7 @@ import timeit
 from webapps.settings import BASE_DIR
 from weiss.classifier.feature import *
 from weiss.flows.states import *
+from nltk.tag.stanford import POSTagger
 
 class Classifier(object):
     modeldir = os.path.abspath(BASE_DIR + "/weiss/classifier/models/")
@@ -36,11 +37,13 @@ class Classifier(object):
         """
         start = timeit.timeit()
         self.action_model, self.type_model = self._get_model()
-        end = timeit.timeit()
         self.stopwords = stopword(self.stopword_path)
-        print "Load time: " + str(start-end)
-        self.feature_arg = parse_options('-uni -pos2 -stem -stprm')
         self.feature_list = self._get_feature_list()
+        self.stemmer = nltk.SnowballStemmer("english")
+        self.sentiment = self._get_sentiment()
+        end = timeit.timeit()
+        print "Load time: " + str(end-start)
+        self.feature_arg = parse_options('-uni -pos2 -stem -stprm')
         self.type_words = self._set_type_words()
         self.labels = [1,2,3,4,5,6,7]
 
@@ -54,6 +57,13 @@ class Classifier(object):
         m1 = load_model(self.modeldir + '/action_model')
         m2 = joblib.load(self.modeldir + '/type_model')
         return m1, m2
+
+    def _get_sentiment(self):
+        sentiment = {}
+        for line in open(self.modeldir + "/AFINN.txt"):
+            word, score = line.split('\t')
+            sentiment[word] = int(score)
+        return sentiment
 
     def _get_feature_list(self):
         """Load feature file
@@ -133,22 +143,26 @@ class Classifier(object):
                         arguments['aid'] = 5
                     else:
                         arguments['aid'] = -1
-        # State Entity Selected and State All Selected
+        # State Entity Selected and State Comment Selected
         else:
             arguments['aid'] = self._classify(query)
             if arguments['aid'] == 7:
-                if temp == -1:
-                    q = list2Vec(hashit(query))
-                    arguments['tid'] = self.type_model.predict(q)[0]
                 self._entity_recognition(query,arguments)
                 if 'keywords' not in arguments:
                     if temp == -1:
                         arguments['aid'] = 5
                     else:
                         arguments['aid'] = 8
-            if arguments['aid'] == 2 and 2 not in plausible:
+            elif arguments['aid'] == 2 and 2 not in plausible:
                 arguments['aid'] = 1
-
+            elif arguments['aid'] == 1:
+                tokens = nltk.word_tokenize(query.lower())
+                score = 0
+                for token in tokens:
+                    if token in self.sentiment:
+                        score += self.sentiment[token]
+                if score < -1:arguments['aid'] = 4
+                if score > 1:arguments['aid'] = 3
 
         return arguments
 
@@ -162,7 +176,10 @@ class Classifier(object):
             arguments: info needs to be updated
         """
         tokens = nltk.word_tokenize(query)
-        tags = nltk.pos_tag(tokens)
+        postagger = POSTagger(self.modeldir+'/postagger/models/english-bidirectional-distsim.tagger', 
+                                self.modeldir+'/postagger/stanford-postagger.jar')
+        tags = postagger.tag(tokens)
+
         entities = nltk.chunk.ne_chunk(tags)
         if 'aid' not in arguments:
             arguments['aid'] = 7
@@ -174,9 +191,9 @@ class Classifier(object):
             if isinstance(i,tuple):
                 if ((i[1][:2] == 'NN' or i[1][:2] == 'JJ')
                     and i[0].lower() not in self.stopwords
-                    and i[0].rstrip('s') not in self.type_words['movie']
-                    and i[0].rstrip('s') not in self.type_words['article']
-                    and i[0].rstrip('s') not in self.type_words['restaurant']):
+                    and self.stemmer.stem(i[0]) not in self.type_words['movie']
+                    and self.stemmer.stem(i[0]) not in self.type_words['article']
+                    and self.stemmer.stem(i[0]) not in self.type_words['restaurant']):
                     tuples.append(i[0])
             elif isinstance(i,nltk.tree.Tree):
                 phrase = []
@@ -199,17 +216,26 @@ class Classifier(object):
         Return: A dictionary, key: movie, article, restaurant, value: their synonymy words
         """
         topic = {}
-        topic['movie'] = set(['cinema','show','film','picture','cinematograph',
+        movie = ['cinema','show','film','picture','cinematograph',
             'videotape','flick','pic','cine','cinematics','photodrama',
-            'photoplay','talkie','flicker','DVD','movie'])
-        topic['article'] = set(['report','announcement','story','account',
+            'photoplay','talkie','flicker','DVD','movie']
+        article = ['report','announcement','story','account',
             'newscast','headlines','press','communication','talk','word',
             'communique','bulletin','message','dispatch','broadcast',
             'statement','intelligence','disclosure','revelation',
-            'gossip','dispatch','news','article'])
-        topic['restaurant'] = set(['bar','cafeteria','diner','dining','saloon','coffeehouse',
+            'gossip','dispatch','news','article']
+        restaurant = ['bar','cafeteria','diner','dining','saloon','coffeehouse',
             'canteen','chophouse','drive-in','eatery','grill','lunchroom','inn','food',
-            'pizzeria','hideaway','cafe','charcuterie','deli','restaurant'])
+            'pizzeria','hideaway','cafe','charcuterie','deli','restaurant']
+        for m in movie:
+            topic.setdefault('movie',set([]))
+            topic['movie'].add(self.stemmer.stem(m))
+        for a in article:
+            topic.setdefault('article',set([]))
+            topic['article'].add(self.stemmer.stem(a))
+        for r in restaurant:
+            topic.setdefault('restaurant',set([]))
+            topic['restaurant'].add(self.stemmer.stem(r))
         return topic
 
     def _type_recognition(self, query, arguments):
@@ -225,13 +251,13 @@ class Classifier(object):
         tokens = nltk.word_tokenize(query)
         arguments['aid'] = 8
         for i in xrange(0,len(tokens)):
-            if tokens[i] in self.type_words['article']:
+            if self.stemmer.stem(tokens[i]) in self.type_words['article']:
                 arguments['tid'] = 1
                 break
-            if tokens[i] in self.type_words['restaurant']:
+            if self.stemmer.stem(tokens[i]) in self.type_words['restaurant']:
                 arguments['tid'] = 2
                 break
-            if tokens[i] in self.type_words['movie']:
+            if self.stemmer.stem(tokens[i]) in self.type_words['movie']:
                 arguments['tid'] = 3
                 break
         if 'tid' not in arguments:
