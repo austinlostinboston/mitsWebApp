@@ -25,7 +25,7 @@ import timeit
 from webapps.settings import BASE_DIR
 from weiss.classifier.feature import *
 from weiss.flows.states import *
-from nltk.tag.stanford import POSTagger
+from nltk.tag.stanford import StanfordPOSTagger
 
 class Classifier(object):
     modeldir = os.path.abspath(BASE_DIR + "/weiss/classifier/models/")
@@ -176,7 +176,7 @@ class Classifier(object):
             arguments: info needs to be updated
         """
         tokens = nltk.word_tokenize(query)
-        postagger = POSTagger(self.modeldir+'/postagger/models/english-bidirectional-distsim.tagger', 
+        postagger = StanfordPOSTagger(self.modeldir+'/postagger/models/english-bidirectional-distsim.tagger', 
                                 self.modeldir+'/postagger/stanford-postagger.jar')
         tags = postagger.tag(tokens)
 
