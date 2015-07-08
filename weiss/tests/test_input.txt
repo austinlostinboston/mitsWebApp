@@ -73,6 +73,9 @@ How good is it?#2#3
 One comment#2#1
 I want to know something good about it#2#3
 Any thoughts about it?#2#1
+I want to talk about movie.#2#8
+I'd like to talk about movie now.#2#8
+Can I talk about restaurant instead?#2#8
 
 # Start with Comment Selected, sid = #3
 What's a bad review?#3#4
