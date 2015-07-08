@@ -42,7 +42,7 @@ def nextRandomEntity(session, args):
     logger.debug("next ran entity has decided next eid: %s" % (new_eid))
     #addNewDialog(session, WEISS, new_eid)
     entity = Entity.objects.get(eid=new_eid)
-    return "Sure, let's talk about %s" % entity.name
+    return "Sure, let's talk about \"%s\"" % entity.name
 
 def nextRandomCmt(session, args):
     """Give a random comment of given entity
@@ -234,7 +234,7 @@ def entitySelection(session, args):
             # good, we found some
             entity = entitySelector(entities, curr_tid)
             session["curr_eid"] = entity.eid
-            return "Sure, let's talk about %s" % entity.name
+            return "Sure, let's talk about \"%s\"" % entity.name
         else:
             # if there is no such entity, we loose the requirement
             keywords = args["keywords"].split("#")
@@ -246,7 +246,7 @@ def entitySelection(session, args):
                 if len(entities) > 0:
                     entity = entitySelector(entities, curr_tid)
                     session["curr_eid"] = entity.eid
-                    return "Sure, let's talk about %s" % entity.name
+                    return "Sure, let's talk about \"%s\"" % entity.name
             return "Sorry, I could not find a relevent entity to talk about."
     else:
         # TODO: handle this case
