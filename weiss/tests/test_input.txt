@@ -13,6 +13,10 @@
 # 7 - Entity Selection
 # 8 - Type Selection
 # 9 - Greeting
+# Type ID:
+# 1 - news
+# 2 - restrauant
+# 3 - films
 
 
 
@@ -29,16 +33,22 @@
 =======
 =======
 # Start with System Initiative, sid =  #0
+<<<<<<< HEAD
 restaurant#0#8
 >>>>>>> 85c9b34... a little format for test_input.txt
 Let's talk about movie#0#8
+=======
+restaurant#0#8#2
+Let's talk about movie#0#8#3
+>>>>>>> 69df819... add test for type id
 I'm hungry for chinese food#0#7
-news#0#8
+news#0#8#1
 where can i get pizza?#0#7
 any Italian food recommendation#0#7
 action movie#0#7
-Let's talk about news#0#8
-Let's talk about news articles#0#8
+Let's talk about news#0#8#1
+Let's talk about news articles#0#8#1
+Let's talk about restaruant#0#8#2
 
 # Start with Type Selected, sid =  #1
 Let's talk about Frozen#1#7
@@ -49,7 +59,7 @@ I want to know something about little asia#1#7
 action movie#1#7
 recomment a romance movie for me#1#7
 where can i get pizza?#1#7
-Let's discuss news#1#8
+Let's discuss news#1#8#1
 Give me another movie#1#5
 Let's talk about greece#1#7
 
@@ -65,7 +75,7 @@ Anything bad about it?#2#4
 Give me a positive comment.#2#3
 Say some bad words.#2#4
 Give me a comment#2#1
-Let's talk about news articles#2#8
+Let's talk about news articles#2#8#1
 Tell me something about Grexit#2#7
 How about another restaurant#2#5
 What do people think about Grexit ?#2#6
@@ -95,7 +105,7 @@ any italian food recommendation#3#7
 what do people think#3#6
 Is it a bad movie ?#3#6
 Anything good ?#3#3
-How about restaurant#3#8
+How about restaurant#3#8#2
 Tell me another news#3#5
 Does anyone think it's a bad idea ?#3#6
 Give me one negative review.#3#4

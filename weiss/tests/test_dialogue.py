@@ -10,7 +10,11 @@ class Case(object):
     def __init__(self, line):
         self.query = line[0]
         self.curr_sid = int(line[1])
-        self.expected = int(line[2])
+        self.expected_aid = int(line[2])
+        if (self.expected_aid == 8):
+            self.expected_tid = int(line[3])
+        else:
+            self.expected_tid = None
         self.classifier = getClassifier()
         self.fmgr = getFlowManager()
         self.curr_state = self.fmgr.lookUp(self.curr_sid)
@@ -23,18 +27,21 @@ class Case(object):
 
     def __str__(self):
         if self.check():
-            return  "query: %s\ncurr_state: %s\nexpected: %s\nactual: %s\n" %   \
-                    (self.query, self.curr_state, self.expected, self.actual) \
+            return  "query: %s\ncurr_state: %s\nexpected_aid: %s, expected_tid: %s\nactual: %s\n" %   \
+                    (self.query, self.curr_state, self.expected_aid, self.expected_tid, self.actual) \
                     + PASSED + "\n"
         else:
-            return  "query: %s\ncurr_state: %s\nexpected: %s\nactual: %s\n" %   \
-                    (self.query, self.curr_state, self.expected, self.actual) \
+            return  "query: %s\ncurr_state: %s\nexpected_aid: %s, expected_tid: %s\nactual: %s\n" %   \
+                    (self.query, self.curr_state, self.expected_aid, self.expected_tid, self.actual) \
                     + FAILED + "\n"
 
 
     def check(self):
         if self.isDone is True:
-            return self.actual['aid'] == self.expected
+            if (self.expected_aid == 8):
+                return self.actual['aid'] == self.expected_aid and self.actual['tid'] == self.expected_tid
+            else:
+                return self.actual['aid'] == self.expected_aid
         else:
             self.run()
             #print self
