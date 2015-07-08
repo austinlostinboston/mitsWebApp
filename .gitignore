@@ -6,8 +6,9 @@ webapps/settings.py
 log/
 
 # classifier models
-model_*
-features_*
+action_features
+action_model
+type_model
 
 # python
 *.pyc
