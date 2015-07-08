@@ -9,6 +9,8 @@ log/
 action_features
 action_model
 type_model
+model*
+features*
 
 # python
 *.pyc

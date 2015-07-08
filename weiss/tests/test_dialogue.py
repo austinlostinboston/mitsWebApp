@@ -61,13 +61,18 @@ class ClassifierTestCase(TestCase):
         self.cases = readCases()
 
     def test_classifier(self):
+        numCases = len(self.cases)
+        numPass = 0
+        numFail = 0
         for case in self.cases:
             try:
                 self.assertTrue(case.check())
+                numPass = numPass + 1
             except AssertionError, e:
-                pass
+                numFail = numFail + 1
             finally:
                 print case
+        print "Summary:  Passed: %s, Failed: %s, All: %s" % (numPass, numFail, numCases)
 
 
 

@@ -1,7 +1,7 @@
 django
-MySQLdb
+MySQL-python
 numpy
-sklearn
+scikit-learn
 nltk
 python-igraph
 termcolor
