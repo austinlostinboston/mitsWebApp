@@ -78,11 +78,15 @@ Any thoughts about it?#2#1
 What's a bad review?#3#4
 Any different ideas?#3#2
 Let's talk about something else#3#5
+<<<<<<< HEAD
 Let's talk about another movie#3#8
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 6e6df71... add test cases
 =======
+=======
+Let's talk about another movie#3#5
+>>>>>>> 2b46763... update model and test cases
 Another comment#3#1
 any italian food recommendation#3#7
 what do people think#3#6
