@@ -49,6 +49,8 @@ action movie#0#7
 Let's talk about news#0#8#1
 Let's talk about news articles#0#8#1
 Let's talk about restaruant#0#8#2
+where's the best steak house in pittsburgh#0#7
+can you recommend a good sushi place#0#7
 
 # Start with Type Selected, sid =  #1
 Let's talk about Frozen#1#7
@@ -62,6 +64,7 @@ where can i get pizza?#1#7
 Let's discuss news#1#8#1
 Give me another movie#1#5
 Let's talk about greece#1#7
+
 
 # Start with Entity Selected, sid =  #2
 What was something positive?#2#3
