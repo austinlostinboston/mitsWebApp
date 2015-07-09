@@ -18,14 +18,15 @@ Date: July 1, 2015
 import os
 import pickle
 import nltk
-from sklearn.externals import joblib
-from liblinearutil import *
 import timeit
+import string
 
 from webapps.settings import BASE_DIR
 from weiss.classifier.feature import *
 from weiss.flows.states import *
 from nltk.tag.stanford import StanfordPOSTagger
+from sklearn.externals import joblib
+from liblinearutil import *
 
 class Classifier(object):
     modeldir = os.path.abspath(BASE_DIR + "/weiss/classifier/models/")
@@ -125,11 +126,9 @@ class Classifier(object):
 
         """
         arguments = {}
-        temp = -1
         plausible = state.getNextPossibleActions()
         self._type_recognition(query, arguments)
-        if arguments['aid'] == 8:
-            temp = 8
+        temp = arguments['aid']
         # State System Initiative and State Type Selected
         if state is SystemInitiative or state is TypeSelected:
             q = list2Vec(hashit(query))
@@ -143,16 +142,27 @@ class Classifier(object):
                         arguments['aid'] = 5
                     else:
                         arguments['aid'] = 10
+                else:
+                    if query.find('another') != -1:
+                        # TODO<wenjunw@cs.cmu.edu>:
+                        # Need to think about this heuristic later how to differentiate 5,7,8
+                        # Or do we still allow action 5?
+                        arguments['aid'] = 5
         # State Entity Selected and State Comment Selected
         else:
             arguments['aid'] = self._classify(query)
             if arguments['aid'] == 7:
                 self._entity_recognition(query,arguments)
                 if 'keywords' not in arguments:
-                    if temp == -1:
+                    if temp == 10:
                         arguments['aid'] = 5
                     else:
                         arguments['aid'] = 8
+            elif arguments['aid'] == 5:
+                # TODO<wenjunw@cs.cmu.edu>:
+                # Need to think about this heuristic later how to differentiate 5,7,8
+                if temp == 8 and query.find('another') == -1:
+                    arguments['aid'] = 8
             elif arguments['aid'] == 2 and 2 not in plausible:
                 arguments['aid'] = 1
             elif arguments['aid'] == 1:
@@ -248,13 +258,20 @@ class Classifier(object):
             arguments: info needs to be updated
 
         """
+        query = query.translate(string.maketrans("",""),string.punctuation)
         tokens = nltk.word_tokenize(query)
         arguments['aid'] = 8
         first = self.stemmer.stem(tokens[0])
         last = self.stemmer.stem(tokens[-1])
-        if first in self.type_words['article'] or last in self.type_words['article']:
+        lastsecond = self.stemmer.stem(tokens[-2]) if len(tokens) > 1 else "toy"
+        if (first in self.type_words['article'] or last in self.type_words['article']
+            or lastsecond in self.type_words['article']):
             arguments['tid'] = 1
-        elif first in self.type_words['restaurant'] or last in self.type_words['restaurant']:
+        elif (first in self.type_words['restaurant'] or last in self.type_words['restaurant'] 
+            or lastsecond in self.type_words['restaurant']):
             arguments['tid'] = 2
-        elif first in self.type_words['movie'] or last in self.type_words['movie']:
+        elif (first in self.type_words['movie'] or last in self.type_words['movie'] 
+            or lastsecond in self.type_words['movie']):
             arguments['tid'] = 3
+        else:
+            arguments['aid'] = 10
