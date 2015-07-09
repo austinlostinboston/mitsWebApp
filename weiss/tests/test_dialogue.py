@@ -39,7 +39,10 @@ class Case(object):
     def check(self):
         if self.isDone is True:
             if (self.expected_aid == 8):
-                return self.actual['aid'] == self.expected_aid and self.actual['tid'] == self.expected_tid
+                if 'tid' not in self.actual:
+                    return False
+                else:
+                    return self.actual['aid'] == self.expected_aid and self.actual['tid'] == self.expected_tid
             else:
                 return self.actual['aid'] == self.expected_aid
         else:
