@@ -130,6 +130,8 @@ class Classifier(object):
         self._type_recognition(query, arguments)
         temp = arguments['aid']
         # State System Initiative and State Type Selected
+        # TODO<wenjunw@cs.cmu.edu>:
+        # Reconsider the logic for SystemInitiative and TypeSelected
         if state is SystemInitiative or state is TypeSelected:
             q = list2Vec(hashit(query))
             arguments['tid'] = int(self.type_model.predict(q)[0])
