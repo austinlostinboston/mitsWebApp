@@ -64,6 +64,7 @@ where can i get pizza?#1#7
 Let's discuss news#1#8#1
 Give me another movie#1#5
 Let's talk about greece#1#7
+I would like to talk about Terminator#1#7
 
 
 # Start with Entity Selected, sid =  #2
