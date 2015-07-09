@@ -48,7 +48,7 @@ any Italian food recommendation#0#7
 action movie#0#7
 Let's talk about news#0#8#1
 Let's talk about news articles#0#8#1
-Let's talk about restaruant#0#8#2
+Let's talk about restaurant#0#8#2
 where's the best steak house in pittsburgh#0#7
 can you recommend a good sushi place#0#7
 

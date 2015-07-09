@@ -107,7 +107,7 @@ class Classifier(object):
         x = self._convert_query_to_dictionary(query)
         p_label, p_val = predict(self.labels, x, self.action_model, '-b 0')
         if p_val[0][int(p_label[0])-1] == 0:
-            p_label[0] = -1
+            p_label[0] = 10
 
         return int(p_label[0]) # API changes here
 
@@ -142,7 +142,7 @@ class Classifier(object):
                     if 5 in plausible:
                         arguments['aid'] = 5
                     else:
-                        arguments['aid'] = -1
+                        arguments['aid'] = 10
         # State Entity Selected and State Comment Selected
         else:
             arguments['aid'] = self._classify(query)
@@ -250,15 +250,11 @@ class Classifier(object):
         """
         tokens = nltk.word_tokenize(query)
         arguments['aid'] = 8
-        for i in xrange(0,len(tokens)):
-            if self.stemmer.stem(tokens[i]) in self.type_words['article']:
-                arguments['tid'] = 1
-                break
-            if self.stemmer.stem(tokens[i]) in self.type_words['restaurant']:
-                arguments['tid'] = 2
-                break
-            if self.stemmer.stem(tokens[i]) in self.type_words['movie']:
-                arguments['tid'] = 3
-                break
-        if 'tid' not in arguments:
-            arguments['aid'] = -1
+        first = self.stemmer.stem(tokens[0])
+        last = self.stemmer.stem(tokens[-1])
+        if first in self.type_words['article'] or last in self.type_words['article']:
+            arguments['tid'] = 1
+        elif first in self.type_words['restaurant'] or last in self.type_words['restaurant']:
+            arguments['tid'] = 2
+        elif first in self.type_words['movie'] or last in self.type_words['movie']:
+            arguments['tid'] = 3
