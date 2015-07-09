@@ -19,9 +19,12 @@ import os
 import pickle
 import nltk
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import string
 >>>>>>> b54bb32... update classifier
+=======
+>>>>>>> a533c0f... add heuristic rules
 import timeit
 import string
 
