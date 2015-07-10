@@ -1,3 +1,7 @@
+## Weiss
+
+Weiss, named after the German verb "to know", is a dialogue system aimed at answering subjective questions, as opposed to fact based systems like Siri, Evi, and Echo. Weiss is equipped to talk about three well defined domains; news, restaurants, and movies. Trained off of news article comments, restaurant reviews, and movie critiques, Weiss aims to understand user’s requests as well as generalize popular views within these categories. Using concepts from machine learning (classification, feature engineering), natural language processing (text summarization, named entity recognition, and parsing), and dialogue system (system-initiative and plan-based), Weiss is able to parse and understand questions, efficiently search and filter possible results, and return answers in small, intelligible segments.
+
 ## Dependencies
 
 To install dependencies, type `sudo pip install -r requirements.txt`
