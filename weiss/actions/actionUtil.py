@@ -95,7 +95,7 @@ def initSession(request):
     if len(line) > 0 and line[0].aid.aid == 9: # the previous record is not a greeting
         return
     initNewLine(session, '', 9) # greeting aid and meaningless user query
-    flushNewLine(request, "Hi I'm Weiss. What would like to talk about, movies? news? or restaurants?")
+    flushNewLine(request, "Hi I'm Weiss. What would you like to talk about, movies? news? or restaurants?")
 
 
 def getActions():

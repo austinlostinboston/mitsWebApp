@@ -3,18 +3,13 @@ This file defines the concrete control flow logic
 
 Author: Ming Fang
 """
-from weiss.flows.factory import getFlowManager
+from weiss.flows.abstractState import State, AbstractState
+from weiss.utils.switch import switch
 
-fmgr = getFlowManager()
 
 """
 Definitions of the system states
 """
-SystemInitiative = fmgr.createState("System Initiative")
-TypeSelected = fmgr.createState("Type Selected")
-EntitySelected = fmgr.createState("Entity Selected")
-CommentSelected = fmgr.createState("Comment Selected")
-
 
 
 """
@@ -27,15 +22,37 @@ Definition of the control flow
 6. Sentiment Stats
 7. Entity Selection (base on key and within current type)
 8. Type Selection
-9. Type and Entity Selection
+9. Greeting
+10. Unknown Action
 """
 
 """
 Systen initialization state
 the beginning point of the dialog
 """
-SystemInitiative[7] = EntitySelected
-SystemInitiative[8] = TypeSelected
+class SystemInitiative(AbstractState):
+
+    _npa = set([7, 8])
+
+    def __init__(self, uid):
+        AbstractState.__init__(self, uid)
+
+    @property
+    def sid(self):
+        return State.SystemInitiative
+
+    @property
+    def nextPossibleActions(self):
+        return self._npa
+
+    def transit(aid):
+        for case in switch(aid):
+            if case(7):
+                return Stete.EntitySelected
+            if case(8):
+                return State.TypeSelected
+            if case():
+                raise KeyError("Invaild action id")
 
 
 """
@@ -43,9 +60,31 @@ Type selected state
 The followings should be determined:
     curr_tid
 """
-TypeSelected[5] = EntitySelected
-TypeSelected[7] = EntitySelected
-TypeSelected[8] = TypeSelected
+class TypeSelected(AbstractState):
+
+    _npa = set([5,7,8])
+
+    def __init__(self, uid):
+        AbstractState.__init__(self, uid)
+
+    @property
+    def sid(self):
+        return State.TypeSelected
+
+    @property
+    def nextPossibleActions(self):
+        return self._npa
+
+    def transit(aid):
+        for case in switch(aid):
+            if case(5):
+                return State.EntitySelected
+            if case(7):
+                return State.EntitySelected
+            if case(8):
+                return State.TypeSelected
+            if case():
+                raise KeyError("Invaild action id")
 
 """
 Entity selceted state
@@ -53,16 +92,41 @@ The followings should be determined:
     curr_tid
     curr_eid
 """
-EntitySelected[1] = CommentSelected
-EntitySelected[3] = CommentSelected
-EntitySelected[4] = CommentSelected
+class EntitySelected(AbstractState):
 
-EntitySelected[5] = EntitySelected
-EntitySelected[6] = EntitySelected
-EntitySelected[7] = EntitySelected
-#EntitySelected[9] = EntitySelected
+    _npa = set([1,3,4,5,6,7,8])
 
-EntitySelected[8] = TypeSelected
+    def __init__(self, uid):
+        AbstractState.__init__(self, uid)
+
+    @property
+    def sid(self):
+        return State.EntitySelected
+
+    @property
+    def nextPossibleActions(self):
+        return self._npa
+
+    def transit(aid):
+        for case in switch(aid):
+            if case(1):
+                return State.CommentSelected
+            if case(3):
+                return State.CommentSelected
+            if case(4):
+                return State.CommentSelected
+            if case(5):
+                return State.EntitySelected
+            if case(6):
+                return State.EntitySelecetd
+            if case(7):
+                return State.EntitySelected
+            if case(8):
+                return State.TypeSelected
+            if case():
+                raise KeyError("Invaild action id")
+
+
 
 
 """
@@ -72,19 +136,61 @@ The followings should be determined:
     curr_eid
     curr_cid
 """
-CommentSelected[1] = CommentSelected
-CommentSelected[2] = CommentSelected
-CommentSelected[3] = CommentSelected
-CommentSelected[4] = CommentSelected
-CommentSelected[6] = CommentSelected
+class CommentSelected(AbstractState):
 
-CommentSelected[5] = EntitySelected
-CommentSelected[7] = EntitySelected
-#CommentSelected[9] = EntitySelected
+    _npa = set([1,2,3,4,5,6,7,8])
 
-CommentSelected[8] = TypeSelected
+    def __init__(self, uid):
+        AbstractState.__init__(self, uid)
+
+    @property
+    def sid(self):
+        return State.CommentSelected
+
+    @property
+    def nextPossibleActions(self):
+        return self._npa
+
+    def transit(aid):
+        for case in switch(aid):
+            if case(1):
+                return State.CommentSelected
+            if case(2):
+                return State.CommentSelected
+            if case(3):
+                return State.CommentSelected
+            if case(4):
+                return State.CommentSelected
+            if case(5):
+                return State.EntitySelected
+            if case(6):
+                return State.CommentSelected
+            if case(7):
+                return State.EntitySelected
+            if case(8):
+                return State.TypeSelected
+            if case():
+                raise KeyError("Invaild action id")
 
 
+"""
+Range Selected state
+"""
+class RangeSelected(AbstractState):
+
+    def __init__(self, uid):
+        AbstractState.__init__(self, uid)
+
+    @property
+    def sid(self):
+        return State.RangeSelected
+
+    @property
+    def nextPossibleActions(self):
+        raise NotImplementedError()
+
+    def transit(aid):
+        raise NotImplementedError()
 
 
 

@@ -4,7 +4,7 @@ Flow Mnager
 NOTE: this class should be created by signleton factory in factory.py
 
 this class is responsible for
-    1. create State, which is a inner class of flow manager.
+    1. user state factory.
     2. loop up state by sid
     3. make transit from one state based on a given action
 
@@ -12,6 +12,9 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 """
 
 import logging
+from weiss.utils.switch import switch
+from weiss.flows.abstractState import State
+from weiss.flows.states import *
 
 logger = logging.getLogger(__name__)
 
@@ -20,62 +23,46 @@ class FlowManager:
     def __init__(self):
         self._stateTable = {}
 
-    def createState(self, name):
-        state = self.State(name)
-        sid = len(self._stateTable.keys())
-        state.setSid(sid)
-        self._stateTable[sid] = state
-        return state
+    def createState(self, uid, sid):
+        for case in switch(sid):
+            if case(State.SystemInitiative):
+                return SystemInitiative(uid)
 
-    def lookUp(self, sid):
-        return self._stateTable[sid]
+            if case(State.TypeSelected):
+                return TypeSelected(uid)
+
+            if case(State.EntitySelected):
+                return EntitySelected(uid)
+
+            if case(State.CommentSelected):
+                return CommentSelected(uid)
+
+            if case(State.RangeSelected):
+                return RangeSelected(uid)
+
+            if case():
+                raise KeyError()
 
     def nameOf(self, sid):
-        return self.lookUp(sid).getName()
+        return sid.name
 
-    def transit(self, session, aid):
-        sid = session['curr_sid']
-        curr_state = self.lookUp(sid)
-        new_state = curr_state[aid]
-        logger.debug("Transit from %s to %s" % (self.nameOf(sid), new_state))
-        session['curr_sid'] = new_state.getSid()
+    def register(self, uid):
+        state = self.createState(uid, State.SystemInitiative)
+        self._stateTable[uid] = state
+        return state
 
-
-    class State(object):
-        def __init__(self, name):
-            self._name = name
-            self._actions = {} # int (aid) -> State
-            self._npa = set()  # next possible actions
-
-        def getName(self):
-            return self._name
-
-        def getSid(self):
-            return self._sid
-
-        def setSid(self, sid):
-            self._sid = sid
-
-        def getNextPossibleActions(self):
-            """
-            get next possible acitons as set
-            """
-            return self._npa
-
-        def __setitem__(self, aid, state):
-            self._actions[aid] = state
-            self._npa = set(self._actions.keys())
-
-        def __getitem__(self, aid):
-            if aid not in self._npa:
-                raise KeyError
-            else:
-                return self._actions[aid]
-
-        def __str__(self):
-            return self._name
+    def loopUp(self, uid):
+        if not self._stateTable.hasKey(uid):
+            return None
+        else:
+            return self._stateTable[uid]
 
 
-
+    def transit(self, request, aid):
+        curr_state = self.lookUp(request.user)
+        new_sid = curr_state.transit(aid)
+        new_state = self.createState(self, request.user, sid)
+        logger.debug("Transit from %s to %s" % (curr_state, new_state))
+        self._stateTable[uid] = new_state
 
 
