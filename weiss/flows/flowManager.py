@@ -41,7 +41,7 @@ class FlowManager:
                 return RangeSelected(uid)
 
             if case():
-                raise KeyError()
+                raise KeyError("No such state %s" % sid)
 
     def nameOf(self, sid):
         return sid.name
@@ -51,18 +51,21 @@ class FlowManager:
         self._stateTable[uid] = state
         return state
 
-    def loopUp(self, uid):
-        if not self._stateTable.hasKey(uid):
+    def lookUp(self, uid):
+        if not self._stateTable.has_key(uid):
             return None
         else:
             return self._stateTable[uid]
 
 
-    def transit(self, request, aid):
+    def transit(self, request, action):
         curr_state = self.lookUp(request.user)
-        new_sid = curr_state.transit(aid)
-        new_state = self.createState(self, request.user, sid)
-        logger.debug("Transit from %s to %s" % (curr_state, new_state))
-        self._stateTable[uid] = new_state
+        if curr_state is None:
+            logger.error("Can not make transit from a none state, %s, %s" %(request.user, action))
+            return
+        new_sid = curr_state.transit(action)
+        new_state = self.createState(request.user, new_sid)
+        logger.info("Transit from %s to %s" % (curr_state, new_state))
+        self._stateTable[request.user] = new_state
 
 

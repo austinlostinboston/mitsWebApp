@@ -1,6 +1,7 @@
 from django.test import TestCase
 from weiss.classifier.factory import getClassifier
 from weiss.flows.factory import getFlowManager
+from weiss.flows.abstractState import State
 from weiss.tests.testUtils import *
 from webapps.settings import BASE_DIR
 
@@ -17,7 +18,7 @@ class Case(object):
             self.expected_tid = None
         self.classifier = getClassifier()
         self.fmgr = getFlowManager()
-        self.curr_state = self.fmgr.lookUp(self.curr_sid)
+        self.curr_state = self.fmgr.createState(1, State(self.curr_sid)) # 1 for a dummy user id
         self.actual = None
         self.isDone = False
 

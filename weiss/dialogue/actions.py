@@ -8,7 +8,7 @@ from django.db.models import Q
 
 from weiss.models import Comment, Entity, Type
 from weiss.utils.switch import switch
-from weiss.actions.entitySelector import entitySelector
+from weiss.dialogue.entitySelector import entitySelector
 
 import random
 import logging

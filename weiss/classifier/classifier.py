@@ -28,12 +28,13 @@ import string
 import timeit
 import string
 
-from webapps.settings import BASE_DIR
-from weiss.classifier.feature import *
-from weiss.flows.states import *
 from nltk.tag.stanford import StanfordPOSTagger
 from sklearn.externals import joblib
 from liblinearutil import *
+
+from webapps.settings import BASE_DIR
+from weiss.classifier.feature import *
+from weiss.flows.states import *
 
 class Classifier(object):
     modeldir = os.path.abspath(BASE_DIR + "/weiss/classifier/models/")
@@ -133,7 +134,7 @@ class Classifier(object):
 
         """
         arguments = {}
-        plausible = state.getNextPossibleActions()
+        plausible = state.nextPossibleActions
         self._type_recognition(query, arguments)
         temp = arguments['aid']
         # State System Initiative and State Type Selected
@@ -195,7 +196,7 @@ class Classifier(object):
             arguments: info needs to be updated
         """
         tokens = nltk.word_tokenize(query)
-        postagger = StanfordPOSTagger(self.modeldir+'/postagger/models/english-bidirectional-distsim.tagger', 
+        postagger = StanfordPOSTagger(self.modeldir+'/postagger/models/english-bidirectional-distsim.tagger',
                                 self.modeldir+'/postagger/stanford-postagger.jar')
         tags = postagger.tag(tokens)
 
@@ -276,10 +277,10 @@ class Classifier(object):
         if (first in self.type_words['article'] or last in self.type_words['article']
             or lastsecond in self.type_words['article']):
             arguments['tid'] = 1
-        elif (first in self.type_words['restaurant'] or last in self.type_words['restaurant'] 
+        elif (first in self.type_words['restaurant'] or last in self.type_words['restaurant']
             or lastsecond in self.type_words['restaurant']):
             arguments['tid'] = 2
-        elif (first in self.type_words['movie'] or last in self.type_words['movie'] 
+        elif (first in self.type_words['movie'] or last in self.type_words['movie']
             or lastsecond in self.type_words['movie']):
             arguments['tid'] = 3
         else:

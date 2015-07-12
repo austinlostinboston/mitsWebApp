@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 
 # Imports model objects to access database
-from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Method, Action, History
+from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Method, History
 from django.db.models import Q, Max, Min
 
 # Import django forms
@@ -24,8 +24,9 @@ import ast
 
 ## Import from personal moduls
 from weiss.commentChooser import randomComment, pageRankComment
-from weiss.actions.actionUtil import dispatch, initSession, getActions, getDialogHistory, confirmAciton
-from weiss.actions.queryUtil import queryResolve
+from weiss.dialogue.actionUtil import initSession, getDialogHistory, confirmAciton
+from weiss.dialogue.factory import getDialogueManager
+from weiss.dialogue.actions import Action
 from webapps.settings import BASE_DIR
 
 logger = logging.getLogger(__name__)
@@ -34,12 +35,13 @@ logger = logging.getLogger(__name__)
 @login_required
 def homepage(request):
     context = {}
+    dmgr = getDialogueManager()
     if request.method == 'POST':
-        conext = queryResolve(request)
+        conext = dmgr.handle(request)
     else:
         initSession(request)
 
-    context['actions'] = getActions()
+    context['actions'] = Action
     context['dialog'] = getDialogHistory(request.user)
     return render(request, 'weiss/index.html', context)
 
@@ -50,7 +52,7 @@ def confirmaction(request, aid):
     logger.debug('user:'+str(User))
     confirmAciton(User, aid)
     context = {}
-    context['actions'] = getActions()
+    context['actions'] = Action
     context['dialog'] = getDialogHistory(request.user)
     context['msg'] = 'thanks for you feedback'
     return render(request, 'weiss/index.html', context)
@@ -99,11 +101,11 @@ def actionboard(request):
         args = {}
         args['aid'] = int(request.POST['aid'])
         args['keywords'] = request.POST['queryinput']
-        dispatch(request, None, args)
+        getDialogueManager().dispatch(request, None, args)
     else:
         initSession(request)
 
-    context['actions'] = getActions()
+    context['actions'] = Action
     context['dialog'] = getDialogHistory(request.user)
     return render(request, 'weiss/actionboard.html', context)
 

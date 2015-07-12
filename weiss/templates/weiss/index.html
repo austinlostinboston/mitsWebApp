@@ -37,10 +37,10 @@ function play_response(hid) {
                     Intended Action <span class="caret"></span>
                 </button>
                 <ul name="aid" class="dropdown-menu">
-                    {% for aid, name in actions %}
+                    {% for action in actions %}
                     <!--from context dict, use keyname = aid to grabe value-->
                     <!-- <li value="{{ aid }}">{{ name }}</li> -->
-                    <li aid="{{ aid }}"><a href="confirmaction-{{ aid }}">{{ name }}</a></li>
+                    <li aid="{{ actioin.value }}"><a href="confirmaction-{{ action.value }}">{{ action.name }}</a></li>
                     {% endfor%}
                 </ul>
             </form>

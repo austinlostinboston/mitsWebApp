@@ -1,7 +1,7 @@
 from django.test import TestCase
 from weiss.flows.abstractState import State
 from weiss.flows.factory import getFlowManager
-from weiss.actions.actions import Action
+from weiss.dialogue.actions import Action
 
 
 class StateTestCase(TestCase):

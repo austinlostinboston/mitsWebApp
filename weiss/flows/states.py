@@ -5,7 +5,7 @@ Author: Ming Fang
 """
 from weiss.flows.abstractState import State, AbstractState
 from weiss.utils.switch import switch
-from weiss.actions.actions import Action
+from weiss.dialogue.actions import Action
 
 
 """
@@ -47,7 +47,7 @@ class SystemInitiative(AbstractState):
     def nextPossibleActions(self):
         return self._npa
 
-    def transit(aid):
+    def transit(self, aid):
         for case in switch(aid):
             if case(Action.EntitySelection):
                 return Stete.EntitySelected
@@ -81,7 +81,7 @@ class TypeSelected(AbstractState):
     def nextPossibleActions(self):
         return self._npa
 
-    def transit(aid):
+    def transit(self, aid):
         for case in switch(aid):
             if case(Action.NextRandomEntity):
                 return State.EntitySelected
@@ -122,7 +122,7 @@ class EntitySelected(AbstractState):
     def nextPossibleActions(self):
         return self._npa
 
-    def transit(aid):
+    def transit(self, aid):
         for case in switch(aid):
             if case(Action.NextRandomComment):
                 return State.CommentSelected
@@ -180,7 +180,7 @@ class CommentSelected(AbstractState):
     def nextPossibleActions(self):
         return self._npa
 
-    def transit(aid):
+    def transit(self, aid):
         for case in switch(aid):
             if case(Action.NextRandomComment):
                 return State.CommentSelected
@@ -226,7 +226,7 @@ class RangeSelected(AbstractState):
     def nextPossibleActions(self):
         raise NotImplementedError()
 
-    def transit(aid):
+    def transit(self, aid):
         raise NotImplementedError()
 
 

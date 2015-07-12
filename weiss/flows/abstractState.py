@@ -8,11 +8,11 @@ import abc
 from enum import Enum
 
 class State(Enum):
-    SystemInitiative = 1
-    TypeSelected = 2
-    EntitySelected = 3
-    CommentSelected = 4
-    RangeSelected = 5
+    SystemInitiative = 0
+    TypeSelected = 1
+    EntitySelected = 2
+    CommentSelected = 3
+    RangeSelected = 4
 
 class AbstractState(object):
     __metaclass__ = abc.ABCMeta
