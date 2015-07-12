@@ -1,9 +1,6 @@
 """
 The fixed number of actions that Weiss supports.
-TODO: More edge cases, ex: there is no opposite cmt in the database
 
-Note: There is not need to import any methods dirtectly from here
-You probably want something in actionUtil.py
 
 Author: Ming Fang <mingf@cs.cmu.edu>
 """
@@ -12,10 +9,27 @@ from django.db.models import Q
 from weiss.models import Comment, Entity, Type
 from weiss.utils.switch import switch
 from weiss.actions.entitySelector import entitySelector
+
 import random
 import logging
+from enum import Enum
 
 logger = logging.getLogger(__name__)
+
+class Action(Enum):
+    """
+    Enum for actions
+    """
+    NextRandomComment = 1
+    NextOppositeComment = 2
+    NextPositiveComment = 3
+    NextNegativeComment = 4
+    NextRandomEntity = 5
+    SentimentStats = 6
+    EntitySelection = 7
+    TypeSelection = 8
+    Greeting = 9
+    UnknownAction = 10
 
 
 def nextRandomEntity(session, args):
@@ -29,7 +43,6 @@ def nextRandomEntity(session, args):
     Returns:
         a int that represents next entity id
     """
-    #next_tid = int(session['actioninput'] or "3")
     next_tid = int(random.uniform(1, 3.5))
     curr_eid = int(session['curr_eid'] or "0")
     logger.debug("next ran entity with next_tid: %s, curr_eid: %s" % (next_tid, curr_eid))
@@ -277,4 +290,5 @@ def greeting(session, args):
     '''dummy'''
     pass
 
-
+def unknownAction(session, args):
+    pass

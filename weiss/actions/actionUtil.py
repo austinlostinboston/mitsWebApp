@@ -4,7 +4,7 @@ Note that, in practice, it is no need to import any from actions.py.
 Just import needed method from actionUtil.py
 
 
-Author: Ming Fang & Yao Zhou
+Author: Ming Fang
 '''
 
 import datetime

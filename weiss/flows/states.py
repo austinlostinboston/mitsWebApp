@@ -5,6 +5,7 @@ Author: Ming Fang
 """
 from weiss.flows.abstractState import State, AbstractState
 from weiss.utils.switch import switch
+from weiss.actions.actions import Action
 
 
 """
@@ -32,7 +33,8 @@ the beginning point of the dialog
 """
 class SystemInitiative(AbstractState):
 
-    _npa = set([7, 8])
+    _npa = set([Action.EntitySelection,
+                Action.TypeSelection])
 
     def __init__(self, uid):
         AbstractState.__init__(self, uid)
@@ -47,12 +49,14 @@ class SystemInitiative(AbstractState):
 
     def transit(aid):
         for case in switch(aid):
-            if case(7):
+            if case(Action.EntitySelection):
                 return Stete.EntitySelected
-            if case(8):
+
+            if case(Action.TypeSelection):
                 return State.TypeSelected
+
             if case():
-                raise KeyError("Invaild action id")
+                raise KeyError("Invaild action")
 
 
 """
@@ -62,7 +66,9 @@ The followings should be determined:
 """
 class TypeSelected(AbstractState):
 
-    _npa = set([5,7,8])
+    _npa = set([Action.NextRandomEntity,
+                Action.EntitySelection,
+                Action.TypeSelection])
 
     def __init__(self, uid):
         AbstractState.__init__(self, uid)
@@ -77,12 +83,15 @@ class TypeSelected(AbstractState):
 
     def transit(aid):
         for case in switch(aid):
-            if case(5):
+            if case(Action.NextRandomEntity):
                 return State.EntitySelected
-            if case(7):
+
+            if case(Action.EntitySelection):
                 return State.EntitySelected
-            if case(8):
+
+            if case(Action.TypeSelection):
                 return State.TypeSelected
+
             if case():
                 raise KeyError("Invaild action id")
 
@@ -94,7 +103,13 @@ The followings should be determined:
 """
 class EntitySelected(AbstractState):
 
-    _npa = set([1,3,4,5,6,7,8])
+    _npa = set([Action.NextRandomComment,
+                Action.NextPositiveComment,
+                Action.NextNegativeComment,
+                Action.NextRandomEntity,
+                Action.SentimentStats,
+                Action.EntitySelection,
+                Action.TypeSelection])
 
     def __init__(self, uid):
         AbstractState.__init__(self, uid)
@@ -109,20 +124,27 @@ class EntitySelected(AbstractState):
 
     def transit(aid):
         for case in switch(aid):
-            if case(1):
+            if case(Action.NextRandomComment):
                 return State.CommentSelected
-            if case(3):
+
+            if case(Action.NextPositiveComment):
                 return State.CommentSelected
-            if case(4):
+
+            if case(Action.NextNegativeComment):
                 return State.CommentSelected
-            if case(5):
+
+            if case(Action.NextRandomEntity):
                 return State.EntitySelected
-            if case(6):
+
+            if case(Action.SentimentStats):
                 return State.EntitySelecetd
-            if case(7):
+
+            if case(Action.EntitySelection):
                 return State.EntitySelected
-            if case(8):
+
+            if case(Action.TypeSelection):
                 return State.TypeSelected
+
             if case():
                 raise KeyError("Invaild action id")
 
@@ -138,7 +160,14 @@ The followings should be determined:
 """
 class CommentSelected(AbstractState):
 
-    _npa = set([1,2,3,4,5,6,7,8])
+    _npa = set([Action.NextRandomComment,
+                Action.NextOppositeComment,
+                Action.NextPositiveComment,
+                Action.NextNegativeComment,
+                Action.NextRandomEntity,
+                Action.SentimentStats,
+                Action.EntitySelection,
+                Action.TypeSelection])
 
     def __init__(self, uid):
         AbstractState.__init__(self, uid)
@@ -153,24 +182,32 @@ class CommentSelected(AbstractState):
 
     def transit(aid):
         for case in switch(aid):
-            if case(1):
+            if case(Action.NextRandomComment):
                 return State.CommentSelected
-            if case(2):
+
+            if case(Action.NextOppositeComment):
                 return State.CommentSelected
-            if case(3):
+
+            if case(Action.NextPositiveComment):
                 return State.CommentSelected
-            if case(4):
+
+            if case(Action.NextNegativeComment):
                 return State.CommentSelected
-            if case(5):
+
+            if case(Action.NextRandomEntity):
                 return State.EntitySelected
-            if case(6):
+
+            if case(Action.SentimentStats):
                 return State.CommentSelected
-            if case(7):
+
+            if case(Action.EntitySelection):
                 return State.EntitySelected
-            if case(8):
+
+            if case(Action.TypeSelection):
                 return State.TypeSelected
+
             if case():
-                raise KeyError("Invaild action id")
+                raise KeyError("Invaild action")
 
 
 """
