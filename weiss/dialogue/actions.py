@@ -1,5 +1,7 @@
 """
-The fixed number of actions that Weiss supports.
+This module provides:
+    a enum for actions
+    a fixed number of actions that weiss supports
 
 
 Author: Ming Fang <mingf@cs.cmu.edu>
@@ -18,7 +20,12 @@ logger = logging.getLogger(__name__)
 
 class Action(Enum):
     """
-    Enum for actions
+    Enum for actions.
+    NOTE: this will cause conflict with models.Action
+    I cannot find a better solution for the time being
+    If you want to use both Action at the same time. Do the following:
+    from weiss import models
+    from weiss.dialogue.actions import Action
     """
     NextRandomComment = 1
     NextOppositeComment = 2
@@ -291,4 +298,5 @@ def greeting(session, args):
     pass
 
 def unknownAction(session, args):
+    '''dummy'''
     pass

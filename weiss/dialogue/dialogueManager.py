@@ -1,11 +1,10 @@
 """
-Action Mnager
-
-NOTE: currently all methods are static
+dialogue Mnager
 
 this class is responsible for
-    1. loop up action handler by action
-    2. handle an action request
+    1. loop up action executor by action
+    2. handle an request
+    3. dispatch a requset based on query
 
 Author: Ming Fang <mingf@cs.cmu.edu>
 """
@@ -69,6 +68,9 @@ class DialogueManager(object):
                 raise KeyError("No such action %s" % action)
 
     def handle(self, request):
+        """
+        handle a request from user, will call dispatch
+        """
         query = str(request.POST.get('queryinput', False))
         logger.debug("query:%s" % query)
 
@@ -80,6 +82,9 @@ class DialogueManager(object):
         return
 
     def dispatch(self, request, query, args):
+        """
+        dispatch a request based on query
+        """
         action = Action(args['aid'])
         logger.debug(action.name)
         actioninput = ""
