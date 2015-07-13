@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 
 # Imports model objects to access database
-from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Method, History
+from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Method, History, Action
 from django.db.models import Q, Max, Min
 
 # Import django forms
@@ -26,7 +26,6 @@ import ast
 from weiss.commentChooser import randomComment, pageRankComment
 from weiss.dialogue.actionUtil import initSession, getDialogHistory, confirmAciton
 from weiss.dialogue.factory import getDialogueManager
-from weiss.dialogue.actions import Action
 from webapps.settings import BASE_DIR
 
 logger = logging.getLogger(__name__)

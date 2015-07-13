@@ -8,9 +8,9 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 """
 from django.db.models import Q
 
-from weiss.models import Comment, Entity, Types
+from weiss.models import Comment, Entity, Type, Types
 from weiss.utils.switch import switch
-from weiss.dialogue.entitySelector import entitySelector, Type
+from weiss.dialogue.entitySelector import entitySelector
 
 import random
 import logging
@@ -192,7 +192,7 @@ def nextRandomOppositeCmt(session, args):
 def typeSelection(session, args):
     tid = args.get("tid", 3) # imdb by default :)
     session['curr_tid'] = tid
-    type_obj = Type.objects.get(tid=tid)
+    type_obj = Types.objects.get(tid=tid)
     return "What %s would you like to talk about?" % type_obj.name
 
 
