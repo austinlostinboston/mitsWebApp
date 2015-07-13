@@ -50,7 +50,7 @@ class SystemInitiative(AbstractState):
     def transit(self, aid):
         for case in switch(aid):
             if case(Action.EntitySelection):
-                return Stete.EntitySelected
+                return State.EntitySelected
 
             if case(Action.TypeSelection):
                 return State.TypeSelected
