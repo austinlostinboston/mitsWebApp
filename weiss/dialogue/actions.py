@@ -26,6 +26,10 @@ class Action(Enum):
     If you want to use both Action at the same time. Do the following:
     from weiss import models
     from weiss.dialogue.actions import Action
+
+        wherever refered to as aid, refered to this enum
+        To get a int representation, use aid.value
+        To get a str representation, use aid.name
     """
     NextRandomComment = 1
     NextOppositeComment = 2
@@ -48,7 +52,7 @@ def nextRandomEntity(session, args):
             curr_eid: current entity id that is talking about
 
     Returns:
-        a int that represents next entity id
+        response
     """
     next_tid = int(random.uniform(1, 3.5))
     curr_eid = int(session['curr_eid'] or "0")
@@ -72,7 +76,7 @@ def nextRandomCmt(session, args):
             curr_eid: current entity id that is talking about
 
     Returns:
-        a dict that represents a new comment
+        response
     """
 
     curr_eid = session['curr_eid']
@@ -113,7 +117,7 @@ def nextRandomPositiveCmt(session, args):
             curr_cid: the current cid
 
     Returns:
-        a comment body
+        response
     """
     curr_eid = session['curr_eid']
     curr_cid = session['curr_cid']
@@ -153,7 +157,7 @@ def nextRandomNegativeCmt(session, args):
             curr_cid: the previous cid
 
     Returns:
-        a dict that represents a new comment
+        response
     """
     curr_eid = session['curr_eid']
     curr_cid = session['curr_cid']
@@ -193,7 +197,7 @@ def nextRandomOppositeCmt(session, args):
             curr_sentiment: the value of current sentiment
 
     Returns:
-        a dict that represents a new comment
+        response
     """
 
     curr_cid = session['curr_cid']

@@ -24,6 +24,9 @@ class FlowManager:
         self._stateTable = {}
 
     def createState(self, uid, sid):
+        """
+        Factory for state class
+        """
         for case in switch(sid):
             if case(State.SystemInitiative):
                 return SystemInitiative(uid)
@@ -42,9 +45,6 @@ class FlowManager:
 
             if case():
                 raise KeyError("No such state %s" % sid)
-
-    def nameOf(self, sid):
-        return sid.name
 
     def register(self, uid):
         state = self.createState(uid, State.SystemInitiative)
