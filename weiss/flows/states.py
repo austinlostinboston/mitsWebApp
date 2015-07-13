@@ -25,6 +25,7 @@ Definition of the control flow
 8. Type Selection
 9. Greeting
 10. Unknown Action
+11. Entity Comcirmation
 """
 
 """
@@ -34,7 +35,8 @@ the beginning point of the dialog
 class SystemInitiative(AbstractState):
 
     _npa = set([Action.EntitySelection,
-                Action.TypeSelection])
+                Action.TypeSelection,
+                Action.UnknownAction])
 
     def __init__(self, uid):
         AbstractState.__init__(self, uid)
@@ -55,6 +57,9 @@ class SystemInitiative(AbstractState):
             if case(Action.TypeSelection):
                 return State.TypeSelected
 
+            if case(Action.UnknownAction):
+                return self.sid
+
             if case():
                 raise KeyError("Invaild action")
 
@@ -68,7 +73,8 @@ class TypeSelected(AbstractState):
 
     _npa = set([Action.NextRandomEntity,
                 Action.EntitySelection,
-                Action.TypeSelection])
+                Action.TypeSelection,
+                Action.UnknownAction])
 
     def __init__(self, uid):
         AbstractState.__init__(self, uid)
@@ -90,13 +96,16 @@ class TypeSelected(AbstractState):
                 return State.EntitySelected
 
             if case(Action.TypeSelection):
-                return State.TypeSelected
+                return self.sid
+
+            if case(Action.UnknownAction):
+                return self.sid
 
             if case():
                 raise KeyError("Invaild action id")
 
 """
-Entity selceted state
+Entity selected state
 The followings should be determined:
     curr_tid
     curr_eid
@@ -109,7 +118,8 @@ class EntitySelected(AbstractState):
                 Action.NextRandomEntity,
                 Action.SentimentStats,
                 Action.EntitySelection,
-                Action.TypeSelection])
+                Action.TypeSelection,
+                Action.UnknownAction])
 
     def __init__(self, uid):
         AbstractState.__init__(self, uid)
@@ -134,16 +144,19 @@ class EntitySelected(AbstractState):
                 return State.CommentSelected
 
             if case(Action.NextRandomEntity):
-                return State.EntitySelected
+                return self.sid
 
             if case(Action.SentimentStats):
-                return State.EntitySelecetd
+                return self.sid
 
             if case(Action.EntitySelection):
-                return State.EntitySelected
+                return self.sid
 
             if case(Action.TypeSelection):
                 return State.TypeSelected
+
+            if case(Action.UnkwonAction):
+                return self.sid
 
             if case():
                 raise KeyError("Invaild action id")
@@ -167,7 +180,8 @@ class CommentSelected(AbstractState):
                 Action.NextRandomEntity,
                 Action.SentimentStats,
                 Action.EntitySelection,
-                Action.TypeSelection])
+                Action.TypeSelection,
+                Action.UnknownAction])
 
     def __init__(self, uid):
         AbstractState.__init__(self, uid)
@@ -183,28 +197,31 @@ class CommentSelected(AbstractState):
     def transit(self, aid):
         for case in switch(aid):
             if case(Action.NextRandomComment):
-                return State.CommentSelected
+                return self.sid
 
             if case(Action.NextOppositeComment):
-                return State.CommentSelected
+                return self.sid
 
             if case(Action.NextPositiveComment):
-                return State.CommentSelected
+                return self.sid
 
             if case(Action.NextNegativeComment):
-                return State.CommentSelected
+                return self.sid
 
             if case(Action.NextRandomEntity):
                 return State.EntitySelected
 
             if case(Action.SentimentStats):
-                return State.CommentSelected
+                return self.sid
 
             if case(Action.EntitySelection):
                 return State.EntitySelected
 
             if case(Action.TypeSelection):
                 return State.TypeSelected
+
+            if case(Action.UnknowAction):
+                return self.sid
 
             if case():
                 raise KeyError("Invaild action")
@@ -215,6 +232,10 @@ Range Selected state
 """
 class RangeSelected(AbstractState):
 
+    _npa = set([Action.TypeSelection,
+                Action.EntityComfirmation,
+                Action.UnknownAction])
+
     def __init__(self, uid):
         AbstractState.__init__(self, uid)
 
@@ -224,10 +245,22 @@ class RangeSelected(AbstractState):
 
     @property
     def nextPossibleActions(self):
-        raise NotImplementedError()
+        return self._npa
 
     def transit(self, aid):
-        raise NotImplementedError()
+        for case in switch(aid):
+            if case(Action.TypeSelection):
+                return State.TypeSelected
+
+            if case(Action.EntityComfirmation):
+                return self.sid
+
+            if case(Action.UnknowAction):
+                return self.sid
+
+            if case():
+                raise KeyError("Invaild action")
+
 
 
 

@@ -27,8 +27,8 @@
             <div class="input-group-btn" id="actionbtn">
                 <button type="submit" class="btn btn-default input-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false" name="actionname">Action <span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    {% for action in actions %}                
-                    <li aid={{ action.value }}><a href="#">{{ action.name }}</a></li>
+                    {% for value, name in actions %}                
+                    <li aid={{ value }}><a href="#">{{ name }}</a></li>
                     <!-- <li class="divider"></li> -->
                     {% endfor%}
                 </ul>

@@ -43,6 +43,8 @@ class Action(Enum):
     TypeSelection = 8
     Greeting = 9
     UnknownAction = 10
+    EntityComfirmation = 11
+
 
 class State(Enum):
     """

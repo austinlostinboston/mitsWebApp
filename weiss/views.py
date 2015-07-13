@@ -40,7 +40,7 @@ def homepage(request):
     else:
         initSession(request)
 
-    context['actions'] = Action
+    context['actions'] = [ (action.value, action.name) for action in Action ]
     context['dialog'] = getDialogHistory(request.user)
     return render(request, 'weiss/index.html', context)
 
@@ -104,7 +104,7 @@ def actionboard(request):
     else:
         initSession(request)
 
-    context['actions'] = Action
+    context['actions'] = [ (action.value, action.name) for action in Action ]
     context['dialog'] = getDialogHistory(request.user)
     return render(request, 'weiss/actionboard.html', context)
 

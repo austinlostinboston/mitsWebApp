@@ -275,3 +275,7 @@ def greeting(session, args):
 def unknownAction(session, args):
     '''dummy'''
     pass
+
+def entityComfirmation(session, args):
+    pass
+
