@@ -8,35 +8,14 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 """
 from django.db.models import Q
 
-from weiss.models import Comment, Entity, Type
+from weiss.models import Comment, Entity, Types
 from weiss.utils.switch import switch
-from weiss.dialogue.entitySelector import entitySelector
+from weiss.dialogue.entitySelector import entitySelector, Type
 
 import random
 import logging
-from enum import Enum
 
 logger = logging.getLogger(__name__)
-
-class Action(Enum):
-    """
-    Enum for actions.
-    Note:
-        wherever refered to as aid, refered to this enum
-        To get a int representation, use aid.value
-        To get a str representation, use aid.name
-    """
-    NextRandomComment = 1
-    NextOppositeComment = 2
-    NextPositiveComment = 3
-    NextNegativeComment = 4
-    NextRandomEntity = 5
-    SentimentStats = 6
-    EntitySelection = 7
-    TypeSelection = 8
-    Greeting = 9
-    UnknownAction = 10
-
 
 def nextRandomEntity(session, args):
     """Start next conversation
@@ -139,7 +118,6 @@ def nextRandomPositiveCmt(session, args):
 
     session['curr_cid'] = idx
     logger.debug("next ran pos cmt has decided to talk about %s" % res.cid)
-    #addNewDialog(session, WEISS, res.body)
     return res.body
 
 
@@ -164,7 +142,6 @@ def nextRandomNegativeCmt(session, args):
     idxs = Comment.objects.filter(Q(eid=curr_eid), Q(sentiment__lt=0)).values_list('cid', flat=True)
     idx = curr_cid
     if (len(idxs) == 0):
-        #addNewDialog(session, WEISS, "No such comments")
         return "No such comments"
     else:
         while (idx == curr_cid):
@@ -179,7 +156,6 @@ def nextRandomNegativeCmt(session, args):
 
     session['curr_cid'] = idx
     logger.debug("next ran neg cmt has decided to talk about %s" % res.cid)
-    #addNewDialog(session, WEISS, res.body)
     return res.body
 
 
@@ -251,7 +227,7 @@ def entitySelection(session, args):
         entities = Entity.objects.filter(q)
         if len(entities) > 0:
             # good, we found some
-            entity = entitySelector(entities, curr_tid)
+            entity = entitySelector(entities, Type(curr_tid))
             session["curr_eid"] = entity.eid
             return "Sure, let's talk about \"%s\"" % entity.name
         else:
@@ -263,7 +239,7 @@ def entitySelection(session, args):
                 q = Q(tid=curr_tid, description__icontains=keyword) | Q(tid=curr_tid, name__icontains=keyword)
                 entities = Entity.objects.filter(q)
                 if len(entities) > 0:
-                    entity = entitySelector(entities, curr_tid)
+                    entity = entitySelector(entities, Type(curr_tid))
                     session["curr_eid"] = entity.eid
                     return "Sure, let's talk about \"%s\"" % entity.name
             return "Sorry, I could not find a relevent entity to talk about."

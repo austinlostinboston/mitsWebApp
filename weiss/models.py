@@ -11,6 +11,45 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from enum import Enum
+
+class Type(Enum):
+    News = 1
+    Restaurant = 2
+    Movie = 3
+
+class Action(Enum):
+    """
+    Enum for actions.
+    Note:
+        wherever refered to as aid, refered to this enum
+        To get a int representation, use aid.value
+        To get a str representation, use aid.name
+    """
+    NextRandomComment = 1
+    NextOppositeComment = 2
+    NextPositiveComment = 3
+    NextNegativeComment = 4
+    NextRandomEntity = 5
+    SentimentStats = 6
+    EntitySelection = 7
+    TypeSelection = 8
+    Greeting = 9
+    UnknownAction = 10
+
+class State(Enum):
+    """
+    wherever referred as sid, referred this enum
+    To get the actual int representation, use sid.value
+    To get str representation, use sid.name
+    """
+    SystemInitiative = 0
+    TypeSelected = 1
+    EntitySelected = 2
+    CommentSelected = 3
+    RangeSelected = 4
+
+
 
 
 class Comment(models.Model):

@@ -5,19 +5,6 @@ Author: Ming Fang
 
 """
 import abc
-from enum import Enum
-
-class State(Enum):
-    """
-    wherever referred as sid, referred this enum
-    To get the actual int representation, use sid.value
-    To get str representation, use sid.name
-    """
-    SystemInitiative = 0
-    TypeSelected = 1
-    EntitySelected = 2
-    CommentSelected = 3
-    RangeSelected = 4
 
 class AbstractState(object):
     __metaclass__ = abc.ABCMeta

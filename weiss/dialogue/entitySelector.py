@@ -10,7 +10,6 @@ Author: Ming Fang
 from weiss.models import Comment, Entity, Type
 from weiss.utils.switch import switch
 
-
 def entitySelector(entities, tid):
     '''
     Public main entry of this module.
@@ -21,15 +20,15 @@ def entitySelector(entities, tid):
         a single entity selected
     '''
     for case in switch(tid):
-        if case(Type.News.value):
+        if case(Type.News):
             # Articles
             return _selectByNumOfReview(entities)
 
-        if case(Type.Restaurant.value):
+        if case(Type.Restaurant):
             # Restaurants
             return _selectByNumOfReview(entities)
 
-        if case(Type.Movie.value):
+        if case(Type.Movie):
             # Movies
             return _selectMovieByReleaseYear(entities)
 

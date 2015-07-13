@@ -10,6 +10,7 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 """
 
 import logging
+from weiss.models import Action
 from weiss.utils.switch import switch
 from weiss.dialogue.actions import *
 from weiss.dialogue.actionUtil import initNewLine, flushNewLine

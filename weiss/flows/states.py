@@ -3,9 +3,9 @@ This file defines the concrete control flow logic
 
 Author: Ming Fang
 """
-from weiss.flows.abstractState import State, AbstractState
+from weiss.flows.abstractState import AbstractState
 from weiss.utils.switch import switch
-from weiss.dialogue.actions import Action
+from weiss.models import Action, State  # for enums
 
 
 """

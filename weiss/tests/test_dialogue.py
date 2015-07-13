@@ -1,8 +1,10 @@
 from django.test import TestCase
+
 from weiss.classifier.factory import getClassifier
 from weiss.flows.factory import getFlowManager
-from weiss.flows.abstractState import State
 from weiss.tests.testUtils import *
+from weiss.models import State
+
 from webapps.settings import BASE_DIR
 
 

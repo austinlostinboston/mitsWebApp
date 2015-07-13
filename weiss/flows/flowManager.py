@@ -12,8 +12,9 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 """
 
 import logging
+
+from weiss.models import State # for enums
 from weiss.utils.switch import switch
-from weiss.flows.abstractState import State
 from weiss.flows.states import *
 
 logger = logging.getLogger(__name__)
