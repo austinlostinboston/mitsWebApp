@@ -21,12 +21,7 @@ logger = logging.getLogger(__name__)
 class Action(Enum):
     """
     Enum for actions.
-    NOTE: this will cause conflict with models.Action
-    I cannot find a better solution for the time being
-    If you want to use both Action at the same time. Do the following:
-    from weiss import models
-    from weiss.dialogue.actions import Action
-
+    Note:
         wherever refered to as aid, refered to this enum
         To get a int representation, use aid.value
         To get a str representation, use aid.name

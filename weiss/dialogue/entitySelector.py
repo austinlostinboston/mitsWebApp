@@ -21,15 +21,18 @@ def entitySelector(entities, tid):
         a single entity selected
     '''
     for case in switch(tid):
-        if case(1):
+        if case(Type.News.value):
             # Articles
             return _selectByNumOfReview(entities)
-        if case(2):
+
+        if case(Type.Restaurant.value):
             # Restaurants
             return _selectByNumOfReview(entities)
-        if case(3):
+
+        if case(Type.Movie.value):
             # Movies
             return _selectMovieByReleaseYear(entities)
+
         if case():
             # #$%^&*
             return entities[0]

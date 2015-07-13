@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Comment(models.Model):
     cid = models.BigIntegerField(primary_key=True)
     eid = models.ForeignKey('Entity', db_column='eid')
@@ -33,7 +34,7 @@ class Entity(models.Model):
     source = models.TextField()
     description = models.TextField()
     url = models.TextField()
-    tid = models.ForeignKey('Type', db_column='tid')
+    tid = models.ForeignKey('Types', db_column='tid')
     name = models.TextField()
 
     class Meta:
@@ -41,7 +42,7 @@ class Entity(models.Model):
         db_table = 'entity'
 
 
-class Type(models.Model):
+class Types(models.Model):
     tid = models.AutoField(primary_key=True)
     name = models.TextField()
 
@@ -90,7 +91,7 @@ class Summary(models.Model):
         db_table = 'summary'
         unique_together = (('cid', 'mid'),)
 
-class Action(models.Model):
+class Actions(models.Model):
     aid = models.AutoField(primary_key=True)
     name = models.TextField()
     method = models.TextField()
@@ -105,7 +106,7 @@ class History(models.Model):
     query = models.TextField()
     response = models.TextField()
     time = models.DateTimeField()
-    aid = models.ForeignKey(Action, db_column='aid', blank=True, null=True)
+    aid = models.ForeignKey(Actions, db_column='aid', blank=True, null=True)
     desired_aid = models.IntegerField(blank=True, null=True)
     eid = models.ForeignKey(Entity, db_column='eid', blank=True, null=True)
     feedback = models.IntegerField(blank=True, null=True)

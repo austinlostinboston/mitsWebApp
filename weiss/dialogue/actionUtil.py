@@ -84,7 +84,7 @@ def flushNewLine(request, response):
     else:
         eid = Entity.objects.get(eid=session['curr_eid'])
 
-    aid = models.Action.objects.get(aid=line['curr_aid'])
+    aid = models.Actions.objects.get(aid=line['curr_aid'])
     models.History.objects.create(query=line['query'],
                            userid=userid,
                            response=response,
