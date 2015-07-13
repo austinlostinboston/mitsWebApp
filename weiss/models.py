@@ -13,6 +13,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from enum import Enum
 
+"""
+Note: This file also contains enumerations for `Type`, `Actiion`, `State`
+      To avoid conflict:
+      previous database model `Type` has been rename to `Types`
+      previous database model `Action` has been rename to `Actions`
+
+"""
 class Type(Enum):
     News = 1
     Restaurant = 2
