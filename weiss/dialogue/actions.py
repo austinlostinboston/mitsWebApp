@@ -64,7 +64,6 @@ def nextRandomCmt(session, args):
         curr_eid = int(curr_eid)
         idxs = Comment.objects.filter(eid=curr_eid).values_list('cid', flat=True)
         if (len(idxs) == 0):
-            #addNewDialog(session, WEISS, "No such comment")
             return "No such comment"
         idx = random.sample(idxs, 1)[0]
 
@@ -78,7 +77,6 @@ def nextRandomCmt(session, args):
     session['curr_cid'] = idx
     session['curr_eid'] = res.eid.eid
     logger.debug("next ran cmt has decided to talk about e:%s, c:%s" % (res.eid, res.cid))
-    #addNewDialog(session, WEISS, res.body)
     return res.body
 
 
@@ -277,5 +275,7 @@ def unknownAction(session, args):
     pass
 
 def entityComfirmation(session, args):
+
+
     pass
 

@@ -65,8 +65,11 @@ class FlowManager:
             logger.error("Can not make transit from a none state, %s, %s" %(request.user, action))
             return
         new_sid = curr_state.transit(action)
-        new_state = self.createState(request.user, new_sid)
-        logger.info("Transit from %s to %s" % (curr_state, new_state))
-        self._stateTable[request.user] = new_state
+        if new_sid != curr_state.sid:
+            new_state = self.createState(request.user, new_sid)
+            logger.info("Transit from %s to %s" % (curr_state, new_state))
+            self._stateTable[request.user] = new_state
+        else:
+            logger.info("State does not change")
 
 
