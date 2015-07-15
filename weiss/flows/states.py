@@ -233,7 +233,7 @@ Range Selected state
 class RangeSelected(AbstractState):
 
     _npa = set([Action.TypeSelection,
-                Action.EntityComfirmation,
+                Action.EntityConfirmation,
                 Action.UnknownAction])
 
     def __init__(self, uid):
@@ -252,7 +252,7 @@ class RangeSelected(AbstractState):
             if case(Action.TypeSelection):
                 return State.TypeSelected
 
-            if case(Action.EntityComfirmation):
+            if case(Action.EntityConfirmation):
                 return self.sid
 
             if case(Action.UnknowAction):

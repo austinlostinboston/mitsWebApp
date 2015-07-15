@@ -8,9 +8,11 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 """
 from django.db.models import Q
 
-from weiss.models import Comment, Entity, Type, Types
+from weiss.models import Comment, Entity, Type, Types, Action, Step
 from weiss.utils.switch import switch
 from weiss.dialogue.entitySelector import entitySelector
+from weiss.flows.states import *
+from weiss.flows.factor import getFlowManager
 
 import random
 import logging
@@ -38,8 +40,8 @@ def nextRandomEntity(session, args):
 
     session['curr_eid'] = new_eid
     logger.debug("next ran entity has decided next eid: %s" % (new_eid))
-    #addNewDialog(session, WEISS, new_eid)
     entity = Entity.objects.get(eid=new_eid)
+
     return "Sure, let's talk about \"%s\"" % entity.name
 
 def nextRandomCmt(session, args):
@@ -268,14 +270,42 @@ def sentimentStats(session, args):
 
 def greeting(session, args):
     '''dummy'''
-    pass
+    return "Hi, I'm Weiss"
 
 def unknownAction(session, args):
     '''dummy'''
-    pass
+    return "Sorry, I cannot handle this question."
 
-def entityComfirmation(session, args):
+def entityConfirmation(request, args):
+    fmgr = getFlowManager()
+    state = fmgr.lookUp(request.user)
+    session = request.session
+    assert(isinstance(state, RangeSelected))
+    for case in switch(state.step):
+        if case(Step.RangeInitiative):
+            assert(args.has_key("tid"))
+            tid = args['tid']
+            session["curr_tid"] = tid.value
+            state.filter(lambda entity : entity.tid == tid.value)
+            state.transit(Step.TypeSelected)
+        if case(Step.TypeSelected):
+            assert(args.has_key("idx"))
+            state.keep(args["idx"])
+        if case():
+            logger.error("No such step in RangeSelected state")
+
+    if state.size() == 1:
+        session['curr_eid'] = state.range[0].eid
+        fmgr.transit(request, State.EntitySelected)
+        return
+    else:
+        return
 
 
-    pass
+
+
+
+
+
+
 

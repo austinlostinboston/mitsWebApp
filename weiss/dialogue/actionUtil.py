@@ -102,4 +102,4 @@ def initNewLine(session, query, aid):
         aid: the aciton id that Weiss decided
     '''
 
-    session['line'] = {'query': query, 'curr_aid': aid}
+    session['line'] = {'query': query, 'curr_aid': aid.value}

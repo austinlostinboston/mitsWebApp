@@ -65,6 +65,9 @@ class DialogueManager(object):
             if case(Action.UnknownAction):
                 return unknownAction
 
+            if case(Action.EntityConfirmation):
+                return entityConfirmation
+
             if case():
                 raise KeyError("No such action %s" % action)
 
@@ -90,19 +93,18 @@ class DialogueManager(object):
         logger.debug(action.name)
         actioninput = ""
 
-        # make a state transition
-        self.fmgr.transit(request, action)
-
         if query is None:
             query = action.name + " : " + args['keywords']
 
         logger.debug("Dispatch action: %s, %s, %s" % (action.value, action.name, actioninput))
 
-        initNewLine(request.session, query, action.value)
+        initNewLine(request.session, query, action)
 
         actionExecutor = self.getExecutor(action)
 
-        response = actionExecutor(request.session, args)
+        actionExecutor(request, args) # transition happens inside
+
+        response = responseGenerator(request)
 
         flushNewLine(request, response)
 

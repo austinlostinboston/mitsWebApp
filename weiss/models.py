@@ -43,7 +43,7 @@ class Action(Enum):
     TypeSelection = 8
     Greeting = 9
     UnknownAction = 10
-    EntityComfirmation = 11
+    EntityConfirmation = 11
 
 
 class State(Enum):
@@ -57,6 +57,13 @@ class State(Enum):
     EntitySelected = 2
     CommentSelected = 3
     RangeSelected = 4
+
+class Step(Enum):
+    """
+    sub state in RangeSelected state
+    """
+    Rangeinitiative = 1
+    TypeSelected = 2
 
 
 
