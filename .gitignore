@@ -23,3 +23,6 @@ weiss/audio
 
 # misc
 .DS_Store
+
+# config.ini files
+*.ini
