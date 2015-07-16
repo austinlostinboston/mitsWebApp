@@ -110,13 +110,13 @@ def selectComment(cid, eid, tid, sentiment="="):
         if eid is not None:
             pass
         else:
-            q = & Q(eid=eid)
+            q = q & Q(eid=eid)
         if sentiment == "=":
-            q = & Q(sentiment=0)
+            q = q & Q(sentiment=0)
         elif sentiment == "+":
-            q = & Q(sentiment__gt=0)
+            q = q & Q(sentiment__gt=0)
         elif sentiment == "-":
-            q = & Q(sentiment__lt=0)
+            q = q & Q(sentiment__lt=0)
         else:
             pass
 
