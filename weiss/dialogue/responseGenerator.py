@@ -2,31 +2,21 @@
 import random
 
 ## Import from weiss
-from weiss.flows.factory import getFlowManager
 from weiss.models import Action, Type, Types, State, Comment, Entity
 from django.db.models import Q
 
-def responseHandler(request, args):
+def responseHandler(flow):
     ## Set response
     response = 'Empty response: We are experiencing problems, sorry!'
 
-    ## Grab information from request
-    session = request.session
-    userid = request.user
-    state = getFlowManager().lookUp(userid)
+    ## Grab information from flow
+    userid = flow.user
+    state = flow.state
+    action = flow.action
 
-    ## Get id's from session
-    aid = args['aid']
-    eid = session['curr_eid']
-    cid = session['curr_cid']
-    tid = session['curr_tid']
-
-    ## Get id names from enumerated models
-    action = Action(aid)
-    if tid is not None:
-        tid_name = Type(tid).name
-    else:
-        tid_name = "none"
+    cid = flow.cid
+    eid = flow.eid
+    tid = flow.tid
 
     ## Handle the different actions
     if action is Action.NextRandomComment:

@@ -13,7 +13,7 @@ Author: Ming Fang
 import logging
 
 from weiss.flows.factory import getFlowManager, StateFactory
-from weiss.models import State
+from weiss.models import State, Type, Entity
 
 logger = logging.getLogger(__name__)
 
@@ -187,6 +187,7 @@ class Flow(object):
     def type(self, new_type):
         """Setter for type
         """
+        assert(isinstance(new_type, Type))
         self._type = new_type
 
     @property

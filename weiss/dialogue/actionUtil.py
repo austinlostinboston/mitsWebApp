@@ -50,7 +50,8 @@ def getDialogHistory(userid, limit=10):
 def initSession(request):
     session = request.session
     flow = Flow(request)
-    line = History.objects.filter(Q(userid=request.user)).order_by("-time")[:1]
+    tenMinAgo = timezone.now() - datetime.timedelta(minutes=10) # 10 min ago
+    line = History.objects.filter(Q(userid=request.user), Q(time__gt=tenMinAgo)).order_by("-time")[:1]
     if len(line) > 0 and line[0].aid.aid == Action.Greeting.value: # the previous record is not a greeting
         return
     initNewLine(session, '', Action.Greeting) # greeting aid and meaningless user query
@@ -73,13 +74,13 @@ def flushNewLine(request, response):
     flow = getFlowManager().lookUp(userid)
     line = session['line']
 
-    eid = flow.eid
+    entity = flow.entity
     aid = Actions.objects.get(aid=line['curr_aid'])
     History.objects.create(query=line['query'],
                            userid=userid,
                            response=response,
                            aid=aid,
-                           eid=eid,
+                           eid=entity,
                            time=timezone.now())
 
 def initNewLine(session, query, aid):

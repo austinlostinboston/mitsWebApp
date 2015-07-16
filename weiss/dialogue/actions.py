@@ -218,7 +218,7 @@ def typeSelection(flow, decision):
         curr_tid is always set upon return
     """
     tid = decision.get("tid", 3) # imdb by default :)
-    flow.type = tid
+    flow.tid = tid
     flow.transit(State.TypeSelected)
     """Handle by res gen
     type_obj = Types.objects.get(tid=tid)
@@ -343,8 +343,8 @@ def unknownAction(flow, decision):
 
 def entityConfirmation(flow, decision):
     """Narrow down the target list
-        If the state is in RangeInitiative substep, set curr_tid and return
-        If the state is in TypeSelected substep, set curr_eid and return
+        If the state is in RangeInitiative substep, set tid and return
+        If the state is in TypeSelected substep, set eid and return
     """
     assert(isinstance(state, RangeSelected))
     state = flow.state
