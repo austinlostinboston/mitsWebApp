@@ -7,10 +7,17 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
+<<<<<<< HEAD
 TEST_RUNNER = 'weiss.tests.testUtils.NoDbTestRunner'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+=======
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import os
+import ConfigParser
+>>>>>>> c2fce5f... added protected settings file
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -28,7 +35,11 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 # Logging settings
+<<<<<<< HEAD
 logpath = "log/djangoDebug.log"
+=======
+logpath = os.path.join(BASE_DIR, 'log/djangoLog')
+>>>>>>> c2fce5f... added protected settings file
 
 
 # Application definition
@@ -71,6 +82,7 @@ LOGIN_REDIRECT_URL = '/'
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    }
 
+<<<<<<< HEAD
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -79,6 +91,25 @@ DATABASES = {
         'PASSWORD': 'washington',
         'HOST': 'awb.pc.cs.cmu.edu',
         'PORT': '3306',
+=======
+## Get information from config file
+config = ConfigParser.ConfigParser()
+config.read("config.ini")
+name = config.get('webapp','name')
+user = config.get('webapp','user')
+password = config.get('webapp','password')
+host = config.get('webapp','host')
+port = config.get('webapp','port')
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+	'NAME': name,
+        'USER': user,
+        'PASSWORD': password,
+        'HOST': host,
+        'PORT': port,
+>>>>>>> c2fce5f... added protected settings file
     }
 }
 
@@ -107,10 +138,17 @@ LOGGING = {
     'version': 1,
     'formatters': {
         'verbose': {
+<<<<<<< HEAD
             'format': '[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s'
             },
         'simple': {
             'format': '%(levelname)s %(message)s'
+=======
+            'format': '[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d}\n<%(levelname)s - %(message)s'
+            },
+        'simple': {
+            'format': '{%(pathname)s:%(lineno)d}\n<%(levelname)s %(message)s'
+>>>>>>> c2fce5f... added protected settings file
             },
         },
     'handlers': {
@@ -145,3 +183,9 @@ if DEBUG:
     for logger in LOGGING['loggers']:
         LOGGING['loggers'][logger]['handlers'] += ['console']
 
+<<<<<<< HEAD
+=======
+NOSE_ARGS = ['--nocapture', '--nologcapture',]
+# Test runner with no database creation
+TEST_RUNNER = 'weiss.tests.testUtils.NoDbTestRunner'
+>>>>>>> c2fce5f... added protected settings file
