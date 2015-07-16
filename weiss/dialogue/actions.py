@@ -266,6 +266,8 @@ def entitySelection(request, args):
         else:
             base = Q()
 
+        print keywords
+        
         for keyword in keywords:
             q = base & (Q(description__icontains=keyword) | Q(name__icontains=keyword))
         entities = Entity.objects.filter(q)
