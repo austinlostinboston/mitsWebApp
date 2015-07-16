@@ -18,6 +18,7 @@ from weiss.models import History, Action, Actions, Type
 from weiss.utils.switch import switch
 from weiss.dialogue.actions import *  # for action methods
 from weiss.flows.factory import getFlowManager
+from weiss.flows.flow import Flow
 
 parser = HTMLParser.HTMLParser() # html parser
 
@@ -48,14 +49,9 @@ def getDialogHistory(userid, limit=10):
 
 def initSession(request):
     session = request.session
-    session['curr_cid'] = None
-    session['curr_eid'] = None
-    session['curr_tid'] = None
-    session['actioninput'] = ""
-    fmgr = getFlowManager()
-    fmgr.register(request.user)
+    flow = Flow(request)
     line = History.objects.filter(Q(userid=request.user)).order_by("-time")[:1]
-    if len(line) > 0 and line[0].aid.aid == 9: # the previous record is not a greeting
+    if len(line) > 0 and line[0].aid.aid == Action.Greeting.value: # the previous record is not a greeting
         return
     initNewLine(session, '', Action.Greeting) # greeting aid and meaningless user query
     flushNewLine(request, "Hi I'm Weiss. What would you like to talk about, movies? news? or restaurants?")
@@ -73,16 +69,11 @@ def flushNewLine(request, response):
     flush the new line to database
     '''
     session = request.session
-    print session['curr_eid']
     userid = request.user
-    print userid
+    flow = getFlowManager().lookUp(userid)
     line = session['line']
-    curr_eid = session['curr_eid']
-    if curr_eid is None:
-        eid = None
-    else:
-        eid = Entity.objects.get(eid=session['curr_eid'])
 
+    eid = flow.eid
     aid = Actions.objects.get(aid=line['curr_aid'])
     History.objects.create(query=line['query'],
                            userid=userid,

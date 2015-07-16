@@ -38,8 +38,8 @@ class SystemInitiative(AbstractState):
                 Action.TypeSelection,
                 Action.UnknownAction])
 
-    def __init__(self, uid):
-        AbstractState.__init__(self, uid)
+    def __init__(self):
+        AbstractState.__init__(self)
 
     @property
     def sid(self):
@@ -76,8 +76,8 @@ class TypeSelected(AbstractState):
                 Action.TypeSelection,
                 Action.UnknownAction])
 
-    def __init__(self, uid):
-        AbstractState.__init__(self, uid)
+    def __init__(self):
+        AbstractState.__init__(self)
 
     @property
     def sid(self):
@@ -121,8 +121,8 @@ class EntitySelected(AbstractState):
                 Action.TypeSelection,
                 Action.UnknownAction])
 
-    def __init__(self, uid):
-        AbstractState.__init__(self, uid)
+    def __init__(self):
+        AbstractState.__init__(self)
 
     @property
     def sid(self):
@@ -183,8 +183,8 @@ class CommentSelected(AbstractState):
                 Action.TypeSelection,
                 Action.UnknownAction])
 
-    def __init__(self, uid):
-        AbstractState.__init__(self, uid)
+    def __init__(self):
+        AbstractState.__init__(self)
 
     @property
     def sid(self):
@@ -236,8 +236,8 @@ class RangeSelected(AbstractState):
                 Action.EntityConfirmation,
                 Action.UnknownAction])
 
-    def __init__(self, uid):
-        AbstractState.__init__(self, uid)
+    def __init__(self):
+        AbstractState.__init__(self)
 
     @property
     def sid(self):

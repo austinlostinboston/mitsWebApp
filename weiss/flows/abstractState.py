@@ -10,8 +10,8 @@ class AbstractState(object):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
-    def __init__(self, uid):
-        self._uid = uid
+    def __init__(self):
+        pass
 
     @property
     def name(self):
@@ -26,13 +26,6 @@ class AbstractState(object):
         getter for my state id
         """
         raise NotImplementedError()
-
-    @property
-    def uid(self):
-        """
-        getter for user id
-        """
-        return self._uid
 
     @abc.abstractproperty
     def nextPossibleActions(self):

@@ -22,17 +22,17 @@ logger = logging.getLogger(__name__)
 class FlowManager:
 
     def __init__(self):
-        self._stateTable = {}
+        self._flowTable = {}
 
     def register(self, uid, flow):
-        self._stateTable[uid] = flow
+        self._flowTable[uid] = flow
         return
 
     def lookUp(self, uid):
-        if not self._stateTable.has_key(uid):
+        if not self._flowTable.has_key(uid):
             return None
         else:
-            return self._stateTable[uid]
+            return self._flowTable[uid]
 
 
     def transit(self, user, sid):

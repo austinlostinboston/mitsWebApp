@@ -5,6 +5,7 @@ Author: Ming Fang
 '''
 
 from weiss.flows.flowManager import FlowManager
+from weiss.flows.states import *
 from weiss.models import State
 from weiss.utils.switch import switch
 
@@ -24,21 +25,20 @@ def StateFactory(sid):
     """
     for case in switch(sid):
         if case(State.SystemInitiative):
-            return SystemInitiative(uid)
+            return SystemInitiative()
 
         if case(State.TypeSelected):
-            return TypeSelected(uid)
+            return TypeSelected()
 
         if case(State.EntitySelected):
-            return EntitySelected(uid)
+            return EntitySelected()
 
         if case(State.CommentSelected):
-            return CommentSelected(uid)
+            return CommentSelected()
 
         if case(State.RangeSelected):
-            return RangeSelected(uid)
+            return RangeSelected()
 
         if case():
             raise KeyError("No such state %s" % sid)
-
 

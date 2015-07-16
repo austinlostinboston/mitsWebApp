@@ -79,33 +79,35 @@ class DialogueManager(object):
         query = str(request.POST.get('queryinput', False))
         logger.debug("query:%s" % query)
 
-        curr_state = self.fmgr.lookUp(request.user)
+        flow = self.fmgr.lookUp(request.user)
+        flow.request = request
 
-        args = self.classifier.action_info(query, curr_state)
+        decision = self.classifier.action_info(query, flow)
 
-        self.dispatch(request, query, args)
+        self.dispatch(flow, query, decision)
         return
 
-    def dispatch(self, request, query, args):
+    def dispatch(self, flow, query, decision):
         """
         dispatch a request based on query
         """
-        action = Action(args['aid'])
+        flow.action = Action(decision['aid'])
+        request = flow.request
+        action = flow.action
         logger.debug(action.name)
-        actioninput = ""
 
         if query is None:
             query = action.name + " : " + args['keywords']
 
-        logger.debug("Dispatch action: %s, %s, %s" % (action.value, action.name, actioninput))
+        logger.debug("Dispatch action: %s, %s" % (action.value, action.name))
 
         initNewLine(request.session, query, action)
 
         actionExecutor = self.getExecutor(action)
 
-        actionExecutor(request, args) # transition happens inside
+        actionExecutor(flow, decision) # transition happens inside
 
-        response = responseHandler(request, args)
+        response = responseHandler(flow)
 
         flushNewLine(request, response)
 

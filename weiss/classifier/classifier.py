@@ -35,6 +35,7 @@ from liblinearutil import *
 from webapps.settings import BASE_DIR
 from weiss.classifier.feature import *
 from weiss.flows.states import *
+from weiss.models import Action, State, Type
 
 class Classifier(object):
     modeldir = os.path.abspath(BASE_DIR + "/weiss/classifier/models/")
@@ -120,7 +121,7 @@ class Classifier(object):
 
         return int(p_label[0]) # API changes here
 
-    def action_info(self, query, state):
+    def action_info(self, query, flow):
         """API function in this script. Gives all info of an action
 
         This is the only function which will be called outside this script.
@@ -134,6 +135,7 @@ class Classifier(object):
 
         """
         arguments = {}
+        state = flow.state
         plausible = state.nextPossibleActions
         self._type_recognition(query, arguments)
         temp = arguments['aid']
