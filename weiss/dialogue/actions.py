@@ -267,7 +267,7 @@ def entitySelection(request, args):
             base = Q()
 
         print keywords
-        
+
         for keyword in keywords:
             q = base & (Q(description__icontains=keyword) | Q(name__icontains=keyword))
         entities = Entity.objects.filter(q)
@@ -278,7 +278,7 @@ def entitySelection(request, args):
             session["curr_eid"] = entities[0].eid
             return
             #return "Sure, let's talk about \"%s\"" % entity.name
-        elif len(entites) > 1:
+        elif len(entities) > 1:
             # It gave a shitload, go to RangeSelected with state.range set
             state = getFlowManager().transit(request.user, State.RangeSelected)
             state.range = entities
