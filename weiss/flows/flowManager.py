@@ -24,33 +24,9 @@ class FlowManager:
     def __init__(self):
         self._stateTable = {}
 
-    def createState(self, uid, sid):
-        """
-        Factory for state class
-        """
-        for case in switch(sid):
-            if case(State.SystemInitiative):
-                return SystemInitiative(uid)
-
-            if case(State.TypeSelected):
-                return TypeSelected(uid)
-
-            if case(State.EntitySelected):
-                return EntitySelected(uid)
-
-            if case(State.CommentSelected):
-                return CommentSelected(uid)
-
-            if case(State.RangeSelected):
-                return RangeSelected(uid)
-
-            if case():
-                raise KeyError("No such state %s" % sid)
-
-    def register(self, uid):
-        state = self.createState(uid, State.SystemInitiative)
-        self._stateTable[uid] = state
-        return state
+    def register(self, uid, flow):
+        self._stateTable[uid] = flow
+        return
 
     def lookUp(self, uid):
         if not self._stateTable.has_key(uid):
@@ -60,12 +36,10 @@ class FlowManager:
 
 
     def transit(self, user, sid):
-        curr_state = self.lookUp(user)
-        if curr_state is None:
+        flow = self.lookUp(user)
+        if flow is None:
             logger.error("Can not make transit from a none state, %s, %s" %(user, action))
             return
-        new_state = self.createState(user, sid)
-        logger.info("Transit from %s to %s" % (curr_state, new_state))
-        self._stateTable[user] = new_state
+        flow.transit(sid)
 
 

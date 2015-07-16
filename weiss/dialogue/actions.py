@@ -1,6 +1,5 @@
 """
 This module provides:
-    a enum for actions
     a fixed number of actions that weiss supports
 
 
