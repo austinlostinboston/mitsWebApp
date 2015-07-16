@@ -14,7 +14,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-from weiss.models import History, Action, Actions
+from weiss.models import History, Action, Actions, Type
 from weiss.utils.switch import switch
 from weiss.dialogue.actions import *  # for action methods
 from weiss.flows.factory import getFlowManager
@@ -48,7 +48,6 @@ def getDialogHistory(userid, limit=10):
 
 def initSession(request):
     session = request.session
-    session['aid'] = None
     session['curr_cid'] = None
     session['curr_eid'] = None
     session['curr_tid'] = None
