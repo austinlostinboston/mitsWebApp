@@ -93,8 +93,10 @@ DATABASES = {
         'PORT': '3306',
 =======
 ## Get information from config file
+path = os.path.dirname(os.path.realpath(__file__))
 config = ConfigParser.ConfigParser()
-config.read("config.ini")
+config.read(path + "/" + "config.ini")
+
 name = config.get('webapp','name')
 user = config.get('webapp','user')
 password = config.get('webapp','password')
