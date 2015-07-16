@@ -59,17 +59,13 @@ class FlowManager:
             return self._stateTable[uid]
 
 
-    def transit(self, request, action):
-        curr_state = self.lookUp(request.user)
+    def transit(self, user, sid):
+        curr_state = self.lookUp(user)
         if curr_state is None:
-            logger.error("Can not make transit from a none state, %s, %s" %(request.user, action))
+            logger.error("Can not make transit from a none state, %s, %s" %(user, action))
             return
-        new_sid = curr_state.transit(action)
-        if new_sid != curr_state.sid:
-            new_state = self.createState(request.user, new_sid)
-            logger.info("Transit from %s to %s" % (curr_state, new_state))
-            self._stateTable[request.user] = new_state
-        else:
-            logger.info("State does not change")
+        new_state = self.createState(user, sid)
+        logger.info("Transit from %s to %s" % (curr_state, new_state))
+        self._stateTable[user] = new_state
 
 

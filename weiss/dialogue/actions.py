@@ -8,11 +8,11 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 """
 from django.db.models import Q
 
-from weiss.models import Comment, Entity, Type, Types, Action, Step
+from weiss.models import Comment, Entity, Type, Types, Action, Step, State
 from weiss.utils.switch import switch
 from weiss.dialogue.entitySelector import entitySelector
 from weiss.flows.states import *
-from weiss.flows.factor import getFlowManager
+from weiss.flows.factory import getFlowManager
 
 import random
 import logging
@@ -47,7 +47,7 @@ def nextRandomEntity(request, args):
     return "Sure, let's talk about \"%s\"" % entity.name
     """
 
-    getFlowManager().transit(request.user, Action.NextRandomEntity)
+    getFlowManager().transit(request.user, State.EntitySelected)
     return
 
 def nextRandomCmt(request, args):
@@ -86,7 +86,7 @@ def nextRandomCmt(request, args):
     session['curr_eid'] = res.eid.eid
     """
     logger.debug("next ran cmt has decided to talk about c:%s" % (idx))
-    getFlowManager().transit(request.user, Action.NextRandomComment)
+    getFlowManager().transit(request.user, State.CommentSelected)
     return
 
 
@@ -135,7 +135,7 @@ def nextRandomPositiveCmt(request, args):
     """
     session['curr_cid'] = idx
     logger.debug("next ran pos cmt has decided to talk about %s" % idx)
-    getFlowManager().transit(request.user, Action.NextRandomPositiveComment)
+    getFlowManager().transit(request.user, State.CommentSelected)
     return
 
 
@@ -180,7 +180,7 @@ def nextRandomNegativeCmt(request, args):
     """
     session['curr_cid'] = idx
     logger.debug("next ran neg cmt has decided to talk about %s" % idx)
-    getFlowManager().transit(request.user, Action.NextRandomNegativeComment)
+    getFlowManager().transit(request.user, State.CommentSelected)
     return
 
 
@@ -203,7 +203,7 @@ def nextRandomOppositeCmt(request, args):
     curr_sentiment = None
 
     if curr_cid is None:
-        return "What do you want to talk about?"
+        return
     else:
         curr_cmt = Comment.objects.get(cid=curr_cid)
         curr_sentiment = curr_cmt.sentiment
@@ -223,9 +223,10 @@ def typeSelection(request, args):
         If there is no tid in args, talk movies :)
         curr_tid is always set upon return
     """
+    session = request.session
     tid = args.get("tid", 3) # imdb by default :)
     session['curr_tid'] = tid
-    getFlowManager().transit(request.user, Action.TypeSelection)
+    getFlowManager().transit(request.user, State.TypeSelected)
     """Handle by res gen
     type_obj = Types.objects.get(tid=tid)
     return "What %s would you like to talk about?" % type_obj.name
@@ -259,37 +260,56 @@ def entitySelection(request, args):
         logger.debug(keywords)
         if len(keywords) >= 3:
             keywords = keywords[:3]
+
         if curr_tid is not None:
-            q = Q(tid=curr_tid)
-        else
-            q = Q()
+            base = Q(tid=curr_tid)
+        else:
+            base = Q()
+
         for keyword in keywords:
-            q = q & (Q(description__icontains=keyword) | Q(name__icontains=keyword))
+            q = base & (Q(description__icontains=keyword) | Q(name__icontains=keyword))
         entities = Entity.objects.filter(q)
         if len(entities) == 1:
-            # good, we found some
+            # good, we found only one, go to EntitySelected state with curr_eid set
             #entity = entitySelector(entities, Type(curr_tid))
-            state = getFlowManager().transit(request.user, Action.EntitySelection)
-
-
-            session["curr_eid"] = entity.eid
-            return "Sure, let's talk about \"%s\"" % entity.name
+            state = getFlowManager().transit(request.user, State.EntitySelected)
+            session["curr_eid"] = entities[0].eid
+            return
+            #return "Sure, let's talk about \"%s\"" % entity.name
+        elif len(entites) > 1:
+            # It gave a shitload, go to RangeSelected with state.range set
+            state = getFlowManager().transit(request.user, State.RangeSelected)
+            state.range = entities
+            if curr_tid is not None:
+                state.step = Step.TypeSelected
+            else:
+                state.step = Step.RangeInitiative
+            return
         else:
-            # if there is no such entity, we loose the requirement
+            # if there is no such entity, we loosen the requirement
             keywords = args["keywords"].split("#")
             keywords.reverse()
             while len(keywords) > 0:
                 keyword = keywords.pop()
-                q = Q(tid=curr_tid, description__icontains=keyword) | Q(tid=curr_tid, name__icontains=keyword)
+                q = (base & Q(description__icontains=keyword)) | (base & Q(name__icontains=keyword))
                 entities = Entity.objects.filter(q)
-                if len(entities) > 0:
-                    entity = entitySelector(entities, Type(curr_tid))
-                    session["curr_eid"] = entity.eid
-                    return "Sure, let's talk about \"%s\"" % entity.name
-            return "Sorry, I could not find a relevent entity to talk about."
-    else:
-        # TODO: handle this case
-        return "What would you like to talk about?"
+                if len(entities) == 1:
+                    # good, we found only one, go to EntitySelected with curr_eid set
+                    state = getFlowManager().transit(request.user, State.EntitySelected)
+                    session["curr_eid"] = entities[0].eid
+                    return
+                elif len(entities) > 1:
+                    # It gave a shitload, go to RangeSelected with state.range set
+                    state = getFlowManager().transit(request.user, State.RangeSelected)
+                    state.range = entities
+                    if curr_tid is not None:
+                        state.step = Step.TypeSelected
+                    else:
+                        state.step = Step.RangeInitiative
+                    return
+        # either no keyword is given or no entity matched
+        # TODO: handle these cases
+        return
 
 
 def sentimentStats(request, args):

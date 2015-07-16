@@ -14,7 +14,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-from weiss import models
+from weiss.models import History, Action, Actions
 from weiss.utils.switch import switch
 from weiss.dialogue.actions import *  # for action methods
 from weiss.flows.factory import getFlowManager
@@ -26,7 +26,7 @@ def confirmAciton(UserName, ActionID):
     #Find user
     user = User.objects.get(username=UserName)
     #Get last history record of that user
-    his = models.History.objects.filter(userid=user.id).order_by('-hid')[0]
+    his = History.objects.filter(userid=user.id).order_by('-hid')[0]
     #Modify ddid
     print str(his.hid) + "," + str(his.userid) + "," + str(his.desired_aid)
     his.desired_aid = ActionID
@@ -39,9 +39,9 @@ def getDialogHistory(userid, limit=10):
     get lines from database for rendering the page
     '''
     tenMinAgo = timezone.now() - datetime.timedelta(minutes=10) # 10 min ago
-    lines = models.History.objects.filter(Q(userid=userid), Q(time__gt=tenMinAgo)).order_by("-time")[:10]
+    lines = History.objects.filter(Q(userid=userid), Q(time__gt=tenMinAgo)).order_by("-time")[:10]
     if len(lines) == 0:
-        lines = models.History.objects.filter(Q(userid=userid)).order_by("-time")[:1]
+        lines = History.objects.filter(Q(userid=userid)).order_by("-time")[:1]
     for line in lines:
         line.response = parser.unescape(line.response)
     return lines
@@ -55,10 +55,10 @@ def initSession(request):
     session['actioninput'] = ""
     fmgr = getFlowManager()
     fmgr.register(request.user)
-    line = models.History.objects.filter(Q(userid=request.user)).order_by("-time")[:1]
+    line = History.objects.filter(Q(userid=request.user)).order_by("-time")[:1]
     if len(line) > 0 and line[0].aid.aid == 9: # the previous record is not a greeting
         return
-    initNewLine(session, '', 9) # greeting aid and meaningless user query
+    initNewLine(session, '', Action.Greeting) # greeting aid and meaningless user query
     flushNewLine(request, "Hi I'm Weiss. What would you like to talk about, movies? news? or restaurants?")
 
 
@@ -84,8 +84,8 @@ def flushNewLine(request, response):
     else:
         eid = Entity.objects.get(eid=session['curr_eid'])
 
-    aid = models.Actions.objects.get(aid=line['curr_aid'])
-    models.History.objects.create(query=line['query'],
+    aid = Actions.objects.get(aid=line['curr_aid'])
+    History.objects.create(query=line['query'],
                            userid=userid,
                            response=response,
                            aid=aid,

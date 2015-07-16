@@ -14,6 +14,7 @@ from weiss.models import Action
 from weiss.utils.switch import switch
 from weiss.dialogue.actions import *
 from weiss.dialogue.actionUtil import initNewLine, flushNewLine
+from weiss.dialogue.responseGenerator import responseHandler
 from weiss.flows.factory import getFlowManager
 from weiss.classifier.factory import getClassifier
 
@@ -104,7 +105,7 @@ class DialogueManager(object):
 
         actionExecutor(request, args) # transition happens inside
 
-        response = responseGenerator(request)
+        response = responseHandler(request, args)
 
         flushNewLine(request, response)
 
