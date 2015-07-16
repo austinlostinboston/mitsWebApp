@@ -14,6 +14,7 @@ def responseHandler(request, args):
     session = request.session
     userid = request.user
     state = getFlowManager().lookUp(userid)
+    state = State(state)
 
     ## Get id's from session
     aid = args['aid']
