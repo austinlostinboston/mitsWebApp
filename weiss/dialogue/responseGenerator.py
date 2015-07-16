@@ -6,7 +6,7 @@ from weiss.flows.factory import getFlowManager
 from weiss.models import Action, Type, Types, State, Comment, Entity
 from django.db.models import Q
 
-def responseHandler(request):
+def responseHandler(request, args):
     ## Set response
     response = 'Empty response: We are experiencing problems, sorry!'
 
@@ -14,58 +14,57 @@ def responseHandler(request):
     session = request.session
     userid = request.user
     state = getFlowManager().lookUp(userid)
-    state = State(state)
 
     ## Get id's from session
-    aid = session['aid']
+    aid = args['aid']
     eid = session['curr_eid']
     cid = session['curr_cid']
     tid = session['curr_tid']
 
     ## Get id names from enumerated models
-    aid_name = Action(aid).name
+    action = Action(aid)
     if tid is not None:
         tid_name = Type(tid).name
     else:
         tid_name = "none"
 
     ## Handle the different actions
-    if aid_name == "NextRandomComment":
+    if action is Action.NextRandomComment:
         comment_ob = selectComment(cid, eid, tid)
         response = "One person said \" %s \"" % (comment_ob.body)
 
-    elif aid_name == "NextPositiveComment":
+    elif action is Action.NextPositiveComment:
         comment_ob = selectComment(cid, eid, tid, sentiment='+')
         response = "One person said \" %s \"" % (comment_ob.body)
 
-    elif aid_name == "NextNegativeComment":
+    elif action is Action.NextNegativeComment:
         comment_ob = selectComment(cid, eid, tid, sentiment='-')
         response = "One person said \" %s \"" % (comment_ob.body)
 
-    elif aid_name == "NextRandomEntity":
+    elif action is Action.NextRandomEntity:
         entity_ob = selectEntity(eid, tid)
-        resonse = "With such little information, I'll pick to talk about %s." % (entity_ob.name) 
+        resonse = "With such little information, I'll pick to talk about %s." % (entity_ob.name)
 
-    elif aid_name == "SentimentStats":
+    elif action is Action.SentimentStats:
         resonse = "Stats will go here."
 
-    elif aid_name == "EntitySelection":
+    elif action is Action.EntitySelection:
         entity_ob = selectEntity(eid, tid)
         response = "Absoultely, let's talk about %s." % (entity_ob.name)
 
-    elif aid_name == "TypeSelection":
+    elif action is Action.TypeSelection:
         type_ob = selectType(tid)
         response = "It sounds like you want to talk about %s." % (type_ob.name)
 
-    elif aid_name == "Greeting":
+    elif action is Action.Greeting:
         ## Hnadled elsewhere
         pass
 
-    elif aid_name == "EntityComfirmation":
+    elif action is Action.EntityConfirmation:
         ## Not implemented yet
         pass
 
-    elif aid_name == "UnknownAction":
+    elif action is Action.UnknownAction:
         response = "Sorry, could you not be a bimbo. Ask a better question."
 
     else:
@@ -73,13 +72,13 @@ def responseHandler(request):
 
     return response
 
-    
-    
+
+
 def selectType(tid):
     '''
     Returns a type object from database
     '''
-    return Type.objects.get(tid=tid)
+    return Types.objects.get(tid=tid)
 
 
 
