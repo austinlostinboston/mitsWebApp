@@ -212,6 +212,11 @@ class Flow(object):
         """
         filter(self._entities, predicate)
 
+    def keep(self, idx):
+        assert(idx < len(self.entities))
+        self.entity = self.entities[idx]
+        self.entities = [self.entity]
+
 
 
 
