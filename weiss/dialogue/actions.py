@@ -245,6 +245,7 @@ def entitySelection(flow, decision):
         curr_tid = decision["tid"]
         session["curr_tid"] = curr_tid
     """
+    state = flow.state
     if decision.has_key("keywords"):
         # select by first 3 keywords
         keywords = decision["keywords"]
