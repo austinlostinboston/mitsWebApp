@@ -13,14 +13,10 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 
 import logging
 
-from weiss.models import State # for enums
-from weiss.utils.switch import switch
-from weiss.flows.states import *
-
 logger = logging.getLogger(__name__)
 
-class FlowManager:
 
+class FlowManager:
     def __init__(self):
         self._flowTable = {}
 
@@ -34,12 +30,9 @@ class FlowManager:
         else:
             return self._flowTable[uid]
 
-
     def transit(self, user, sid):
         flow = self.lookUp(user)
         if flow is None:
-            logger.error("Can not make transit from a none state, %s, %s" %(user, action))
+            logger.error("Can not make transit from a none state, %s, %s" % (user, action))
             return
         flow.transit(sid)
-
-

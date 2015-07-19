@@ -206,4 +206,8 @@ class Flow(object):
         """
         assert (idx < len(self.entities))
         self.entity = self.entities[idx]
+<<<<<<< HEAD
         self.entities = [self.entity]
+=======
+        self.entities = [self.entity]
+>>>>>>> 2e0cee4... a lot syntax changes

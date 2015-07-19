@@ -7,11 +7,9 @@ from weiss.flows.abstractState import AbstractState
 from weiss.utils.switch import switch
 from weiss.models import Action, State  # for enums
 
-
 """
 Definitions of the system states
 """
-
 
 """
 Definition of the control flow
@@ -32,11 +30,12 @@ Definition of the control flow
 Systen initialization state
 the beginning point of the dialog
 """
-class SystemInitiative(AbstractState):
 
-    _npa = set([Action.EntitySelection,
-                Action.TypeSelection,
-                Action.UnknownAction])
+
+class SystemInitiative(AbstractState):
+    _npa = {[Action.EntitySelection,
+             Action.TypeSelection,
+             Action.UnknownAction]}
 
     def __init__(self):
         AbstractState.__init__(self)
@@ -69,12 +68,13 @@ Type selected state
 The followings should be determined:
     curr_tid
 """
-class TypeSelected(AbstractState):
 
-    _npa = set([Action.NextRandomEntity,
-                Action.EntitySelection,
-                Action.TypeSelection,
-                Action.UnknownAction])
+
+class TypeSelected(AbstractState):
+    _npa = {[Action.NextRandomEntity,
+             Action.EntitySelection,
+             Action.TypeSelection,
+             Action.UnknownAction]}
 
     def __init__(self):
         AbstractState.__init__(self)
@@ -104,22 +104,24 @@ class TypeSelected(AbstractState):
             if case():
                 raise KeyError("Invaild action id")
 
+
 """
 Entity selected state
 The followings should be determined:
     curr_tid
     curr_eid
 """
-class EntitySelected(AbstractState):
 
-    _npa = set([Action.NextRandomComment,
-                Action.NextPositiveComment,
-                Action.NextNegativeComment,
-                Action.NextRandomEntity,
-                Action.SentimentStats,
-                Action.EntitySelection,
-                Action.TypeSelection,
-                Action.UnknownAction])
+
+class EntitySelected(AbstractState):
+    _npa = {[Action.NextRandomComment,
+             Action.NextPositiveComment,
+             Action.NextNegativeComment,
+             Action.NextRandomEntity,
+             Action.SentimentStats,
+             Action.EntitySelection,
+             Action.TypeSelection,
+             Action.UnknownAction]}
 
     def __init__(self):
         AbstractState.__init__(self)
@@ -162,8 +164,6 @@ class EntitySelected(AbstractState):
                 raise KeyError("Invaild action id")
 
 
-
-
 """
 Comment selecetd state
 The followings should be determined:
@@ -171,17 +171,18 @@ The followings should be determined:
     curr_eid
     curr_cid
 """
-class CommentSelected(AbstractState):
 
-    _npa = set([Action.NextRandomComment,
-                Action.NextOppositeComment,
-                Action.NextPositiveComment,
-                Action.NextNegativeComment,
-                Action.NextRandomEntity,
-                Action.SentimentStats,
-                Action.EntitySelection,
-                Action.TypeSelection,
-                Action.UnknownAction])
+
+class CommentSelected(AbstractState):
+    _npa = {[Action.NextRandomComment,
+             Action.NextOppositeComment,
+             Action.NextPositiveComment,
+             Action.NextNegativeComment,
+             Action.NextRandomEntity,
+             Action.SentimentStats,
+             Action.EntitySelection,
+             Action.TypeSelection,
+             Action.UnknownAction]}
 
     def __init__(self):
         AbstractState.__init__(self)
@@ -230,11 +231,12 @@ class CommentSelected(AbstractState):
 """
 Range Selected state
 """
-class RangeSelected(AbstractState):
 
-    _npa = set([Action.TypeSelection,
-                Action.EntityConfirmation,
-                Action.UnknownAction])
+
+class RangeSelected(AbstractState):
+    _npa = {[Action.TypeSelection,
+             Action.EntityConfirmation,
+             Action.UnknownAction]}
 
     def __init__(self):
         AbstractState.__init__(self)
@@ -260,7 +262,3 @@ class RangeSelected(AbstractState):
 
             if case():
                 raise KeyError("Invaild action")
-
-
-
-

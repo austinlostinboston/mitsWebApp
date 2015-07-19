@@ -35,7 +35,7 @@ class AbstractState(object):
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def transit(aid):
+    def transit(self, aid):
         """
         return a state id of the destination state
         """

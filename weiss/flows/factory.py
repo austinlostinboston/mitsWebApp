@@ -11,6 +11,7 @@ from weiss.utils.switch import switch
 
 _instance = None
 
+
 def getFlowManager():
     global _instance
     if _instance is None:
@@ -18,8 +19,9 @@ def getFlowManager():
 
     return _instance
 
+
 def StateFactory(sid):
-    assert(isinstance(sid, State))
+    assert (isinstance(sid, State))
     """
     Factory for state class
     """
@@ -41,4 +43,3 @@ def StateFactory(sid):
 
         if case():
             raise KeyError("No such state %s" % sid)
-

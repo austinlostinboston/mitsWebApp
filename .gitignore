@@ -22,3 +22,7 @@ weiss/audio
 
 # config.ini files
 *.ini
+
+# intellij
+.idea
+*.iml

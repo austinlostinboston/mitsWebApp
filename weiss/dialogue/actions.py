@@ -5,35 +5,33 @@ This module provides:
 
 Author: Ming Fang <mingf@cs.cmu.edu>
 """
-from django.db.models import Q
-
-from weiss.models import Comment, Entity, Type, Types, Action, Step, State
-from weiss.utils.switch import switch
-from weiss.dialogue.entitySelector import entitySelector
-from weiss.flows.states import *
-from weiss.flows.factory import getFlowManager
-
 import random
 import logging
 
+from django.db.models import Q
+
+from weiss.models import Comment, Entity, Step
+from weiss.flows.states import *
+
 logger = logging.getLogger(__name__)
 
+
 def nextRandomEntity(flow, decision):
-    """Start next conversation
+    """Start next conversation with a random entity
 
-    decision:
-        session: The session contains current context
-            next_tid: the type id that the next conversation is going to talk about
-            curr_eid: current entity id that is talking about
-
-    Returns:
+        pick a random entity and set eid in flow
+    Args:
+        flow: the flow class
+        decision: decision made by classifier
+    Return:
+        Void    Returns:
     """
-    next_tid = int(random.uniform(1, 3.5))
+    next_tid = flow.tid
     curr_eid = flow.eid
     logger.debug("next ran entity with next_tid: %s, curr_eid: %s" % (next_tid, curr_eid))
     eids = Entity.objects.filter(tid=next_tid).values_list('eid', flat=True)
     new_eid = curr_eid
-    while (new_eid == curr_eid):
+    while new_eid == curr_eid:
         new_eid = random.sample(eids, 1)[0]
 
     flow.eid = new_eid
@@ -48,11 +46,20 @@ def nextRandomEntity(flow, decision):
     flow.transit(State.EntitySelected)
     return
 
+
 def nextRandomCmt(flow, decision):
+    """Start next conversation with a random entity
+
+        pick a random entity and set eid in flow
+    Args:
+        flow: the flow class
+        decision: decision made by classifier
+    Return:
+        Void    Returns:
+    """
     """Give a random comment of given entity
 
     decision:
-        session: The session contains current context
             curr_eid: current entity id that is talking about
 
     Returns:
@@ -87,8 +94,16 @@ def nextRandomCmt(flow, decision):
     return
 
 
-
 def nextRandomPositiveCmt(flow, decision):
+    """Start next conversation with a random entity
+
+        pick a random entity and set eid in flow
+    Args:
+        flow: the flow class
+        decision: decision made by classifier
+    Return:
+        Void    Returns:
+    """
     """Give a random positive comment of given entity
         If curr_eid is None, return directly
         If no positive cmt in curr_eid, set curr_cid = None and return
@@ -107,14 +122,14 @@ def nextRandomPositiveCmt(flow, decision):
 
     if curr_eid is None:
         logger.info("No eid given")
-        #return "What do you want to talk about?"
+        # return "What do you want to talk about?"
         return
 
     idxs = Comment.objects.filter(Q(eid=curr_eid), Q(sentiment__gt=0)).values_list('cid', flat=True)
     idx = curr_cid
     if (len(idxs) == 0):
         flow.cid = None
-        #return "No such comments"
+        # return "No such comments"
         logger.info("No such comments")
         return
     else:
@@ -136,6 +151,15 @@ def nextRandomPositiveCmt(flow, decision):
 
 
 def nextRandomNegativeCmt(flow, decision):
+    """Start next conversation with a random entity
+
+        pick a random entity and set eid in flow
+    Args:
+        flow: the flow class
+        decision: decision made by classifier
+    Return:
+        Void    Returns:
+    """
     """Give a random negative comment of given entity
         If curr_eid is None, return directly
         If no negative cmt in curr_eid, set curr_cid = None and return
@@ -158,12 +182,12 @@ def nextRandomNegativeCmt(flow, decision):
     logger.debug("next ran negative cmt with curr_eid: %s, curr_cid: %s" % (curr_eid, curr_cid))
     idxs = Comment.objects.filter(Q(eid=curr_eid), Q(sentiment__lt=0)).values_list('cid', flat=True)
     idx = curr_cid
-    if (len(idxs) == 0):
+    if len(idxs) == 0:
         flow.cid = None
-        #return "No such comments"
+        # return "No such comments"
         return
     else:
-        while (idx == curr_cid):
+        while idx == curr_cid:
             idx = random.sample(idxs, 1)[0]
 
     """Handle by res gen
@@ -180,8 +204,16 @@ def nextRandomNegativeCmt(flow, decision):
     return
 
 
-
 def nextRandomOppositeCmt(flow, decision):
+    """Start next conversation with a random entity
+
+        pick a random entity and set eid in flow
+    Args:
+        flow: the flow class
+        decision: decision made by classifier
+    Return:
+        Void    Returns:
+    """
     """Give a random opposite comment of given entity
         If curr_cid is None, return directly
         If this cmt is positive, call negative cmt executor
@@ -211,13 +243,23 @@ def nextRandomOppositeCmt(flow, decision):
         logger.debug("Weiss does not talk about 0 sentiment comment, but Weiss would give one")
         return nextRandomPositiveCmt(flow, decision)
 
+
 def typeSelection(flow, decision):
+    """Start next conversation with a random entity
+
+        pick a random entity and set eid in flow
+    Args:
+        flow: the flow class
+        decision: decision made by classifier
+    Return:
+        Void    Returns:
+    """
     """Select a type
         If there is tid in decision, set it accordingly
         If there is no tid in decision, talk movies :)
         curr_tid is always set upon return
     """
-    tid = decision.get("tid", 3) # imdb by default :)
+    tid = decision.get("tid", 3)  # imdb by default :)
     flow.tid = tid
     flow.transit(State.TypeSelected)
     """Handle by res gen
@@ -226,7 +268,17 @@ def typeSelection(flow, decision):
     """
     return
 
+
 def entitySelection(flow, decision):
+    """Start next conversation with a random entity
+
+        pick a random entity and set eid in flow
+    Args:
+        flow: the flow class
+        decision: decision made by classifier
+    Return:
+        Void    Returns:
+    """
     """
     The logic:
         None test for curr_tid
@@ -267,11 +319,11 @@ def entitySelection(flow, decision):
         flow.entities = entities
         if len(entities) == 1:
             # good, we found only one, go to EntitySelected state with curr_eid set
-            #entity = entitySelector(entities, Type(curr_tid))
+            # entity = entitySelector(entities, Type(curr_tid))
             flow.transit(State.EntitySelected)
             flow.keep(0)
             return
-            #return "Sure, let's talk about \"%s\"" % entity.name
+            # return "Sure, let's talk about \"%s\"" % entity.name
         elif len(entities) > 1:
             # It gave a shitload, go to RangeSelected with state.range set
             flow.transit(State.RangeSelected)
@@ -334,30 +386,33 @@ def sentimentStats(flow, decision):
             return "Almost everyone thought it was bad."
         """
 
+
 def greeting(flow, decision):
     '''dummy'''
     return "Hi, I'm Weiss"
 
+
 def unknownAction(flow, decision):
     '''dummy'''
     return "Sorry, I cannot handle this question."
+
 
 def entityConfirmation(flow, decision):
     """Narrow down the target list
         If the state is in RangeInitiative substep, set tid and return
         If the state is in TypeSelected substep, set eid and return
     """
-    assert(isinstance(state, RangeSelected))
+    assert (isinstance(state, RangeSelected))
     state = flow.state
     for case in switch(state.step):
         if case(Step.RangeInitiative):
-            assert(decision.has_key("tid"))
+            assert (decision.has_key("tid"))
             tid = decision['tid']
             flow.type = tid
-            flow.filter(lambda entity : entity.tid == tid.value)
+            flow.filter(lambda entity: entity.tid == tid.value)
             state.transit(Step.TypeSelected)
         if case(Step.TypeSelected):
-            assert(decision.has_key("idx"))
+            assert (decision.has_key("idx"))
             flow.keep(decision["idx"])
         if case():
             logger.error("No such step in RangeSelected state")
@@ -368,12 +423,3 @@ def entityConfirmation(flow, decision):
         return
     else:
         return
-
-
-
-
-
-
-
-
-
