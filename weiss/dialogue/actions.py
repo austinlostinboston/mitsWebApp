@@ -48,34 +48,24 @@ def nextRandomEntity(flow, decision):
 
 
 def nextRandomCmt(flow, decision):
-    """Start next conversation with a random entity
-
-        pick a random entity and set eid in flow
+    """Pick a random comment
     Args:
         flow: the flow class
         decision: decision made by classifier
     Return:
         Void    Returns:
     """
-    """Give a random comment of given entity
-
-    decision:
-            curr_eid: current entity id that is talking about
-
-    Returns:
-    """
     curr_eid = flow.eid
-    curr_cid = flow.cid
     logger.debug("next ran cmt with curr_eid: %s" % curr_eid)
-    idx = 0
     if curr_eid is None:
         num_cmt = Comment.objects.count()
         idx = random.randint(0, num_cmt - 1)
     else:
         curr_eid = int(curr_eid)
         idxs = Comment.objects.filter(eid=curr_eid).values_list('cid', flat=True)
-        if (len(idxs) == 0):
-            return "No such comment"
+        if len(idxs) == 0:
+            flow.cid = None # no such comment
+            return
         idx = random.sample(idxs, 1)[0]
     flow.cid = idx
 
@@ -95,25 +85,16 @@ def nextRandomCmt(flow, decision):
 
 
 def nextRandomPositiveCmt(flow, decision):
-    """Start next conversation with a random entity
+    """Pick a random positive comment
 
-        pick a random entity and set eid in flow
+        If curr_eid is None, return directly
+        If no positive cmt in current eid, set flow.cid = None and return
+        If there is one cmt found, set flow.cid and return
     Args:
         flow: the flow class
         decision: decision made by classifier
     Return:
-        Void    Returns:
-    """
-    """Give a random positive comment of given entity
-        If curr_eid is None, return directly
-        If no positive cmt in curr_eid, set curr_cid = None and return
-        If there is one cmt found, set curr_cid and return
-    decision:
-        session: The session contains current context
-            curr_eid: the entity id that is talking about
-            curr_cid: the current cid
-
-    Returns:
+        Void
     """
     curr_eid = flow.eid
     curr_cid = flow.cid
@@ -127,13 +108,13 @@ def nextRandomPositiveCmt(flow, decision):
 
     idxs = Comment.objects.filter(Q(eid=curr_eid), Q(sentiment__gt=0)).values_list('cid', flat=True)
     idx = curr_cid
-    if (len(idxs) == 0):
+    if len(idxs) == 0:
         flow.cid = None
         # return "No such comments"
         logger.info("No such comments")
         return
     else:
-        while (idx == curr_cid):
+        while idx == curr_cid:
             idx = random.sample(idxs, 1)[0]
 
     """Handle by Ges Gen
@@ -151,26 +132,16 @@ def nextRandomPositiveCmt(flow, decision):
 
 
 def nextRandomNegativeCmt(flow, decision):
-    """Start next conversation with a random entity
+    """Pick a random negative comment
 
-        pick a random entity and set eid in flow
+        If curr_eid is None, return directly
+        If no negative cmt in curr_eid, set curr_cid = None and return
+        If there is one cmt found, set curr_cid and return
     Args:
         flow: the flow class
         decision: decision made by classifier
     Return:
-        Void    Returns:
-    """
-    """Give a random negative comment of given entity
-        If curr_eid is None, return directly
-        If no negative cmt in curr_eid, set curr_cid = None and return
-        If there is one cmt found, set curr_cid and return
-
-    decision:
-        session: The session contains current context
-            curr_eid: the entity id that is talking about
-            curr_cid: the previous cid
-
-    Returns:
+        Void
     """
     curr_eid = flow.eid
     curr_cid = flow.cid
@@ -205,29 +176,19 @@ def nextRandomNegativeCmt(flow, decision):
 
 
 def nextRandomOppositeCmt(flow, decision):
-    """Start next conversation with a random entity
+    """Pick a random comment with opposite sentiment
 
-        pick a random entity and set eid in flow
+        If flow.cid is None, return directly
+        If this cmt is positive, call negative cmt executor
+        If this cmt is negative, call positive cmt executor
+        If this cmt is neutral, call positive cmt executor
     Args:
         flow: the flow class
         decision: decision made by classifier
     Return:
-        Void    Returns:
-    """
-    """Give a random opposite comment of given entity
-        If curr_cid is None, return directly
-        If this cmt is positive, call negative cmt executor
-        If this cmt is negative, call positive cmt executor
-        If this cmt is 0, call positive cmt executor
-
-    decision:
-        session: The session contains current context
-            curr_sentiment: the value of current sentiment
-
-    Returns:
+        Void
     """
     comment = flow.comment
-    curr_sentiment = None
 
     if comment is None:
         return
@@ -245,19 +206,16 @@ def nextRandomOppositeCmt(flow, decision):
 
 
 def typeSelection(flow, decision):
-    """Start next conversation with a random entity
+    """Pick a type
+        set flow.tid
 
-        pick a random entity and set eid in flow
+        If there is tid in decision, set it accordingly
+        curr_tid is always set upon return
     Args:
         flow: the flow class
         decision: decision made by classifier
     Return:
-        Void    Returns:
-    """
-    """Select a type
-        If there is tid in decision, set it accordingly
-        If there is no tid in decision, talk movies :)
-        curr_tid is always set upon return
+        Void
     """
     tid = decision.get("tid", 3)  # imdb by default :)
     flow.tid = tid
@@ -270,19 +228,10 @@ def typeSelection(flow, decision):
 
 
 def entitySelection(flow, decision):
-    """Start next conversation with a random entity
+    """Pick entities based on keywords
 
-        pick a random entity and set eid in flow
-    Args:
-        flow: the flow class
-        decision: decision made by classifier
-    Return:
-        Void    Returns:
-    """
-    """
-    The logic:
-        None test for curr_tid
         None test for keywords
+
         if there are 3 or more keywords:
             get entities that contain all (up to 3) keywords
                 contain is defined as (description containing or title containing)
@@ -290,6 +239,13 @@ def entitySelection(flow, decision):
             try one keyword at a time
         if any entities are found, pass to entitySelector, and we are good
         if no entity found by each one keyword: well, say sorry
+
+        pick a random entity and set eid in flow
+    Args:
+        flow: the flow class
+        decision: decision made by classifier
+    Return:
+        Void
     """
     curr_tid = flow.tid
     """
@@ -311,17 +267,14 @@ def entitySelection(flow, decision):
         else:
             base = Q()
 
-        print keywords
-
         for keyword in keywords:
             q = base & (Q(description__icontains=keyword) | Q(name__icontains=keyword))
         entities = Entity.objects.filter(q)
         flow.entities = entities
         if len(entities) == 1:
             # good, we found only one, go to EntitySelected state with curr_eid set
-            # entity = entitySelector(entities, Type(curr_tid))
             flow.transit(State.EntitySelected)
-            flow.keep(0)
+            flow.keep(0) # only one, just keep it
             return
             # return "Sure, let's talk about \"%s\"" % entity.name
         elif len(entities) > 1:

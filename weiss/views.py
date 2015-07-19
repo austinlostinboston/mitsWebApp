@@ -34,7 +34,7 @@ def homepage(request):
     context = {}
     dmgr = getDialogueManager()
     if request.method == 'POST':
-        conext = dmgr.handle(request)
+        dmgr.handle(request)
     else:
         initSession(request)
 

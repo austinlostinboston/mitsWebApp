@@ -33,9 +33,9 @@ the beginning point of the dialog
 
 
 class SystemInitiative(AbstractState):
-    _npa = {[Action.EntitySelection,
-             Action.TypeSelection,
-             Action.UnknownAction]}
+    _npa = {Action.EntitySelection,
+            Action.TypeSelection,
+            Action.UnknownAction}
 
     def __init__(self):
         AbstractState.__init__(self)
@@ -71,10 +71,10 @@ The followings should be determined:
 
 
 class TypeSelected(AbstractState):
-    _npa = {[Action.NextRandomEntity,
-             Action.EntitySelection,
-             Action.TypeSelection,
-             Action.UnknownAction]}
+    _npa = {Action.NextRandomEntity,
+            Action.EntitySelection,
+            Action.TypeSelection,
+            Action.UnknownAction}
 
     def __init__(self):
         AbstractState.__init__(self)
@@ -114,14 +114,14 @@ The followings should be determined:
 
 
 class EntitySelected(AbstractState):
-    _npa = {[Action.NextRandomComment,
+    _npa = {Action.NextRandomComment,
              Action.NextPositiveComment,
              Action.NextNegativeComment,
              Action.NextRandomEntity,
              Action.SentimentStats,
              Action.EntitySelection,
              Action.TypeSelection,
-             Action.UnknownAction]}
+             Action.UnknownAction}
 
     def __init__(self):
         AbstractState.__init__(self)
@@ -174,15 +174,15 @@ The followings should be determined:
 
 
 class CommentSelected(AbstractState):
-    _npa = {[Action.NextRandomComment,
-             Action.NextOppositeComment,
-             Action.NextPositiveComment,
-             Action.NextNegativeComment,
-             Action.NextRandomEntity,
-             Action.SentimentStats,
-             Action.EntitySelection,
-             Action.TypeSelection,
-             Action.UnknownAction]}
+    _npa = {Action.NextRandomComment,
+            Action.NextOppositeComment,
+            Action.NextPositiveComment,
+            Action.NextNegativeComment,
+            Action.NextRandomEntity,
+            Action.SentimentStats,
+            Action.EntitySelection,
+            Action.TypeSelection,
+            Action.UnknownAction}
 
     def __init__(self):
         AbstractState.__init__(self)
@@ -234,9 +234,9 @@ Range Selected state
 
 
 class RangeSelected(AbstractState):
-    _npa = {[Action.TypeSelection,
-             Action.EntityConfirmation,
-             Action.UnknownAction]}
+    _npa = {Action.TypeSelection,
+            Action.EntityConfirmation,
+            Action.UnknownAction}
 
     def __init__(self):
         AbstractState.__init__(self)
