@@ -6,6 +6,7 @@ Author: Ming Fang
 """
 import abc
 
+
 class AbstractState(object):
     __metaclass__ = abc.ABCMeta
 
@@ -43,5 +44,3 @@ class AbstractState(object):
 
     def __str__(self):
         return self.name
-
-

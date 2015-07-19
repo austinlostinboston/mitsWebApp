@@ -1,20 +1,25 @@
 ## Import builtins
 import random
 
-## Import from weiss
-from weiss.models import Action, Type, Types, State, Comment, Entity
+# Import from weiss
+from weiss.models import Action, Types, Comment, Entity
 from django.db.models import Q
 from bs4 import BeautifulSoup
 
+
 def responseHandler(flow):
+<<<<<<< HEAD
 
     ## read responses.xml to memory
     soup = BeautifulSoup(open('responses.xml'))
 
     ## Set response
+=======
+    # Set response
+>>>>>>> 7991b98...  a lot syntax change
     response = 'Empty response: We are experiencing problems, sorry!'
 
-    ## Grab information from flow
+    # Grab information from flow
     userid = flow.user
     state = flow.state
     action = flow.action
@@ -25,10 +30,17 @@ def responseHandler(flow):
     tid = flow.tid
     entities = flow.entities
 
+<<<<<<< HEAD
     ## Text variables
     type_name = flow.type
     entity_name = flow.entity
     comment_body = flow.comment
+=======
+    # Handle the different actions
+    if action is Action.NextRandomComment:
+        comment_ob = selectComment(cid, eid, tid)
+        response = "One person said \" %s \"" % (comment_ob.body)
+>>>>>>> 7991b98...  a lot syntax change
 
     if entities is None:
         num_entities = str(None)
@@ -51,22 +63,41 @@ def responseHandler(flow):
     print "--     Type: " + str(type_name)
     print "--   Entity: " + str(entity_name)
 
+<<<<<<< HEAD
     
 
     # ## Handle the different actions
     # if action is Action.NextRandomComment:
     #     #comment_ob = selectComment(flow, cid, eid, tid)
     #     response = "One person said \" %s \"" % (comment_ob.body)
+=======
+    elif action is Action.NextRandomEntity:
+        entity_ob = selectEntity(eid, tid)
+        response = "With such little information, I'll pick to talk about %s." % (entity_ob.name)
+
+    elif action is Action.SentimentStats:
+        response = "Stats will go here."
+>>>>>>> 7991b98...  a lot syntax change
 
 
     # if action is Action.NextPositiveComment:
     #     #comment_ob = selectComment(flow, cid, eid, tid, sentiment='+')
     #     response = "One person said \" %s \"" % (comment_ob.body)
 
+<<<<<<< HEAD
 
     # if action is Action.NextNegativeComment:
     #     #comment_ob = selectComment(flow, cid, eid, tid, sentiment='-')
     #     response = "One person said \" %s \"" % (comment_ob.body)
+=======
+    elif action is Action.Greeting:
+        # Hnadled elsewhere
+        pass
+
+    elif action is Action.EntityConfirmation:
+        # Not implemented yet
+        pass
+>>>>>>> 7991b98...  a lot syntax change
 
 
     # if action is Action.NextRandomEntity:
@@ -79,6 +110,7 @@ def responseHandler(flow):
     # else:
     #     response = "You need to first tell what you would like to hear stats about."
 
+<<<<<<< HEAD
 
     # if action is Action.EntitySelection and str(state) is 'RangeSelected':
     #     response = "There are " + num_entities + " possible matching " + pluralType(type_name) + ". " \
@@ -117,3 +149,54 @@ def pluralType(type_ins):
         type_name += "s"
 
     return type_name
+=======
+def selectType(tid):
+    """
+    Returns a type object from database
+    """
+    return Types.objects.get(tid=tid)
+
+
+def selectEntity(eid, tid):
+    """
+    Returns random/specified entity object from database.
+    """
+    if eid is None:
+        if tid is None:
+            eids = Entity.objects.all().values_list('eid', flat=True)
+        else:
+            eids = Entity.objects.filter(tid=tid).values_list('eid', flat=True)
+        entity = random.sample(eids, 1)[0]
+    else:
+        entity = eid
+
+    return Entity.objects.get(eid=entity)
+
+
+def selectComment(cid, eid, tid, sentiment="="):
+    """
+    Returns a comment based on tid, eid, tid, and sentimnet (+/-/=)
+    """
+    q = Q(tid=tid)
+
+    if cid is None:
+        if eid is not None:
+            pass
+        else:
+            q = q & Q(eid=eid)
+        if sentiment == "=":
+            q = q & Q(sentiment=0)
+        elif sentiment == "+":
+            q = q & Q(sentiment__gt=0)
+        elif sentiment == "-":
+            q = q & Q(sentiment__lt=0)
+        else:
+            pass
+
+        cids = Comment.objects.filter(q).values_list('cid', flat=True)
+        comment = random.sample(cids, 1)[0]
+    else:
+        comment = cid
+
+    return Comment.objects.get(cid=comment)
+>>>>>>> 7991b98...  a lot syntax change

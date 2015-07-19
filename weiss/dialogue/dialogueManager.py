@@ -9,9 +9,6 @@ this class is responsible for
 Author: Ming Fang <mingf@cs.cmu.edu>
 """
 
-import logging
-from weiss.models import Action
-from weiss.utils.switch import switch
 from weiss.dialogue.actions import *
 from weiss.dialogue.actionUtil import initNewLine, flushNewLine
 from weiss.dialogue.responseGenerator import responseHandler
@@ -20,8 +17,8 @@ from weiss.classifier.factory import getClassifier
 
 logger = logging.getLogger(__name__)
 
-class DialogueManager(object):
 
+class DialogueManager(object):
     def __init__(self):
         self._classifier = getClassifier()
         self._fmgr = getFlowManager()
@@ -37,16 +34,17 @@ class DialogueManager(object):
     def getExecutor(self, action):
         """
         return action handler according to action
+        :rtype : method
         """
         for case in switch(action):
             if case(Action.NextRandomComment):
                 return nextRandomCmt
 
             if case(Action.NextOppositeComment):
-                return nextOppositeCmt
+                return nextRandomOppositeCmt
 
             if case(Action.NextNegativeComment):
-                return nextNegativeCmt
+                return nextRandomNegativeCmt
 
             if case(Action.NextRandomEntity):
                 return nextRandomEntity
@@ -97,7 +95,7 @@ class DialogueManager(object):
         logger.debug(action.name)
 
         if query is None:
-            query = action.name + " : " + args['keywords']
+            query = action.name + " : " + decision['keywords']
 
         logger.debug("Dispatch action: %s, %s" % (action.value, action.name))
 
@@ -105,13 +103,10 @@ class DialogueManager(object):
 
         actionExecutor = self.getExecutor(action)
 
-        actionExecutor(flow, decision) # transition happens inside
+        actionExecutor(flow, decision)  # transition happens inside
 
         response = responseHandler(flow)
 
         flushNewLine(request, response)
 
         return
-
-
-

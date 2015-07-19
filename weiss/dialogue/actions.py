@@ -402,6 +402,7 @@ def entityConfirmation(flow, decision):
         If the state is in RangeInitiative substep, set tid and return
         If the state is in TypeSelected substep, set eid and return
     """
+    state = flow.state
     assert (isinstance(state, RangeSelected))
     state = flow.state
     for case in switch(state.step):
