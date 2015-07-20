@@ -106,7 +106,7 @@ port = config.get('webapp','port')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-	'NAME': name,
+        'NAME': name,
         'USER': user,
         'PASSWORD': password,
         'HOST': host,

@@ -1,4 +1,4 @@
-'''
+"""
 A number of plugable methods for select desirable entity
 from a list of entities.
 
@@ -6,7 +6,7 @@ The main entry is entitySelector, which is the only one needs to
 be imported elsewhere
 
 Author: Ming Fang
-'''
+"""
 from weiss.models import Comment, Type
 from weiss.utils.switch import switch
 

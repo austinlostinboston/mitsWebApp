@@ -29,7 +29,7 @@ Definition of the control flow
 class SystemInitiative(AbstractState):
     """
     Systen initialization state
-    the beginning point of the dialog
+    the beginning point of a dialogue
     """
 
     _npa = {Action.EntitySelection,

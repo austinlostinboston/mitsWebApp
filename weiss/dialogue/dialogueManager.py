@@ -33,8 +33,8 @@ class DialogueManager(object):
         return self._fmgr
 
     def getExecutor(self, action):
-        """
-        return action handler according to action
+        """return action handler according to action
+        :param action Action enum
         :rtype : method
         """
         for case in switch(action):
@@ -72,8 +72,7 @@ class DialogueManager(object):
                 raise KeyError("No such action %s" % action)
 
     def handle(self, request):
-        """
-        handle a request from user, will call dispatch
+        """Handle a request from user, will call dispatch
         """
         query = str(request.POST.get('queryinput', False))
         logger.debug("query:%s" % query)
@@ -87,8 +86,7 @@ class DialogueManager(object):
         return
 
     def dispatch(self, flow, query, decision):
-        """
-        dispatch a request based on query
+        """Dispatch a request based on query
         """
         flow.action = Action(decision['aid'])
         request = flow.request

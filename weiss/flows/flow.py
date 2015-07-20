@@ -56,17 +56,6 @@ class Flow(object):
         """
         return self._state
 
-    def transit(self, sid):
-        """
-        make a transition
-        """
-        assert (isinstance(sid, State))
-        logger.info("Transit from %s to %s" % (self.state.name, sid.name))
-        self._state = StateFactory(sid)
-
-    def __str__(self):
-        return "%s in %s" % (self.user, self.state.name)
-
     @property
     def action(self):
         """Getter for current action
@@ -191,6 +180,17 @@ class Flow(object):
         """Setter for tid
         """
         self._type = Type(new_tid)
+
+    def transit(self, sid):
+        """
+        make a transition
+        """
+        assert (isinstance(sid, State))
+        logger.info("Transit from %s to %s" % (self.state.name, sid.name))
+        self._state = StateFactory(sid)
+
+    def __str__(self):
+        return "%s in %s" % (self.user, self.state.name)
 
     def filter(self, predicate):
         """filter and keep entities base on predicate, which is a function

@@ -12,6 +12,7 @@ from django.db.models import Q
 
 from weiss.models import Comment, Entity, Step
 from weiss.flows.states import *
+from weiss.utils.switch import switch
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +36,7 @@ def nextRandomEntity(flow, decision):
         new_eid = random.sample(eids, 1)[0]
 
     flow.eid = new_eid
-    logger.debug("next ran entity has decided next eid: %s" % (new_eid))
+    logger.debug("next ran entity has decided next eid: %s" % new_eid)
 
     """ Handle by Response Generator
     entity = Entity.objects.get(eid=new_eid)
@@ -254,7 +255,7 @@ def entitySelection(flow, decision):
         session["curr_tid"] = curr_tid
     """
     state = flow.state
-    if decision.has_key("keywords"):
+    if "keywords" in decision:
         # select by first 3 keywords
         keywords = decision["keywords"]
         keywords = keywords.split("#")
@@ -360,13 +361,13 @@ def entityConfirmation(flow, decision):
     state = flow.state
     for case in switch(state.step):
         if case(Step.RangeInitiative):
-            assert (decision.has_key("tid"))
+            assert "tid" in decision
             tid = decision['tid']
             flow.type = tid
             flow.filter(lambda entity: entity.tid == tid.value)
             state.transit(Step.TypeSelected)
         if case(Step.TypeSelected):
-            assert (decision.has_key("idx"))
+            assert "idx" in decision
             flow.keep(decision["idx"])
         if case():
             logger.error("No such step in RangeSelected state")

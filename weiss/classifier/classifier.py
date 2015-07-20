@@ -145,7 +145,7 @@ class Classifier(object):
         if state is SystemInitiative or state is TypeSelected:
             q = list2Vec(hashit(query))
             arguments['tid'] = int(self.type_model.predict(q)[0])
-            self._entity_recognition(query,arguments)
+            self._entity_recognition(query, arguments)
             if 'keywords' in arguments:
                 arguments['aid'] = 7
             else:
@@ -210,14 +210,14 @@ class Classifier(object):
         tuples = []
         trees = []
         for i in entities:
-            if isinstance(i,tuple):
+            if isinstance(i, tuple):
                 if ((i[1][:2] == 'NN' or i[1][:2] == 'JJ')
                     and i[0].lower() not in self.stopwords
                     and self.stemmer.stem(i[0]) not in self.type_words['movie']
                     and self.stemmer.stem(i[0]) not in self.type_words['article']
                     and self.stemmer.stem(i[0]) not in self.type_words['restaurant']):
                     tuples.append(i[0])
-            elif isinstance(i,nltk.tree.Tree):
+            elif isinstance(i, nltk.tree.Tree):
                 phrase = []
                 for element in i:
                     if element[0].lower() not in self.stopwords:

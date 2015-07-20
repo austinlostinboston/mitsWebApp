@@ -29,10 +29,3 @@ class FlowManager:
             return None
         else:
             return self._flowTable[uid]
-
-    def transit(self, user, sid):
-        flow = self.lookUp(user)
-        if flow is None:
-            logger.error("Can not make transit from a none state, %s, %s" % (user, action))
-            return
-        flow.transit(sid)
