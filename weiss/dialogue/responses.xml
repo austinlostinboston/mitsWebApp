@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<responses>
+  <state id="0" name="SystemInitiative">
+    <action id="10" name="UnknownAction">
+      <message id="00.10.01">Was that even English?</message>
+      <message id="00.10.02">I didn't quite get that. Please repeat that.</message>
+      <message id="00.10.03">We're just getting started, let's try that again.</message>
+    </action>
+  </state>
+
+  <state id="1" name="TypeSelected">
+    <action id="8" name="TypeSelection">
+      <message id="01.08.01">Sure, now describe or name the [type] you want to talk about?</message>
+      <message id="01.08.02">Absolutely, let's talk about [type]. </message>
+      <message id="01.08.03">Let's talk about [types].</message>
+    </action>
+
+    <action id="10" name="UnknownAction">
+      <message id="01.10.01">I couldn't understand what type of entity you wanted to talk about. Try again.</message>
+      <message id="01.10.02">What was that?</message>
+      <message id="01.10.03">Let's try that again.</message>
+    </action>
+  </state>
+
+  <state id="2" name="EntitySelected">
+    <action id="6">
+      <message id="02.06.01">EntitySelected: This is sentinment stats</message>
+    </action>
+
+    <action id="10">
+      <message id="02.10.01">EntitySelected: Unknown Query</message>
+    </action>
+
+    <action id="11">
+      <message id="02.11.01">EntitySelected: Entity Confirmation</message>
+    </action>
+  </state>
+
+  <state id="3" name="CommentSelected">
+    <action id="1">
+      <message id="03.01.01">CommentSelected: Next random comment</message>
+    </action>
+
+    <action id="2">
+      <message id="03.02.01">CommentSelected: Next opposite comment</message>
+    </action>
+
+    <action id="3">
+      <message id="03.03.01">CommentSelected: Next positive momment</message>
+    </action>
+
+    <action id="4">
+      <message id="03.04.01">CommentSelected: This is sentinment stats</message>
+    </action>
+
+    <action id="6">
+      <message id="03.06.01">CommentSelected: This is sentinment stats</message>
+    </action>
+
+    <action id="10">
+      <message id="03.10.01">CommentSelected: Unknown Query</message>
+    </action>
+  </state>
+
+  <state id="4" name="RangeSelected">
+    <action id="5">
+      <message id="04.05.01">RangeSelected: Next random entity with current type.</message>
+    </action>
+
+    <action id="7">
+      <message id="04.07.01">RangeSelected: Entity selection</message>
+    </action>
+  </state>
+</responses>

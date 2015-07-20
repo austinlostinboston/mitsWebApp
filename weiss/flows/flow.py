@@ -1,14 +1,10 @@
 """
 Flow
-
 Flow represents the context for a user. Each instance contains:
     1. information about the user
     2. state information
     3. misc
-
-
 Author: Ming Fang
-
 """
 import logging
 
@@ -17,13 +13,12 @@ from weiss.models import State, Type, Entity
 
 logger = logging.getLogger(__name__)
 
-class Flow(object):
 
+class Flow(object):
     def __init__(self, request):
         self._request = request
         self._fmgr = getFlowManager()
         self._state = StateFactory(State.SystemInitiative)
-        self._fmgr.register(request.user, self)
         self._action = None
 
         self._entities = None
@@ -35,8 +30,6 @@ class Flow(object):
 
         self._cid = None
         self._comment = None
-
-
 
     @property
     def user(self):
@@ -67,10 +60,9 @@ class Flow(object):
         """
         make a transition
         """
-        assert(isinstance(sid, State))
+        assert (isinstance(sid, State))
         logger.info("Transit from %s to %s" % (self.state.name, sid.name))
         self._state = StateFactory(sid)
-
 
     def __str__(self):
         return "%s in %s" % (self.user, self.state.name)
@@ -78,7 +70,6 @@ class Flow(object):
     @property
     def action(self):
         """Getter for current action
-
         It is of type models.Action enum
         """
         return self._action
@@ -92,7 +83,6 @@ class Flow(object):
     @property
     def entities(self):
         """Getter for current range of entities
-
         elements are of type models.Entity
         """
         return self._entities
@@ -122,7 +112,6 @@ class Flow(object):
         """
         self._eid = new_eid
         self._entities = None
-
 
     @property
     def entity(self):
@@ -162,7 +151,6 @@ class Flow(object):
         self._cid = new_cid
         self._comment = None
 
-
     @property
     def comment(self):
         """Getter comment
@@ -178,7 +166,6 @@ class Flow(object):
     @property
     def type(self):
         """Getter for current type
-
         of type models.Type
         """
         return self._type
@@ -187,7 +174,7 @@ class Flow(object):
     def type(self, new_type):
         """Setter for type
         """
-        assert(isinstance(new_type, Type))
+        assert (isinstance(new_type, Type))
         self._type = new_type
 
     @property
@@ -205,19 +192,18 @@ class Flow(object):
         """
         self._type = Type(new_tid)
 
-
     def filter(self, predicate):
-        """
-        filter and keep entities base on predicate
-        which is a function
+        """filter and keep entities base on predicate, which is a function
+        :param predicate:
+        :return: void
         """
         filter(self._entities, predicate)
 
     def keep(self, idx):
-        assert(idx < len(self.entities))
+        """Keep one of the entities based on idx
+        :param idx: the index of entity that is kept
+        :return: void
+        """
+        assert (idx < len(self.entities))
         self.entity = self.entities[idx]
         self.entities = [self.entity]
-
-
-
-
