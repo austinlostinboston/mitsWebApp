@@ -4,7 +4,6 @@ This file defines the concrete control flow logic
 Author: Ming Fang
 """
 from weiss.flows.abstractState import AbstractState
-from weiss.utils.switch import switch
 from weiss.models import Action, State  # for enums
 
 """
@@ -26,13 +25,13 @@ Definition of the control flow
 11. Entity Comcirmation
 """
 
-"""
-Systen initialization state
-the beginning point of the dialog
-"""
-
 
 class SystemInitiative(AbstractState):
+    """
+    Systen initialization state
+    the beginning point of the dialog
+    """
+
     _npa = {Action.EntitySelection,
             Action.TypeSelection,
             Action.UnknownAction}
@@ -48,29 +47,14 @@ class SystemInitiative(AbstractState):
     def nextPossibleActions(self):
         return self._npa
 
-    def transit(self, aid):
-        for case in switch(aid):
-            if case(Action.EntitySelection):
-                return State.EntitySelected
-
-            if case(Action.TypeSelection):
-                return State.TypeSelected
-
-            if case(Action.UnknownAction):
-                return self.sid
-
-            if case():
-                raise KeyError("Invaild action")
-
-
-"""
-Type selected state
-The followings should be determined:
-    curr_tid
-"""
-
 
 class TypeSelected(AbstractState):
+    """
+    Type selected state
+    The followings should be determined:
+        curr_tid
+    """
+
     _npa = {Action.NextRandomEntity,
             Action.EntitySelection,
             Action.TypeSelection,
@@ -87,41 +71,23 @@ class TypeSelected(AbstractState):
     def nextPossibleActions(self):
         return self._npa
 
-    def transit(self, aid):
-        for case in switch(aid):
-            if case(Action.NextRandomEntity):
-                return State.EntitySelected
-
-            if case(Action.EntitySelection):
-                return State.EntitySelected
-
-            if case(Action.TypeSelection):
-                return self.sid
-
-            if case(Action.UnknownAction):
-                return self.sid
-
-            if case():
-                raise KeyError("Invaild action id")
-
-
-"""
-Entity selected state
-The followings should be determined:
-    curr_tid
-    curr_eid
-"""
-
 
 class EntitySelected(AbstractState):
+    """
+    Entity selected state
+    The followings should be determined:
+        curr_tid
+        curr_eid
+    """
+
     _npa = {Action.NextRandomComment,
-             Action.NextPositiveComment,
-             Action.NextNegativeComment,
-             Action.NextRandomEntity,
-             Action.SentimentStats,
-             Action.EntitySelection,
-             Action.TypeSelection,
-             Action.UnknownAction}
+            Action.NextPositiveComment,
+            Action.NextNegativeComment,
+            Action.NextRandomEntity,
+            Action.SentimentStats,
+            Action.EntitySelection,
+            Action.TypeSelection,
+            Action.UnknownAction}
 
     def __init__(self):
         AbstractState.__init__(self)
@@ -134,46 +100,16 @@ class EntitySelected(AbstractState):
     def nextPossibleActions(self):
         return self._npa
 
-    def transit(self, aid):
-        for case in switch(aid):
-            if case(Action.NextRandomComment):
-                return State.CommentSelected
-
-            if case(Action.NextPositiveComment):
-                return State.CommentSelected
-
-            if case(Action.NextNegativeComment):
-                return State.CommentSelected
-
-            if case(Action.NextRandomEntity):
-                return self.sid
-
-            if case(Action.SentimentStats):
-                return self.sid
-
-            if case(Action.EntitySelection):
-                return self.sid
-
-            if case(Action.TypeSelection):
-                return State.TypeSelected
-
-            if case(Action.UnkwonAction):
-                return self.sid
-
-            if case():
-                raise KeyError("Invaild action id")
-
-
-"""
-Comment selecetd state
-The followings should be determined:
-    curr_tid
-    curr_eid
-    curr_cid
-"""
-
 
 class CommentSelected(AbstractState):
+    """
+    Comment selecetd state
+    The followings should be determined:
+        curr_tid
+        curr_eid
+        curr_cid
+    """
+
     _npa = {Action.NextRandomComment,
             Action.NextOppositeComment,
             Action.NextPositiveComment,
@@ -195,45 +131,12 @@ class CommentSelected(AbstractState):
     def nextPossibleActions(self):
         return self._npa
 
-    def transit(self, aid):
-        for case in switch(aid):
-            if case(Action.NextRandomComment):
-                return self.sid
-
-            if case(Action.NextOppositeComment):
-                return self.sid
-
-            if case(Action.NextPositiveComment):
-                return self.sid
-
-            if case(Action.NextNegativeComment):
-                return self.sid
-
-            if case(Action.NextRandomEntity):
-                return State.EntitySelected
-
-            if case(Action.SentimentStats):
-                return self.sid
-
-            if case(Action.EntitySelection):
-                return State.EntitySelected
-
-            if case(Action.TypeSelection):
-                return State.TypeSelected
-
-            if case(Action.UnknowAction):
-                return self.sid
-
-            if case():
-                raise KeyError("Invaild action")
-
-
-"""
-Range Selected state
-"""
-
 
 class RangeSelected(AbstractState):
+    """
+    Range Selected state
+    """
+
     _npa = {Action.TypeSelection,
             Action.EntityConfirmation,
             Action.UnknownAction}
@@ -248,17 +151,3 @@ class RangeSelected(AbstractState):
     @property
     def nextPossibleActions(self):
         return self._npa
-
-    def transit(self, aid):
-        for case in switch(aid):
-            if case(Action.TypeSelection):
-                return State.TypeSelected
-
-            if case(Action.EntityConfirmation):
-                return self.sid
-
-            if case(Action.UnknowAction):
-                return self.sid
-
-            if case():
-                raise KeyError("Invaild action")

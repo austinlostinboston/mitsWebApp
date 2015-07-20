@@ -6,7 +6,6 @@ Author: Ming Fang
 """
 import abc
 
-
 class AbstractState(object):
     __metaclass__ = abc.ABCMeta
 
@@ -32,13 +31,6 @@ class AbstractState(object):
     def nextPossibleActions(self):
         """
         getter for next possible acitons as set
-        """
-        raise NotImplementedError()
-
-    @abc.abstractmethod
-    def transit(self, aid):
-        """
-        return a state id of the destination state
         """
         raise NotImplementedError()
 
