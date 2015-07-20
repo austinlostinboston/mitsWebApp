@@ -1,5 +1,6 @@
 ## Import builtins
 import random
+import os
 
 # Import from weiss
 from weiss.models import Action, Types, Comment, Entity
@@ -9,9 +10,14 @@ from bs4 import BeautifulSoup
 
 def responseHandler(flow):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    ## Get directory
+    cur_dir = os.path.dirname(__file__)
+>>>>>>> ac51fe6... response gen working minimally
 
     ## read responses.xml to memory
-    soup = BeautifulSoup(open('responses.xml'))
+    soup = BeautifulSoup(open(cur_dir + '/responses.xml'))
 
     ## Set response
 =======
@@ -22,7 +28,9 @@ def responseHandler(flow):
     # Grab information from flow
     userid = flow.user
     state = flow.state
+    sid = state.sid.value
     action = flow.action
+    aid = action.value
 
     ## 
     cid = flow.cid
@@ -32,7 +40,7 @@ def responseHandler(flow):
 
 <<<<<<< HEAD
     ## Text variables
-    type_name = flow.type
+    type_name = flow.type.name
     entity_name = flow.entity
     comment_body = flow.comment
 =======
@@ -50,19 +58,20 @@ def responseHandler(flow):
     print "===================================================="
     print "--------------  Response Generator  ----------------"
     print "--  Flow State"
-    print "------------"
+    print "--------------"
     print "--  User ID: " + str(userid)
     print "--    State: " + str(state)
     print "--   Action: " + str(action)
-    print "------------"
+    print "--------------"
     print "--      TID: " + str(tid)
     print "--      EID: " + str(eid)
     print "--      CID: " + str(cid)
     print "--  Num Ent: " + num_entities
-    print "------------"
+    print "--------------"
     print "--     Type: " + str(type_name)
     print "--   Entity: " + str(entity_name)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     
 
@@ -136,7 +145,17 @@ def responseHandler(flow):
 
     # if action is Action.UnknownAction:
     #     response = "Sorry, could you not be a bimbo and ask a better question."
+=======
+    rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".01"
+    print "[Response ID]: " + str(rsp_id)
+    response = soup.find('message',{'id':rsp_id}).text
+>>>>>>> ac51fe6... response gen working minimally
 
+    if "[" in response and "]" in response:
+        if "[type]" in response:
+            response = response.replace("[type]", type_name.lower())
+        if "[types]" in response:
+            response = response.replace("[type]", pluralType(type_name.lower()))
 
     print "[RESPONSE] " + response
 
@@ -149,6 +168,7 @@ def pluralType(type_ins):
         type_name += "s"
 
     return type_name
+<<<<<<< HEAD
 =======
 def selectType(tid):
     """
@@ -200,3 +220,6 @@ def selectComment(cid, eid, tid, sentiment="="):
 
     return Comment.objects.get(cid=comment)
 >>>>>>> 7991b98...  a lot syntax change
+=======
+
+>>>>>>> ac51fe6... response gen working minimally
