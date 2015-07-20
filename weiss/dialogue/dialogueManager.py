@@ -14,7 +14,7 @@ from weiss.dialogue.actionUtil import initNewLine, flushNewLine
 from weiss.dialogue.responseGenerator import responseHandler
 from weiss.flows.factory import getFlowManager
 from weiss.classifier.factory import getClassifier
-from weiss.utils import switch
+from weiss.utils.switch import switch
 
 logger = logging.getLogger(__name__)
 
