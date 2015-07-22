@@ -9,7 +9,7 @@ Author: Ming Fang
 import logging
 
 from weiss.flows.factory import getFlowManager, StateFactory
-from weiss.models import State, Type, Entity
+from weiss.models import State, Type, Entity, Comment
 
 logger = logging.getLogger(__name__)
 

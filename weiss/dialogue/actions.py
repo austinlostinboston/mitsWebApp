@@ -218,8 +218,8 @@ def typeSelection(flow, decision):
     Return:
         Void
     """
-    tid = decision.get("tid", 3)  # imdb by default :)
-    flow.tid = tid
+    assert("tid" in decision)
+    flow.type = decision["tid"]
     flow.transit(State.TypeSelected)
     """Handle by res gen
     type_obj = Types.objects.get(tid=tid)
@@ -249,12 +249,12 @@ def entitySelection(flow, decision):
         Void
     """
     curr_tid = flow.tid
+    logger.debug("curr tid : %s" % curr_tid)
     """
     if decision.has_key("tid"):
         curr_tid = decision["tid"]
         session["curr_tid"] = curr_tid
     """
-    state = flow.state
     if "keywords" in decision:
         # select by first 3 keywords
         keywords = decision["keywords"]
@@ -282,9 +282,9 @@ def entitySelection(flow, decision):
             # It gave a shitload, go to RangeSelected with state.range set
             flow.transit(State.RangeSelected)
             if curr_tid is not None:
-                state.step = Step.TypeSelected
+                flow.state.step = Step.TypeSelected
             else:
-                state.step = Step.RangeInitiative
+                flow.state.step = Step.RangeInitiative
             return
         else:
             # if there is no such entity, we loosen the requirement
@@ -304,9 +304,9 @@ def entitySelection(flow, decision):
                     # It gave a shitload, go to RangeSelected with state.range set
                     flow.transit(State.RangeSelected)
                     if curr_tid is not None:
-                        state.step = Step.TypeSelected
+                        flow.state.step = Step.TypeSelected
                     else:
-                        state.step = Step.RangeInitiative
+                        flow.state.step = Step.RangeInitiative
                     return
         # either no keyword is given or no entity matched
         # TODO: handle these cases

@@ -61,6 +61,8 @@ def responseHandler(flow):
     print "--------------"
     print "--  User ID: " + str(userid)
     print "--    State: " + str(state)
+    if (state.sid is State.RangeSelected):
+        print "--     Step: " + state.step.name
     print "--   Action: " + str(action)
     print "--------------"
     print "--      TID: " + str(tid)

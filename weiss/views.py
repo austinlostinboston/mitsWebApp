@@ -379,5 +379,4 @@ def init(request):
     if request.method == 'GET':
         dmgr = getDialogueManager()
         flow = dmgr.initFlow(request)
-        dmgr.
         return

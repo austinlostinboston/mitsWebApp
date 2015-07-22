@@ -88,7 +88,7 @@ class DialogueManager(object):
     def dispatch(self, flow, query, decision):
         """Dispatch a request based on query
         """
-        flow.action = Action(decision['aid'])
+        flow.action = decision['aid']
         request = flow.request
         action = flow.action
         logger.debug(action.name)
@@ -104,6 +104,8 @@ class DialogueManager(object):
 
         actionExecutor(flow, decision)  # transition happens inside
 
+        if flow.state.sid is State.RangeSelected:
+            logger.debug("Step after: " + flow.state.step.name)
         response = responseHandler(flow)
 
         flushNewLine(request, response)

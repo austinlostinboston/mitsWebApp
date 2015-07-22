@@ -15,8 +15,8 @@ Dependency: numpy, scipy, sklearn
 Author: Wenjun Wang<wenjunw@cs.cmu.edu>
 Date: July 1, 2015
 """
-import os
 import pickle
+<<<<<<< HEAD
 import nltk
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -25,21 +25,30 @@ import string
 >>>>>>> b54bb32... update classifier
 =======
 >>>>>>> a533c0f... add heuristic rules
+=======
+>>>>>>> 6d991c7... a lot of bugs fixed
 import timeit
 import string
+import logging
 
 from nltk.tag.stanford import StanfordPOSTagger
-from sklearn.externals import joblib
-from liblinearutil import *
 
+from sklearn.externals import joblib
+
+from liblinearutil import *
 from webapps.settings import BASE_DIR
 from weiss.classifier.feature import *
 from weiss.flows.states import *
 from weiss.models import Action, State, Type
+from weiss.utils.switch import switch
+
+logger = logging.getLogger(__name__)
+
 
 class Classifier(object):
     modeldir = os.path.abspath(BASE_DIR + "/weiss/classifier/models/")
     stopword_path = modeldir + "/english.stp"
+
     def __init__(self):
         """
         All variables which would be used by every query classification and parsing are listed here.
@@ -51,13 +60,13 @@ class Classifier(object):
         self.feature_list = self._get_feature_list()
         self.stemmer = nltk.SnowballStemmer("english")
         self.sentiment = self._get_sentiment()
-        self.postagger = StanfordPOSTagger(self.modeldir+'/postagger/models/english-bidirectional-distsim.tagger',
-                            self.modeldir+'/postagger/stanford-postagger.jar')
+        self.postagger = StanfordPOSTagger(self.modeldir + '/postagger/models/english-bidirectional-distsim.tagger',
+                                           self.modeldir + '/postagger/stanford-postagger.jar')
         end = timeit.timeit()
-        print "Load time: " + str(end-start)
+        print "Load time: " + str(end - start)
         self.feature_arg = parse_options('-uni -pos2 -stem -stprm')
         self.type_words = self._set_type_words()
-        self.labels = [1,2,3,4,5,6,7]
+        self.labels = [1, 2, 3, 4, 5, 6, 7]
 
     def _get_model(self):
         """Load model
@@ -103,7 +112,7 @@ class Classifier(object):
         onerow = {}
         for f in features:
             try:
-                onerow[self.feature_list.index(f)+1] = 1
+                onerow[self.feature_list.index(f) + 1] = 1
             except ValueError:
                 pass
 
@@ -118,10 +127,10 @@ class Classifier(object):
         """
         x = self._convert_query_to_dictionary(query)
         p_label, p_val = predict(self.labels, x, self.action_model, '-b 0')
-        if p_val[0][int(p_label[0])-1] == 0:
+        if p_val[0][int(p_label[0]) - 1] == 0:
             p_label[0] = 10
 
-        return int(p_label[0]) # API changes here
+        return int(p_label[0])  # API changes here
 
     def action_info(self, query, flow):
         """API function in this script. Gives all info of an action
@@ -139,23 +148,25 @@ class Classifier(object):
         arguments = {}
         state = flow.state
         plausible = state.nextPossibleActions
-        query = unicode(query,errors='ignore')
+        # query = unicode(query,errors='ignore')
 
-        for case in switch(state):
-            if case(SystemInitiative):
-                self._system_initiative(query,arguments)
-            if case(TypeSelected):
-                self._type_selected(query,arguments)
-            if case(RangeSelected):
+        for case in switch(state.sid):
+            if case(State.SystemInitiative):
+                self._system_initiative(query, arguments)
+            elif case(State.TypeSelected):
+                self._type_selected(query, arguments)
+            elif case(State.RangeSelected):
                 step = state.step
-                self._range_selected(query,arguments,step,flow.entities)
-            if case(EntitySelected):
-                self._entity_selected(query,arguments)
-            if case(CommentSelected):
-                self._comment_selected(query,arguments)
+                self._range_selected(query, arguments, step, flow.entities)
+            elif case(State.EntitySelected):
+                self._entity_selected(query, arguments)
+            elif case(State.CommentSelected):
+                self._comment_selected(query, arguments)
+            elif case():
+                logger.error("No such state" + state)
+                pass
 
         return arguments
-
 
     def _entity_recognition(self, query, arguments):
         """Parse query and extract keywords
@@ -170,7 +181,7 @@ class Classifier(object):
         tags = self.postagger.tag(tokens)
 
         entities = nltk.chunk.ne_chunk(tags)
-        #print entities
+        # print entities
 
         tuples = []
         trees = []
@@ -203,25 +214,25 @@ class Classifier(object):
         Return: A dictionary, key: movie, article, restaurant, value: their synonymy words
         """
         topic = {}
-        movie = ['cinema','show','film','picture','cinematograph',
-            'videotape','flick','pic','cine','cinematics','photodrama',
-            'photoplay','talkie','flicker','DVD','movie']
-        article = ['report','announcement','story','account',
-            'newscast','headlines','press','communication','talk','word',
-            'communique','bulletin','message','dispatch','broadcast',
-            'statement','intelligence','disclosure','revelation',
-            'gossip','dispatch','news','article']
-        restaurant = ['bar','cafeteria','diner','dining','saloon','coffeehouse',
-            'canteen','chophouse','drive-in','eatery','grill','lunchroom','inn','food',
-            'pizzeria','hideaway','cafe','charcuterie','deli','restaurant']
+        movie = ['cinema', 'show', 'film', 'picture', 'cinematograph',
+                 'videotape', 'flick', 'pic', 'cine', 'cinematics', 'photodrama',
+                 'photoplay', 'talkie', 'flicker', 'DVD', 'movie']
+        article = ['report', 'announcement', 'story', 'account',
+                   'newscast', 'headlines', 'press', 'communication', 'talk', 'word',
+                   'communique', 'bulletin', 'message', 'dispatch', 'broadcast',
+                   'statement', 'intelligence', 'disclosure', 'revelation',
+                   'gossip', 'dispatch', 'news', 'article']
+        restaurant = ['bar', 'cafeteria', 'diner', 'dining', 'saloon', 'coffeehouse',
+                      'canteen', 'chophouse', 'drive-in', 'eatery', 'grill', 'lunchroom', 'inn', 'food',
+                      'pizzeria', 'hideaway', 'cafe', 'charcuterie', 'deli', 'restaurant']
         for m in movie:
-            topic.setdefault('movie',set([]))
+            topic.setdefault('movie', set([]))
             topic['movie'].add(self.stemmer.stem(m))
         for a in article:
-            topic.setdefault('article',set([]))
+            topic.setdefault('article', set([]))
             topic['article'].add(self.stemmer.stem(a))
         for r in restaurant:
-            topic.setdefault('restaurant',set([]))
+            topic.setdefault('restaurant', set([]))
             topic['restaurant'].add(self.stemmer.stem(r))
         return topic
 
@@ -235,7 +246,7 @@ class Classifier(object):
             arguments: info needs to be updated
 
         """
-        query = query.translate(string.maketrans("",""),string.punctuation)
+        query = query.translate(string.maketrans("", ""), string.punctuation)
         tokens = nltk.word_tokenize(query)
         first = self.stemmer.stem(tokens[0])
         last = self.stemmer.stem(tokens[-1])
@@ -244,15 +255,16 @@ class Classifier(object):
             or lastsecond in self.type_words['article']):
             arguments['tid'] = Type.News
         elif (first in self.type_words['restaurant'] or last in self.type_words['restaurant']
-            or lastsecond in self.type_words['restaurant']):
+              or lastsecond in self.type_words['restaurant']):
             arguments['tid'] = Type.Restaurant
         elif (first in self.type_words['movie'] or last in self.type_words['movie']
-            or lastsecond in self.type_words['movie']):
+              or lastsecond in self.type_words['movie']):
             arguments['tid'] = Type.Movie
         else:
             arguments['tid'] = Type.Unknown
 
-    def _string_to_idx(self, number):
+    @staticmethod
+    def _string_to_idx(number):
         if number == 'first' or number == 'one':
             return 0
         if number == 'second' or number == 'two':
@@ -264,24 +276,24 @@ class Classifier(object):
         if number == 'fifth' or number == 'five':
             return 4
 
-    def _keyword_matching(self, arguments, entities):
+    @staticmethod
+    def _keyword_matching(arguments, entities):
         words = arguments['keywords'].split("#")
         phrase = " ".join(words).strip()
 
-        for i in xrange(0,len(entities)):
+        for i in xrange(0, len(entities)):
             if entities[i].find(phrase) != -1:
                 arguments['idx'] = i
                 break
 
-
-    def _find_number(self, query, arguments,entities):
+    def _find_number(self, query, arguments, entities):
         tokens = nltk.word_tokenize(query)
         tags = self.postagger.tag(tokens)
         last = query.find('last')
 
         number = None
         for t in tags:
-            if t[1] == 'JJ' and t[0][-2:] in set(['th','nd','st']):
+            if t[1] == 'JJ' and t[0][-2:] in set(['th', 'nd', 'st']):
                 number = t[0]
                 break
             if t[1] == 'CD':
@@ -290,12 +302,11 @@ class Classifier(object):
             if t[1] == 'LS':
                 arguments['idx'] = int(t[0]) - 1
 
-        if number != None:
+        if number is not None:
             if last != -1:
                 arguments['idx'] = self._string_to_idx(number.lower())
             else:
                 arguments['idx'] = len(entities) - self._string_to_idx(number.lower())
-
 
     def _system_initiative(self, query, arguments):
         self._type_recognition(query, arguments)
@@ -307,7 +318,6 @@ class Classifier(object):
                 arguments['aid'] = Action.TypeSelection
             else:
                 arguments['aid'] = Action.UnknownAction
-
 
     def _type_selected(self, query, arguments):
         self._type_recognition(query, arguments)
@@ -322,41 +332,40 @@ class Classifier(object):
             else:
                 arguments['aid'] = Action.TypeSelection
 
-
     def _range_selected(self, query, arguments, step, entities):
         if step == Step.RangeInitiative:
-            self._type_recognition(query,arguments)
+            logger.debug("RangeInitiative")
+            self._type_recognition(query, arguments)
             if arguments['tid'] == Type.Unknown:
                 arguments['aid'] = Action.UnknownAction
             else:
                 arguments['aid'] = Action.TypeSelection
-        if step == Step.TypeSelected:
+        elif step == Step.TypeSelected:
+            logger.debug("TypeSelected")
             query = query.lower()
-            self._find_number(query,arguments,entities)
+            self._find_number(query, arguments, entities)
             if 'idx' not in arguments:
-                self._entity_recognition(query,arguments)
-                self._keyword_matching(arguments,entities)
+                self._entity_recognition(query, arguments)
+                self._keyword_matching(arguments, entities)
             if 'idx' in arguments:
                 arguments['aid'] = Action.EntityConfirmation
             else:
                 arguments['aid'] = Action.UnknownAction
 
     def _entity_selected(self, query, arguments):
-        self._entity_or_comment_selected_helper(query,arguments)
-        
+        self._entity_or_comment_selected_helper(query, arguments)
+
         if arguments['aid'] == Action.NextOppositeComment:
             arguments['aid'] = Action.NextRandomComment
 
-
     def _comment_selected(self, query, arguments):
-        self._entity_or_comment_selected_helper(query,arguments)
-
+        self._entity_or_comment_selected_helper(query, arguments)
 
     def _entity_or_comment_selected_helper(self, query, arguments):
         self._type_recognition(query, arguments)
         action = self._classify(query)
         if action == Action.EntitySelection:
-            self._entity_recognition(query,arguments)
+            self._entity_recognition(query, arguments)
             if 'keywords' not in arguments:
                 if arguments['tid'] != Type.Unknown:
                     arguments['aid'] = Action.TypeSelection
@@ -373,5 +382,10 @@ class Classifier(object):
             for token in tokens:
                 if token in self.sentiment:
                     score += self.sentiment[token]
+<<<<<<< HEAD
             if score < -1:arguments['aid'] = Action.NextNegativeComment
             if score > 1:arguments['aid'] = Action.NextPositiveComment
+=======
+            if score < -1: arguments['aid'] = Action.NextNegativeComment
+            if score > 1: arguments['aid'] = Action.NextPositiveComment
+>>>>>>> 6d991c7... a lot of bugs fixed
