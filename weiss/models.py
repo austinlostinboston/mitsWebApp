@@ -24,6 +24,7 @@ class Type(Enum):
     News = 1
     Restaurant = 2
     Movie = 3
+    Unknown = 10
 
 class Action(Enum):
     """
