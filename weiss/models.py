@@ -30,7 +30,7 @@ class Action(Enum):
     """
     Enum for actions.
     Note:
-        wherever refered to as aid, refered to this enum
+        wherever referred to as aid, referred to this enum
         To get a int representation, use aid.value
         To get a str representation, use aid.name
     """
@@ -63,7 +63,7 @@ class Step(Enum):
     """
     sub state in RangeSelected state
     """
-    Rangeinitiative = 1
+    RangeInitiative = 1
     TypeSelected = 2
 
 

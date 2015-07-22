@@ -4,7 +4,7 @@ This file defines the concrete control flow logic
 Author: Ming Fang
 """
 from weiss.flows.abstractState import AbstractState
-from weiss.models import Action, State  # for enums
+from weiss.models import Action, State, Step # for enums
 
 """
 Definitions of the system states
@@ -143,6 +143,7 @@ class RangeSelected(AbstractState):
 
     def __init__(self):
         AbstractState.__init__(self)
+        self._step = Step.RangeInitiative
 
     @property
     def sid(self):
@@ -151,3 +152,12 @@ class RangeSelected(AbstractState):
     @property
     def nextPossibleActions(self):
         return self._npa
+
+    @property
+    def step(self):
+        return self._step
+
+    @step.setter
+    def step(self, new_step):
+        self._step = new_step
+
