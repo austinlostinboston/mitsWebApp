@@ -51,6 +51,8 @@ class Classifier(object):
         self.feature_list = self._get_feature_list()
         self.stemmer = nltk.SnowballStemmer("english")
         self.sentiment = self._get_sentiment()
+        self.postagger = StanfordPOSTagger(self.modeldir+'/postagger/models/english-bidirectional-distsim.tagger',
+                            self.modeldir+'/postagger/stanford-postagger.jar')
         end = timeit.timeit()
         print "Load time: " + str(end-start)
         self.feature_arg = parse_options('-uni -pos2 -stem -stprm')
@@ -137,56 +139,23 @@ class Classifier(object):
         arguments = {}
         state = flow.state
         plausible = state.nextPossibleActions
-        self._type_recognition(query, arguments)
-        temp = arguments['aid']
-        # State System Initiative and State Type Selected
-        # TODO<wenjunw@cs.cmu.edu>:
-        # Reconsider the logic for SystemInitiative and TypeSelected
-        if state is SystemInitiative or state is TypeSelected:
-            q = list2Vec(hashit(query))
-            arguments['tid'] = int(self.type_model.predict(q)[0])
-            self._entity_recognition(query, arguments)
-            if 'keywords' in arguments:
-                arguments['aid'] = 7
-            else:
-                if temp != 8:
-                    if 5 in plausible:
-                        arguments['aid'] = 5
-                    else:
-                        arguments['aid'] = 10
-                else:
-                    if query.find('another') != -1:
-                        # TODO<wenjunw@cs.cmu.edu>:
-                        # Need to think about this heuristic later how to differentiate 5,7,8
-                        # Or do we still allow action 5?
-                        arguments['aid'] = 5
-        # State Entity Selected and State Comment Selected
-        else:
-            arguments['aid'] = self._classify(query)
-            if arguments['aid'] == 7:
-                self._entity_recognition(query,arguments)
-                if 'keywords' not in arguments:
-                    if temp == 10:
-                        arguments['aid'] = 5
-                    else:
-                        arguments['aid'] = 8
-            elif arguments['aid'] == 5:
-                # TODO<wenjunw@cs.cmu.edu>:
-                # Need to think about this heuristic later how to differentiate 5,7,8
-                if temp == 8 and query.find('another') == -1:
-                    arguments['aid'] = 8
-            elif arguments['aid'] == 2 and 2 not in plausible:
-                arguments['aid'] = 1
-            elif arguments['aid'] == 1:
-                tokens = nltk.word_tokenize(query.lower())
-                score = 0
-                for token in tokens:
-                    if token in self.sentiment:
-                        score += self.sentiment[token]
-                if score < -1:arguments['aid'] = 4
-                if score > 1:arguments['aid'] = 3
+        query = unicode(query,errors='ignore')
+
+        for case in switch(state):
+            if case(SystemInitiative):
+                self._system_initiative(query,arguments)
+            if case(TypeSelected):
+                self._type_selected(query,arguments)
+            if case(RangeSelected):
+                step = state.step
+                self._range_selected(query,arguments,step,flow.entities)
+            if case(EntitySelected):
+                self._entity_selected(query,arguments)
+            if case(CommentSelected):
+                self._comment_selected(query,arguments)
 
         return arguments
+
 
     def _entity_recognition(self, query, arguments):
         """Parse query and extract keywords
@@ -198,13 +167,9 @@ class Classifier(object):
             arguments: info needs to be updated
         """
         tokens = nltk.word_tokenize(query)
-        postagger = StanfordPOSTagger(self.modeldir+'/postagger/models/english-bidirectional-distsim.tagger',
-                                self.modeldir+'/postagger/stanford-postagger.jar')
-        tags = postagger.tag(tokens)
+        tags = self.postagger.tag(tokens)
 
         entities = nltk.chunk.ne_chunk(tags)
-        if 'aid' not in arguments:
-            arguments['aid'] = 7
         #print entities
 
         tuples = []
@@ -272,18 +237,141 @@ class Classifier(object):
         """
         query = query.translate(string.maketrans("",""),string.punctuation)
         tokens = nltk.word_tokenize(query)
-        arguments['aid'] = 8
         first = self.stemmer.stem(tokens[0])
         last = self.stemmer.stem(tokens[-1])
         lastsecond = self.stemmer.stem(tokens[-2]) if len(tokens) > 1 else "toy"
         if (first in self.type_words['article'] or last in self.type_words['article']
             or lastsecond in self.type_words['article']):
-            arguments['tid'] = 1
+            arguments['tid'] = Type.News
         elif (first in self.type_words['restaurant'] or last in self.type_words['restaurant']
             or lastsecond in self.type_words['restaurant']):
-            arguments['tid'] = 2
+            arguments['tid'] = Type.Restaurant
         elif (first in self.type_words['movie'] or last in self.type_words['movie']
             or lastsecond in self.type_words['movie']):
-            arguments['tid'] = 3
+            arguments['tid'] = Type.Movie
         else:
-            arguments['aid'] = 10
+            arguments['tid'] = Type.Unknown
+
+    def _string_to_idx(self, number):
+        if number == 'first' or number == 'one':
+            return 0
+        if number == 'second' or number == 'two':
+            return 1
+        if number == 'third' or number == 'three':
+            return 2
+        if number == 'fourth' or number == 'four':
+            return 3
+        if number == 'fifth' or number == 'five':
+            return 4
+
+    def _keyword_matching(self, arguments, entities):
+        words = arguments['keywords'].split("#")
+        phrase = " ".join(words).strip()
+
+        for i in xrange(0,len(entities)):
+            if entities[i].find(phrase) != -1:
+                arguments['idx'] = i
+                break
+
+
+    def _find_number(self, query, arguments,entities):
+        tokens = nltk.word_tokenize(query)
+        tags = self.postagger.tag(tokens)
+        last = query.find('last')
+
+        number = None
+        for t in tags:
+            if t[1] == 'JJ' and t[0][-2:] in set(['th','nd','st']):
+                number = t[0]
+                break
+            if t[1] == 'CD':
+                number = t[0]
+                break
+            if t[1] == 'LS':
+                arguments['idx'] = int(t[0]) - 1
+
+        if number != None:
+            if last != -1:
+                arguments['idx'] = self._string_to_idx(number.lower())
+            else:
+                arguments['idx'] = len(entities) - self._string_to_idx(number.lower())
+
+
+    def _system_initiative(self, query, arguments):
+        self._type_recognition(query, arguments)
+        self._entity_recognition(query, arguments)
+        if 'keywords' in arguments:
+            arguments['aid'] = Action.EntitySelection
+        else:
+            if arguments['tid'] != Type.Unknown:
+                arguments['aid'] = Action.TypeSelection
+            else:
+                arguments['aid'] = Action.UnknownAction
+
+
+    def _type_selected(self, query, arguments):
+        self._type_recognition(query, arguments)
+        self._entity_recognition(query, arguments)
+        if 'keywords' in arguments:
+            arguments['aid'] = Action.EntitySelection
+        else:
+            if arguments['tid'] == Type.Unknown:
+                arguments['aid'] = Action.UnknownAction
+            elif query.find('recommend') != -1 or query.find('suggest') != -1:
+                arguments['aid'] = Action.NextRandomEntity
+            else:
+                arguments['aid'] = Action.TypeSelection
+
+
+    def _range_selected(self, query, arguments, step, entities):
+        if step == Step.RangeInitiative:
+            self._type_recognition(query,arguments)
+            if arguments['tid'] == Type.Unknown:
+                arguments['aid'] = Action.UnknownAction
+            else:
+                arguments['aid'] = Action.TypeSelection
+        if step == Step.TypeSelected:
+            query = query.lower()
+            self._find_number(query,arguments,entities)
+            if 'idx' not in arguments:
+                self._entity_recognition(query,arguments)
+                self._keyword_matching(arguments,entities)
+            if 'idx' in arguments:
+                arguments['aid'] = Action.EntityConfirmation
+            else:
+                arguments['aid'] = Action.UnknownAction
+
+    def _entity_selected(self, query, arguments):
+        self._entity_or_comment_selected_helper(query,arguments)
+        
+        if arguments['aid'] == Action.NextOppositeComment:
+            arguments['aid'] = Action.NextRandomComment
+
+
+    def _comment_selected(self, query, arguments):
+        self._entity_or_comment_selected_helper(query,arguments)
+
+
+    def _entity_or_comment_selected_helper(self, query, arguments):
+        self._type_recognition(query, arguments)
+        action = self._classify(query)
+        if action == Action.EntitySelection:
+            self._entity_recognition(query,arguments)
+            if 'keywords' not in arguments:
+                if arguments['tid'] != Type.Unknown:
+                    arguments['aid'] = Action.TypeSelection
+                else:
+                    if query.find('another') != -1 or query.find('recommend') != -1 or query.find('suggest') != -1:
+                        arguments['aid'] = Action.NextRandomEntity
+                    else:
+                        arguments['aid'] = Action.UnknownAction
+            else:
+                arguments['aid'] = Action.EntitySelection
+        if action == Action.NextRandomComment:
+            tokens = nltk.word_tokenize(query.lower())
+            score = 0
+            for token in tokens:
+                if token in self.sentiment:
+                    score += self.sentiment[token]
+            if score < -1:arguments['aid'] = Action.NextNegativeComment
+            if score > 1:arguments['aid'] = Action.NextPositiveComment
