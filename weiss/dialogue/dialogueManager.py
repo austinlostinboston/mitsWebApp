@@ -13,7 +13,7 @@ from weiss.dialogue.actions import *
 from weiss.dialogue.actionUtil import initNewLine, flushNewLine
 from weiss.dialogue.responseGenerator import responseHandler
 from weiss.flows.factory import getFlowManager
-from weiss.classifier.factory import getClassifier
+from weiss.planner.factory import getPlanner
 from weiss.utils.switch import switch
 
 logger = logging.getLogger(__name__)
@@ -21,12 +21,12 @@ logger = logging.getLogger(__name__)
 
 class DialogueManager(object):
     def __init__(self):
-        self._classifier = getClassifier()
+        self._planner = getPlanner()
         self._fmgr = getFlowManager()
 
     @property
-    def classifier(self):
-        return self._classifier
+    def planner(self):
+        return self._planner
 
     @property
     def fmgr(self):
@@ -41,34 +41,37 @@ class DialogueManager(object):
             if case(Action.NextRandomComment):
                 return nextRandomCmt
 
-            if case(Action.NextOppositeComment):
+            elif case(Action.NextOppositeComment):
                 return nextRandomOppositeCmt
 
-            if case(Action.NextNegativeComment):
+            elif case(Action.NextNegativeComment):
                 return nextRandomNegativeCmt
 
-            if case(Action.NextRandomEntity):
+            elif case(Action.NextPositiveComment):
+                return nextRandomPositiveCmt
+
+            elif case(Action.NextRandomEntity):
                 return nextRandomEntity
 
-            if case(Action.SentimentStats):
+            elif case(Action.SentimentStats):
                 return sentimentStats
 
-            if case(Action.EntitySelection):
+            elif case(Action.EntitySelection):
                 return entitySelection
 
-            if case(Action.TypeSelection):
+            elif case(Action.TypeSelection):
                 return typeSelection
 
-            if case(Action.Greeting):
+            elif case(Action.Greeting):
                 return greeting
 
-            if case(Action.UnknownAction):
+            elif case(Action.UnknownAction):
                 return unknownAction
 
-            if case(Action.EntityConfirmation):
+            elif case(Action.EntityConfirmation):
                 return entityConfirmation
 
-            if case():
+            elif case():
                 raise KeyError("No such action %s" % action)
 
     def handle(self, request):
@@ -80,7 +83,7 @@ class DialogueManager(object):
         flow = self.fmgr.lookUp(request.user)
         flow.request = request
 
-        decision = self.classifier.action_info(query, flow)
+        decision = self.planner.plan(query, flow)
 
         self.dispatch(flow, query, decision)
         return

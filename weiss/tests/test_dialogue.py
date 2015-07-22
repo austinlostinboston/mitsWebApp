@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from weiss.classifier.factory import getClassifier
+from weiss.planner.factory import getClassifier
 from weiss.flows.factory import getFlowManager
 from weiss.tests.testUtils import *
 from weiss.models import State
