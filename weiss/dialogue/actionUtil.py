@@ -61,11 +61,11 @@ def initSession(request):
     flushNewLine(request, "Hi I'm Weiss. What would you like to talk about, movies? news? or restaurants?")
 
 
-# Weiss records user interactons in terms of line
+# Weiss records user interactions in terms of line
 # A line includes a user query and its corresponding respond
-# The relevent methods are initNewLine() and flushNewLine()
+# The relevant methods are initNewLine() and flushNewLine()
 #
-# initNewLine is called at the time whne new query comes
+# initNewLine is called at the time when new query comes
 # flushNewLine is called at the time a response is generated.
 
 def flushNewLine(request, response):

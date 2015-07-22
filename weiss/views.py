@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 # Handles login
 from django.contrib.auth.models import User
 
+from rest_framework.decorators import api_view
+
 # Imports model objects to access database
 from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Method, History, Action
 from django.db.models import Q, Max, Min
@@ -369,3 +371,13 @@ def rep_vote(request):
             new_eval.save()
 
     return redirect('/evaluate/2')
+
+
+# API
+@api_view(['GET'])
+def init(request):
+    if request.method == 'GET':
+        dmgr = getDialogueManager()
+        flow = dmgr.initFlow(request)
+        dmgr.
+        return
