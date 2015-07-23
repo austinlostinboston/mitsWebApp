@@ -160,15 +160,23 @@ class Parser(object):
         tags = self._postagger.tag(tokens)
         last = query.find('last')
 
+        # Edge case, "first" cannot be tagged correctly
+        if len(query.split(" ")) <= 3 and query.find('first') != -1:
+            arguments['idx'] = 0
+            return 
+
         number = None
         for t in tags:
             logger.debug(t[1])
             if t[1] == 'JJ' and t[0][-2:] in set(['th', 'nd', 'st']):
                 number = t[0]
+                break
             elif t[1] == 'CD':
                 number = t[0]
-            elif t[1] == 'LS':
-                arguments['idx'] = int(t[0]) - 1
+                if number.isdigit():
+                	arguments['idx'] = int(number) - 1
+                	return
+                break
 
         if number is not None:
             if last == -1:

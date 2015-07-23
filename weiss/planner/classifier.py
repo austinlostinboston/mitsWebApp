@@ -115,6 +115,7 @@ class Classifier(object):
         if p_val[0][int(p_label[0]) - 1] == 0:
             p_label[0] = 10
 
+<<<<<<< HEAD
         return Action(int(p_label[0]))  # API changes here
 <<<<<<< HEAD
 
@@ -381,3 +382,8 @@ class Classifier(object):
 >>>>>>> 0f60d68... classifier seems working and does major refactor for classifiers:weiss/planner/classifier.py
 =======
 >>>>>>> 35e14f1... refactor
+=======
+        logger.debug("Classified as: %d\n",p_label[0])
+
+        return Action(int(p_label[0]))
+>>>>>>> 50f6d3e... fix find_number

@@ -29,7 +29,7 @@ class Planner(object):
         arguments = {}
         state = flow.state
         # plausible = state.nextPossibleActions
-        # query = unicode(query,errors='ignore')
+        query = query.decode('utf8','ignore').encode('ascii','ignore')
 
         for case in switch(state.sid):
             if case(State.SystemInitiative):
@@ -86,8 +86,7 @@ class Planner(object):
                 arguments['aid'] = Action.TypeSelection
         elif step == Step.TypeSelected:
             logger.debug("TypeSelected")
-            query = query.lower()
-            self._parser.find_number(query, arguments, entities)
+            self._parser.find_number(query.lower(), arguments, entities)
             if 'idx' not in arguments:
                 self._parser.entity_recognition(query, arguments)
                 self._parser.keyword_matching(arguments, entities)
