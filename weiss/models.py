@@ -66,6 +66,11 @@ class Step(Enum):
     RangeInitiative = 1
     TypeSelected = 2
 
+class API(Enum):
+    Init = 1
+    Query = 2
+    Close = 3
+
 
 
 

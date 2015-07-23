@@ -11,6 +11,7 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 """
 
 import logging
+from weiss.flows.flow import Flow
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 class FlowManager:
     def __init__(self):
         self._flowTable = {}
+        self.next_userid = 2147483647
 
     def register(self, uid, flow):
         """Register a user's flow object
@@ -36,3 +38,14 @@ class FlowManager:
         :return: the flow obj associated with the given user, or None if not found
         """
         return self._flowTable.get(uid, None)
+
+    def new(self, request=None):
+        if request is None:
+            flow = Flow(self.next_userid)
+        else:
+            flow = Flow(request.user, request)
+        return flow
+
+    def delete(self, user):
+        if user in self._flowTable:
+            del self._flowTable[user]

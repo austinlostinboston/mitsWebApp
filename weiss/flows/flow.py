@@ -8,26 +8,27 @@ Author: Ming Fang
 """
 import logging
 
+from django.utils import timezone
+
 from weiss.flows.factory import getFlowManager, StateFactory
-from weiss.models import State, Type, Entity, Comment
+from weiss.models import State, Type, Entity, Comment, Actions, History
 
 logger = logging.getLogger(__name__)
 
-
 class Flow(object):
-    def __init__(self, request):
+    def __init__(self, user, request=None):
+        self._user = user
         self._request = request
         self._fmgr = getFlowManager()
         self._state = StateFactory(State.SystemInitiative)
         self._action = None
-
+        self._query = None
+        self._response = None
         self._entities = None
         self._entity = None
         self._eid = None
-
         self._type = None
         self._tid = None
-
         self._cid = None
         self._comment = None
 
@@ -36,7 +37,7 @@ class Flow(object):
         """
         getter for user id, which is a django obj
         """
-        return self._request.user
+        return self._user
 
     @property
     def request(self):
@@ -181,6 +182,14 @@ class Flow(object):
         """
         self._type = Type(new_tid)
 
+    @property
+    def query(self):
+        return self._query
+
+    @property
+    def response(self):
+        return self._response
+
     def transit(self, sid):
         """
         make a transition
@@ -210,4 +219,21 @@ class Flow(object):
         self.entities = [self.entity]
 =======
         self.entities = [self.entity]
+<<<<<<< HEAD
 >>>>>>> 2e0cee4... a lot syntax changes
+=======
+
+    def start_line(self, query, action):
+        self._query = query
+        self._action = action
+
+    def end_line(self, response):
+        self._response = response
+        aid = Actions.objects.get(aid=self.aid)
+        History.objects.create(query=self.query,
+                               userid=self.user,
+                               response=response,
+                               aid=aid,
+                               eid=self.entity,
+                               time=timezone.now())
+>>>>>>> f6651f7... refactor action util

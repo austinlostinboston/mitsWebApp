@@ -3,20 +3,18 @@ from django.http import HttpResponse
 
 # Django auth
 from django.contrib.auth.decorators import login_required
-
-# Handles login
 from django.contrib.auth.models import User
+from django.db.models import Q, Max, Min
 
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
 # Imports model objects to access database
 from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Method, History, Action
-from django.db.models import Q, Max, Min
-
-# Import django forms
 from weiss.forms import RegistrationForm
+from webapps.settings import BASE_DIR
 
-# Python imports
 import random
 import os
 import logging
@@ -24,9 +22,12 @@ import ast
 
 # Import from personal moduls
 from weiss.commentChooser import pageRankComment
-from weiss.dialogue.actionUtil import initSession, getDialogHistory, confirmAciton
+from weiss.dialogue.actionUtil import confirmAciton
 from weiss.dialogue.factory import getDialogueManager
-from webapps.settings import BASE_DIR
+from weiss.api.serializers import *
+from weiss.api.requests import *
+from weiss.api.responses import *
+
 
 logger = logging.getLogger(__name__)
 
@@ -38,10 +39,10 @@ def homepage(request):
     if request.method == 'POST':
         dmgr.handle(request)
     else:
-        initSession(request)
+        dmgr.start_new_dialogue(request)
 
     context['actions'] = [(action.value, action.name) for action in Action]
-    context['dialog'] = getDialogHistory(request.user)
+    context['dialog'] = dmgr.get_dialogue(request.user)
     return render(request, 'weiss/index.html', context)
 
 
@@ -53,7 +54,7 @@ def confirmaction(request, aid):
     confirmAciton(User, aid)
     context = {}
     context['actions'] = Action
-    context['dialog'] = getDialogHistory(request.user)
+    context['dialog'] = getDialogueManager().get_dialogue(request.user)
     context['msg'] = 'thanks for you feedback'
     return render(request, 'weiss/index.html', context)
     # return redirect('')
@@ -70,7 +71,7 @@ def verbalresponse(request):
 
     if history is None:
         context = {}
-        context['dialog'] = getDialogHistory(request.user)
+        context['dialog'] = getDialogueManager().get_dialogue(request.user)
         return render(request, 'weiss/index.html', context)
 
     response = history.response
@@ -96,7 +97,7 @@ def verbalresponse(request):
 @login_required
 def actionboard(request):
     logger.debug("%s" % (request))
-
+    dmgr = getDialogueManager()
     context = {}
 
     if request.method == 'POST':
@@ -105,10 +106,10 @@ def actionboard(request):
         args['keywords'] = request.POST['queryinput']
         getDialogueManager().dispatch(request, None, args)
     else:
-        initSession(request)
+        dmgr.start_new_dialogue(request)
 
     context['actions'] = [(action.value, action.name) for action in Action]
-    context['dialog'] = getDialogHistory(request.user)
+    context['dialog'] = dmgr.get_dialogue(request.user)
     return render(request, 'weiss/actionboard.html', context)
 
 
@@ -373,10 +374,38 @@ def rep_vote(request):
     return redirect('/evaluate/2')
 
 
-# API
+# APIs
 @api_view(['GET'])
 def init(request):
     if request.method == 'GET':
         dmgr = getDialogueManager()
-        flow = dmgr.initFlow(request)
-        return
+        flow = dmgr.start_new_dialogue()
+        init_res = InitResponse(flow.user)
+        serializer = InitResponseSerializer(init_res)
+        return Response(serializer.data)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def inquire(request):
+    if request.method == 'POST':
+        req_serializer = QueryRequestSerializer(data=request.data)
+        if req_serializer.is_valid():
+            query_req = req_serializer.save()
+            response_str = getDialogueManager().handle(request, query_req)
+            response = QueryResponse(response_str)
+            res_serializer = QueryResponseSerializer(response)
+            return Response(res_serializer.data)
+        else:
+            return Response(req_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def close(request, fid):
+    if request.method == 'POST':
+        ret_bool = getDialogueManager().fmgr.delete(fid)
+        ret = CloseResponse(ret_bool)
+        res_serializer = CloseResponseSerializer(ret)
+        return Response(res_serializer.data)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
