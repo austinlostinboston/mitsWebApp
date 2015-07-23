@@ -28,21 +28,15 @@ import string
 =======
 >>>>>>> 6d991c7... a lot of bugs fixed
 import timeit
-import string
 import logging
 import os
-import nltk
 
-from nltk.tag.stanford import StanfordPOSTagger
 
 from sklearn.externals import joblib
-
 from liblinearutil import *
 from webapps.settings import BASE_DIR
 from weiss.planner.feature import *
-from weiss.flows.states import *
-from weiss.models import Action, State, Type
-from weiss.utils.switch import switch
+from weiss.models import Action
 
 logger = logging.getLogger(__name__)
 
@@ -60,14 +54,9 @@ class Classifier(object):
         self.action_model, self.type_model = self._get_model()
         self.stopwords = stopword(self.stopword_path)
         self.feature_list = self._get_feature_list()
-        self.stemmer = nltk.SnowballStemmer("english")
-        self.sentiment = self._get_sentiment()
-        self.postagger = StanfordPOSTagger(self.modeldir + '/postagger/models/english-bidirectional-distsim.tagger',
-                                           self.modeldir + '/postagger/stanford-postagger.jar')
         end = timeit.timeit()
         print "Load time: " + str(end - start)
         self.feature_arg = parse_options('-uni -pos2 -stem -stprm')
-        self.type_words = self._set_type_words()
         self.labels = [1, 2, 3, 4, 5, 6, 7]
 
     def _get_model(self):
@@ -81,12 +70,6 @@ class Classifier(object):
         m2 = joblib.load(self.modeldir + '/type_model')
         return m1, m2
 
-    def _get_sentiment(self):
-        sentiment = {}
-        for line in open(self.modeldir + "/AFINN.txt"):
-            word, score = line.split('\t')
-            sentiment[word] = int(score)
-        return sentiment
 
     def _get_feature_list(self):
         """Load feature file
@@ -120,7 +103,7 @@ class Classifier(object):
 
         return [onerow]
 
-    def _classify(self, query):
+    def classify(self, query):
         """Does query classification, which decides which action need to be taken
 
         This function is called by self.action_info
@@ -133,6 +116,7 @@ class Classifier(object):
             p_label[0] = 10
 
         return Action(int(p_label[0]))  # API changes here
+<<<<<<< HEAD
 
     def action_info(self, query, flow):
         """API function in this script. Gives all info of an action
@@ -395,3 +379,5 @@ class Classifier(object):
         else:
             arguments['aid'] = action
 >>>>>>> 0f60d68... classifier seems working and does major refactor for classifiers:weiss/planner/classifier.py
+=======
+>>>>>>> 35e14f1... refactor
