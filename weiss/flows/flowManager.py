@@ -42,11 +42,10 @@ class FlowManager:
     def new(self, request=None):
         if request is None:
             flow = Flow(self.next_userid)
-            self.register(self.next_userid, flow)
+            self.next_userid -= 1
         else:
             flow = Flow(request.user.id, request.user, request)
-            self.register(request.user.id, flow)
-        self.next_userid -= 1
+        self.register(request.user_id, flow)
         return flow
 
     def delete(self, user):
