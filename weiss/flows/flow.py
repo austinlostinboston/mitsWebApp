@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 class Flow(object):
     def __init__(self, user, request=None):
+        logger.debug("User id: %s", user)
         self._user = user
         self._request = request
         self._state = StateFactory(State.SystemInitiative)
@@ -226,6 +227,7 @@ class Flow(object):
         self._action = action
 
     def end_line(self, response):
+        print self
         self._response = response
         aid = Actions.objects.get(aid=self.action.value)
         History.objects.create(query=self.query,
