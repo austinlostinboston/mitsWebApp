@@ -65,6 +65,8 @@ def responseHandler(flow, test=False):
     else:
         rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".01"
 
+    print "===================================================="
+    print "--------------  Response Generator  ----------------"
     print flow   # implicitly call __str__ of flow
 
 <<<<<<< HEAD
@@ -152,9 +154,9 @@ def responseHandler(flow, test=False):
 
     if "[" in response and "]" in response:
         ## Types
-        response = response.replace("[type]", type_name.lower())
+        response = response.replace("[type]", flow.type.name.lower())
         if "[types]" in response:
-            response = response.replace("[types]", pluralType(type_name.lower()))
+            response = response.replace("[types]", pluralType(flow.type.name.lower()))
 
         ## Entities
         response = response.replace("[num_entities]", str(num_entities))
@@ -169,11 +171,6 @@ def responseHandler(flow, test=False):
                 str_ent_list += entity.name + ", "
                 print str_ent_list
             response = response.replace("[list-" + str(ent_list_length) + "]", str_ent_list)
-
-        if "[type]" in response:
-            response = response.replace("[type]", type.name.lower())
-        if "[types]" in response:
-            response = response.replace("[type]", pluralType(type.name.lower()))
 
     print "[RESPONSE] " + response
 
