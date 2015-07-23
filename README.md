@@ -46,3 +46,44 @@ To install dependencies, type `sudo pip install -r requirements.txt`
   To run test, simply use the following:
 
   `python manage.py test`
+
+
+## API
+    ### Initilize a dialogue
+    
+    url: `/api/init`
+    
+    Request requirement:
+        method GET
+    The response format:
+    `{`
+    `   "fid" : fid`
+    `}`
+    
+    ### Send a query
+    
+    url: `/api/inquire`
+    
+    Request requirement
+        method POST
+    The request format:
+    `{`
+    `   "fid" : fid,`
+    `    "query" : query`
+    `}`
+    
+    The response format:
+    `{`
+    `   "response" : response`
+    `}`
+
+    ### End a dialogue
+    
+    url: `/api/close`
+    
+    Request requirement
+        method POST
+    The request format:
+    `{`
+    `   "fid" : fid`
+    `}`
