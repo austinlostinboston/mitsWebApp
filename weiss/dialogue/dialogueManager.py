@@ -127,8 +127,6 @@ class DialogueManager(object):
 
         actionExecutor(flow, decision)  # transition happens inside
 
-        if flow.state.sid is State.RangeSelected:
-            logger.debug("Step after: " + flow.state.step.name)
         response = responseHandler(flow)
 
         flow.end_line(response)
@@ -151,12 +149,20 @@ class DialogueManager(object):
         ten_min_ago = timezone.now() - datetime.timedelta(minutes=10)  # 10 min ago
         lines = History.objects.filter(Q(userid=user_id), Q(time__gt=ten_min_ago)).order_by("-time")[:limit]
         if len(lines) == 0:
+            # If no line in the last 10 min, relax the time constraint
             lines = History.objects.filter(Q(userid=user_id)).order_by("-time")[:1]
+        num_greeting = 0
+        # Do not show multiple Greeting
+        for line in reversed(lines):
+            if line.aid.aid != Action.Greeting.value:
+                break
+            num_greeting += 1
+
+        # more than 1 greeting
+        if num_greeting > 1:
+            num_greeting -= 1
+            lines = lines[:-num_greeting]
+
         for line in lines:
             line.response = self.html_parser.unescape(line.response)
         return lines
-
-
-
-
-

@@ -233,7 +233,6 @@ class Flow(object):
         self._action = action
 
     def end_line(self, response):
-        print self
         self._response = response
         aid = Actions.objects.get(aid=self.action.value)
         History.objects.create(query=self.query,
