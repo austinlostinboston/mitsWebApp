@@ -57,7 +57,7 @@ def responseHandler(flow):
 
     print "===================================================="
     print "--------------  Response Generator  ----------------"
-    print flow
+    print flow   # implicitly call __str__ of flow
 
 <<<<<<< HEAD
 <<<<<<< HEAD
