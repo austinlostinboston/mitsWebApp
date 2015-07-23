@@ -18,5 +18,5 @@ urlpatterns = patterns('',
     url(r'^register', 'weiss.views.register'),
     url(r'^api/init$', 'weiss.views.init'),
     url(r'^api/inquire$', 'weiss.views.inquire'),
-    url(r'^api/close/(?P<flow_id>\d+)$', 'weiss.views.close'),
+    url(r'^api/close$', 'weiss.views.close'),
 )

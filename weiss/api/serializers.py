@@ -4,12 +4,14 @@ from weiss.api.requests import *
 
 class InitResponseSerializer(serializers.Serializer):
     fid = serializers.IntegerField()
+    response = serializers.CharField()
 
     def create(self, validated_data):
         return InitResponse(**validated_data)
 
     def update(self, instance, validated_data):
         instance.fid = validated_data.get('fid', instance.fid)
+        instance.response = validated_data.get('response', instance.response)
         return instance
 
 class QueryRequestSerializer(serializers.Serializer):
@@ -39,7 +41,7 @@ class CloseRequestSerializer(serializers.Serializer):
     fid = serializers.IntegerField()
 
     def create(self, validated_data):
-        return CloseRequeset(**validated_data)
+        return CloseRequest(**validated_data)
 
     def update(self, instance, validated_data):
         instance.fid = validated_data.get('fid', instance.fid)

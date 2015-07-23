@@ -90,17 +90,23 @@ class DialogueManager(object):
         """
         if query_obj is not None:
             query = query_obj.query
+            user_id = query_obj.fid
         else:
+            user_id = request.user.id
             query = str(request.POST.get('queryinput', False))
         logger.debug("query:%s" % query)
 
-        flow = self.fmgr.lookUp(request.user.id)
+        flow = self.fmgr.lookUp(user_id)
+
+        if flow is None:
+            logger.debug("No such flow")
+            return None
+
         flow.request = request
-
         decision = self.planner.plan(query, flow)
-
         self.dispatch(flow, query, decision)
-        return
+
+        return flow
 
     def dispatch(self, flow, query, decision):
         """Dispatch a request based on query
@@ -141,11 +147,11 @@ class DialogueManager(object):
     def end_dialogue(self, user):
         self.fmgr.delete(user)
 
-    def get_dialogue(self, userid, limit=10):
-        tenMinAgo = timezone.now() - datetime.timedelta(minutes=10)  # 10 min ago
-        lines = History.objects.filter(Q(userid=userid), Q(time__gt=tenMinAgo)).order_by("-time")[:limit]
+    def get_dialogue(self, user_id, limit=10):
+        ten_min_ago = timezone.now() - datetime.timedelta(minutes=10)  # 10 min ago
+        lines = History.objects.filter(Q(userid=user_id), Q(time__gt=ten_min_ago)).order_by("-time")[:limit]
         if len(lines) == 0:
-            lines = History.objects.filter(Q(userid=userid)).order_by("-time")[:1]
+            lines = History.objects.filter(Q(userid=user_id)).order_by("-time")[:1]
         for line in lines:
             line.response = self.html_parser.unescape(line.response)
         return lines

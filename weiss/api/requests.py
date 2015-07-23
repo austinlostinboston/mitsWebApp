@@ -4,7 +4,7 @@ class QueryRequest(object):
         self.fid = fid
         self.query = query
 
-class CloseRequeset(object):
+class CloseRequest(object):
 
     def __init__(self, fid):
         self.fid = fid

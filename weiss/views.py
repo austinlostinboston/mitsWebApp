@@ -42,7 +42,7 @@ def homepage(request):
         dmgr.start_new_dialogue(request)
 
     context['actions'] = [(action.value, action.name) for action in Action]
-    context['dialog'] = dmgr.get_dialogue(request.user.id)
+    context['dialog'] = dmgr.get_dialogue(request.user_id)
     return render(request, 'weiss/index.html', context)
 
 
@@ -54,7 +54,7 @@ def confirmaction(request, aid):
     confirmAciton(User, aid)
     context = {}
     context['actions'] = Action
-    context['dialog'] = getDialogueManager().get_dialogue(request.user.id)
+    context['dialog'] = getDialogueManager().get_dialogue(request.user_id)
     context['msg'] = 'thanks for you feedback'
     return render(request, 'weiss/index.html', context)
     # return redirect('')
@@ -71,14 +71,14 @@ def verbalresponse(request):
 
     if history is None:
         context = {}
-        context['dialog'] = getDialogueManager().get_dialogue(request.user.id)
+        context['dialog'] = getDialogueManager().get_dialogue(request.user_id)
         return render(request, 'weiss/index.html', context)
 
     response = history.response
 
     if request.method == 'GET':
         # Write text to file
-        audio_file_path = os.path.abspath(BASE_DIR + ("/weiss/audio/%s.wav" % (request.user)))
+        audio_file_path = os.path.abspath(BASE_DIR + ("/weiss/audio/%s.wav" % request.user))
 
         conv = ('flite -voice awb -t "%s" -o "%s"' % (response, audio_file_path))
         logger.debug("command:" + conv)
@@ -96,7 +96,7 @@ def verbalresponse(request):
 
 @login_required
 def actionboard(request):
-    logger.debug("%s" % (request))
+    logger.debug("%s" % request)
     dmgr = getDialogueManager()
     context = {}
 
@@ -380,7 +380,7 @@ def init(request):
     if request.method == 'GET':
         dmgr = getDialogueManager()
         flow = dmgr.start_new_dialogue()
-        init_res = InitResponse(flow.user)
+        init_res = InitResponse(flow.user_id, flow.response)
         serializer = InitResponseSerializer(init_res)
         return Response(serializer.data)
     return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -391,8 +391,10 @@ def inquire(request):
         req_serializer = QueryRequestSerializer(data=request.data)
         if req_serializer.is_valid():
             query_req = req_serializer.save()
-            response_str = getDialogueManager().handle(request, query_req)
-            response = QueryResponse(response_str)
+            flow = getDialogueManager().handle(request, query_req)
+            if flow is None:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            response = QueryResponse(flow.response)
             res_serializer = QueryResponseSerializer(response)
             return Response(res_serializer.data)
         else:
@@ -401,11 +403,16 @@ def inquire(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
-def close(request, fid):
+def close(request):
     if request.method == 'POST':
-        ret_bool = getDialogueManager().fmgr.delete(fid)
-        ret = CloseResponse(ret_bool)
-        res_serializer = CloseResponseSerializer(ret)
-        return Response(res_serializer.data)
+        req_serializer = CloseRequestSerializer(data=request.data)
+        if req_serializer.is_valid():
+            close_req = req_serializer.save()
+            ret_bool = getDialogueManager().fmgr.delete(close_req.fid)
+            ret = CloseResponse(ret_bool)
+            res_serializer = CloseResponseSerializer(ret)
+            return Response(res_serializer.data)
+        else:
+            return Response(req_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)

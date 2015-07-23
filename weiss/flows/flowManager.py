@@ -52,3 +52,6 @@ class FlowManager:
     def delete(self, user):
         if user in self._flowTable:
             del self._flowTable[user]
+            return True
+        else:
+            return False
