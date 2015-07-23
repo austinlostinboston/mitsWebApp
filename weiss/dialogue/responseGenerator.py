@@ -30,8 +30,14 @@ def responseHandler(flow, test=False):
 >>>>>>> 7991b98...  a lot syntax change
     response = 'Empty response: We are experiencing problems, sorry!'
 
+<<<<<<< HEAD
     # Grab information from flow
     userid = flow.user
+=======
+    ## Grab information from flow
+    user = flow.user  # a str, None for unregistered user
+    user_id = flow.user_id  # a int
+>>>>>>> adbee11... seperate user id and user name
     state = flow.state
     sid = state.sid.value
     action = flow.action

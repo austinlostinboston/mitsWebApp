@@ -32,7 +32,7 @@ class FlowManager:
         return
 
     def lookUp(self, uid):
-        """Look up a flow given a user id
+        """Look up a flow given a user id, a int
 
         :param uid: the user id to be looked up, get it by request.user
         :return: the flow obj associated with the given user, or None if not found
@@ -41,10 +41,10 @@ class FlowManager:
 
     def new(self, request=None):
         if request is None:
-            flow = Flow(self.next_userid)
+            flow = Flow(None, self.next_userid)
             self.register(self.next_userid, flow)
         else:
-            flow = Flow(request.user.id, request)
+            flow = Flow(request.user, request.user.id, request)
             self.register(request.user.id, flow)
         self.next_userid -= 1
         return flow

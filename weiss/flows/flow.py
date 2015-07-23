@@ -16,9 +16,10 @@ from weiss.models import State, Type, Entity, Comment, Actions, History, Action
 logger = logging.getLogger(__name__)
 
 class Flow(object):
-    def __init__(self, user, request=None):
+    def __init__(self, user, user_id, request=None):
         logger.debug("User id: %s", user)
         self._user = user
+        self._user_id = user_id
         self._request = request
         self._state = StateFactory(State.SystemInitiative)
         self._action = Action.Greeting
@@ -35,9 +36,15 @@ class Flow(object):
     @property
     def user(self):
         """
-        getter for user id, which is a django obj
+        getter for user name, a str, unregister user does not have a user name
         """
         return self._user
+
+    @property
+    def user_id(self):
+        """Every one has the user id, which is a int
+        """
+        return self._user_id
 
     @property
     def request(self):
@@ -248,7 +255,8 @@ class Flow(object):
 
     def __str__(self):
         res = "--  Flow State\n"        \
-              "--  User ID: %s\n"       \
+              "--  User ID: %s\n" \
+              "--User name: %s\n" \
               "--    State: %s\n"       \
               "--     Step: %s\n"       \
               "--   Action: %s\n"       \
@@ -259,7 +267,8 @@ class Flow(object):
               "--  Num Ent: %s\n"       \
               "--------------\n"        \
               "--     Type: %s\n"       \
-              "--   Entity: %s\n" % (self.user,
+              "--   Entity: %s\n" % (self.user_id,
+                                     self.user,
                                      self.state,
                                      self.state.step,
                                      self.action.name,
