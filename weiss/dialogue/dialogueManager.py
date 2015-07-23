@@ -94,7 +94,7 @@ class DialogueManager(object):
             query = str(request.POST.get('queryinput', False))
         logger.debug("query:%s" % query)
 
-        flow = self.fmgr.lookUp(request.user)
+        flow = self.fmgr.lookUp(request.user.id)
         flow.request = request
 
         decision = self.planner.plan(query, flow)

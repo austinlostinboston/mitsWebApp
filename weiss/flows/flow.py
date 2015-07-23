@@ -16,8 +16,7 @@ from weiss.models import State, Type, Entity, Comment, Actions, History, Action
 logger = logging.getLogger(__name__)
 
 class Flow(object):
-    def __init__(self, user, user_id, request=None):
-        logger.debug("User id: %s", user)
+    def __init__(self, user_id, user=None, request=None):
         self._user = user
         self._user_id = user_id
         self._request = request
@@ -238,7 +237,7 @@ class Flow(object):
         self._response = response
         aid = Actions.objects.get(aid=self.action.value)
         History.objects.create(query=self.query,
-                               userid=self.user,
+                               userid=self.user_id,
                                response=response,
                                aid=aid,
                                eid=self.entity,
