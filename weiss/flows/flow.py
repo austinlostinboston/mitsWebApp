@@ -37,7 +37,7 @@ class Flow(object):
         """
         getter for user name, a str, unregister user does not have a user name
         """
-        return self._user
+        return str(self._user)
 
     @property
     def user_id(self):

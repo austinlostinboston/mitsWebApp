@@ -45,6 +45,7 @@ class FlowManager:
             self.next_userid -= 1
         else:
             flow = Flow(request.user.id, request.user, request)
+        assert(type(flow.user_id) is int, "%s" % type(flow.user_id))
         self.register(flow.user_id, flow)
         return flow
 
