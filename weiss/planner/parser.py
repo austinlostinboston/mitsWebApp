@@ -151,7 +151,8 @@ class Parser(object):
         phrase = " ".join(words).strip()
 
         for i in xrange(0, len(entities)):
-            if entities[i].find(phrase) != -1:
+            entity_name = entities[i].name
+            if entity_name.find(phrase) != -1:
                 arguments['idx'] = i
                 break
 
