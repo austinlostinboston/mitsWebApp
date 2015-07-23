@@ -14,14 +14,14 @@ class InitResponseSerializer(serializers.Serializer):
 
 class QueryRequestSerializer(serializers.Serializer):
     fid = serializers.IntegerField()
-    response = serializers.CharField()
+    query = serializers.CharField()
 
     def create(self, validated_data):
         return QueryRequest(**validated_data)
 
     def update(self, instance, validated_data):
         instance.fid = validated_data.get('fid', instance.fid)
-        instance.response = validated_data.get('response', instance.response)
+        instance.query = validated_data.get('query', instance.response)
         return instance
 
 

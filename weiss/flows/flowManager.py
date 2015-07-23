@@ -45,7 +45,7 @@ class FlowManager:
             self.register(self.next_userid, flow)
         else:
             flow = Flow(request.user, request)
-            self.register(request.user, flow)
+            self.register(request.user.id, flow)
         self.next_userid += 1
         return flow
 

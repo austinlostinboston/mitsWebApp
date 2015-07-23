@@ -163,7 +163,7 @@ class Actions(models.Model):
 
 class History(models.Model):
     hid = models.BigIntegerField(primary_key=True)
-    userid = models.ForeignKey(User, db_column='userid')
+    userid = models.IntegerField()
     query = models.TextField()
     response = models.TextField()
     time = models.DateTimeField()

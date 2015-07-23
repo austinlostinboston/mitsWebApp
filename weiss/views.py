@@ -42,7 +42,7 @@ def homepage(request):
         dmgr.start_new_dialogue(request)
 
     context['actions'] = [(action.value, action.name) for action in Action]
-    context['dialog'] = dmgr.get_dialogue(request.user)
+    context['dialog'] = dmgr.get_dialogue(request.user.id)
     return render(request, 'weiss/index.html', context)
 
 
@@ -54,7 +54,7 @@ def confirmaction(request, aid):
     confirmAciton(User, aid)
     context = {}
     context['actions'] = Action
-    context['dialog'] = getDialogueManager().get_dialogue(request.user)
+    context['dialog'] = getDialogueManager().get_dialogue(request.user.id)
     context['msg'] = 'thanks for you feedback'
     return render(request, 'weiss/index.html', context)
     # return redirect('')
@@ -71,7 +71,7 @@ def verbalresponse(request):
 
     if history is None:
         context = {}
-        context['dialog'] = getDialogueManager().get_dialogue(request.user)
+        context['dialog'] = getDialogueManager().get_dialogue(request.user.id)
         return render(request, 'weiss/index.html', context)
 
     response = history.response

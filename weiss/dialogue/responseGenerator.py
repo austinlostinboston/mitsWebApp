@@ -40,10 +40,7 @@ def responseHandler(flow):
 
 <<<<<<< HEAD
     ## Text variables
-    if flow.type is not None:
-        type_name = flow.type.name
-    else:
-        type_name = None
+    type = flow.type
     entity_name = flow.entity
     comment_body = flow.comment
 =======
@@ -144,9 +141,9 @@ def responseHandler(flow):
 
     if "[" in response and "]" in response:
         if "[type]" in response:
-            response = response.replace("[type]", type_name.lower())
+            response = response.replace("[type]", type.name.lower())
         if "[types]" in response:
-            response = response.replace("[type]", pluralType(type_name.lower()))
+            response = response.replace("[type]", pluralType(type.name.lower()))
 
     print "[RESPONSE] " + response
 
