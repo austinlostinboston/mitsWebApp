@@ -60,29 +60,12 @@ def responseHandler(flow, test=False):
     else:
         num_entities = str(len(entities))
 
-    print "===================================================="
-    print "--------------  Response Generator  ----------------"
-<<<<<<< HEAD
-    print "--  Flow State"
-    print "--------------"
-    print "--  User ID: " + str(userid)
-    print "--    State: " + str(state)
-    print "--   Action: " + str(action)
-    print "--------------"
-    print "--      TID: " + str(tid)
-    print "--      EID: " + str(eid)
-    print "--      CID: " + str(cid)
-    print "--  Num Ent: " + num_entities
-    print "--------------"
-    print "--     Type: " + str(type_name)
-    print "--   Entity: " + str(entity_name)
     if test:
         rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".test"
     else:
         rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".01"
-=======
+
     print flow   # implicitly call __str__ of flow
->>>>>>> 79b06f28357db6a478bc208126389b872970cf93
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -168,7 +151,6 @@ def responseHandler(flow, test=False):
 >>>>>>> ac51fe6... response gen working minimally
 
     if "[" in response and "]" in response:
-<<<<<<< HEAD
         ## Types
         response = response.replace("[type]", type_name.lower())
         if "[types]" in response:
@@ -187,13 +169,11 @@ def responseHandler(flow, test=False):
                 str_ent_list += entity.name + ", "
                 print str_ent_list
             response = response.replace("[list-" + str(ent_list_length) + "]", str_ent_list)
-            
-=======
+
         if "[type]" in response:
             response = response.replace("[type]", type.name.lower())
         if "[types]" in response:
             response = response.replace("[type]", pluralType(type.name.lower()))
->>>>>>> 79b06f28357db6a478bc208126389b872970cf93
 
     print "[RESPONSE] " + response
 
