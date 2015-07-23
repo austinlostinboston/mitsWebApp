@@ -1,17 +1,22 @@
 ## Import builtins
 import random
 import os
+import re
 
 # Import from weiss
 from weiss.models import Action, Types, Comment, Entity
 from django.db.models import Q
 from bs4 import BeautifulSoup
 
+<<<<<<< HEAD
 
 def responseHandler(flow):
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
+=======
+def responseHandler(flow, test=False):
+>>>>>>> 63918f7... continuing adding to response generator
     ## Get directory
     cur_dir = os.path.dirname(__file__)
 >>>>>>> ac51fe6... response gen working minimally
@@ -57,8 +62,29 @@ def responseHandler(flow):
 
     print "===================================================="
     print "--------------  Response Generator  ----------------"
+<<<<<<< HEAD
+    print "--  Flow State"
+    print "--------------"
+    print "--  User ID: " + str(userid)
+    print "--    State: " + str(state)
+    print "--   Action: " + str(action)
+    print "--------------"
+    print "--      TID: " + str(tid)
+    print "--      EID: " + str(eid)
+    print "--      CID: " + str(cid)
+    print "--  Num Ent: " + num_entities
+    print "--------------"
+    print "--     Type: " + str(type_name)
+    print "--   Entity: " + str(entity_name)
+    if test:
+        rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".test"
+    else:
+        rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".01"
+=======
     print flow   # implicitly call __str__ of flow
+>>>>>>> 79b06f28357db6a478bc208126389b872970cf93
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     
@@ -135,15 +161,39 @@ def responseHandler(flow):
     #     response = "Sorry, could you not be a bimbo and ask a better question."
 =======
     rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".01"
+=======
+>>>>>>> 63918f7... continuing adding to response generator
     print "[Response ID]: " + str(rsp_id)
     response = soup.find('message',{'id':rsp_id}).text
 >>>>>>> ac51fe6... response gen working minimally
 
     if "[" in response and "]" in response:
+<<<<<<< HEAD
+        ## Types
+        response = response.replace("[type]", type_name.lower())
+        if "[types]" in response:
+            response = response.replace("[types]", pluralType(type_name.lower()))
+
+        ## Entities
+        response = response.replace("[num_entities]", str(num_entities))
+        response = response.replace("[entity]", str(entity_name))
+
+        regex = re.compile(r'\[list\-(\d+)\]')
+        
+        if regex.search(response) is not None:
+            ent_list_length = regex.findall(response)[0]
+            str_ent_list = ''
+            for entity in entities[:int(ent_list_length)]:
+                str_ent_list += entity.name + ", "
+                print str_ent_list
+            response = response.replace("[list-" + str(ent_list_length) + "]", str_ent_list)
+            
+=======
         if "[type]" in response:
             response = response.replace("[type]", type.name.lower())
         if "[types]" in response:
             response = response.replace("[type]", pluralType(type.name.lower()))
+>>>>>>> 79b06f28357db6a478bc208126389b872970cf93
 
     print "[RESPONSE] " + response
 
@@ -151,7 +201,7 @@ def responseHandler(flow):
 
 
 def pluralType(type_ins):
-    type_name = str(type_ins).split('.')[1]
+    type_name = type_ins
     if type_name[-1] != "s":
         type_name += "s"
 
