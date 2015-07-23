@@ -12,7 +12,8 @@ features*
 *.pyc
 
 # lib
-liblinear*
+liblinear.so*
+liblinear-*
 
 # audio
 weiss/audio
