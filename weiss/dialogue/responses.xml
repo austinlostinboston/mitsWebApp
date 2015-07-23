@@ -2,6 +2,10 @@
 
 <responses>
   <state id="0" name="SystemInitiative">
+    <action id="9" name="Greeting">
+      <message id="00.09.01">Hi I'm Weiss. What would you like to talk about, movies? news? or restaurants?</message>
+    </action>
+
     <action id="10" name="UnknownAction">
       <message id="00.10.01">Was that even English?</message>
       <message id="00.10.02">I didn't quite get that. Please repeat that.</message>

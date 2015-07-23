@@ -29,7 +29,7 @@ class DialogueManager(object):
     def __init__(self):
         self._planner = getPlanner()
         self._fmgr = getFlowManager()
-        self._html_parser = HTMLParser()
+        self._html_parser = HTMLParser.HTMLParser()
 
     @property
     def planner(self):
@@ -115,7 +115,7 @@ class DialogueManager(object):
 
         logger.debug("Dispatch action: %s, %s" % (action.value, action.name))
 
-        flow.start_line(query, action)
+        flow.start_line(action, query)
 
         actionExecutor = self.getExecutor(action)
 
@@ -147,7 +147,7 @@ class DialogueManager(object):
         if len(lines) == 0:
             lines = History.objects.filter(Q(userid=userid)).order_by("-time")[:1]
         for line in lines:
-            line.response = self.parser.unescape(line.response)
+            line.response = self.html_parser.unescape(line.response)
         return lines
 
 

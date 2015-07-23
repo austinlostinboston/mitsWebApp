@@ -7,20 +7,9 @@ Just import needed method from actionUtil.py
 Author: Ming Fang
 '''
 
-import datetime
-import HTMLParser
-
-from django.utils import timezone
-
 from django.contrib.auth.models import User
 
-from weiss.models import History, Actions
-from weiss.dialogue.actions import *  # for action methods
-from weiss.flows.factory import getFlowManager
-from weiss.flows.flow import Flow
-
-parser = HTMLParser.HTMLParser()  # html parser
-
+from weiss.models import History
 
 def confirmAciton(UserName, ActionID):
     print 'confirmAciton called'

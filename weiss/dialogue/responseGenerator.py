@@ -40,7 +40,10 @@ def responseHandler(flow):
 
 <<<<<<< HEAD
     ## Text variables
-    type_name = flow.type.name
+    if flow.type is not None:
+        type_name = flow.type.name
+    else:
+        type_name = None
     entity_name = flow.entity
     comment_body = flow.comment
 =======
@@ -57,21 +60,7 @@ def responseHandler(flow):
 
     print "===================================================="
     print "--------------  Response Generator  ----------------"
-    print "--  Flow State"
-    print "--------------"
-    print "--  User ID: " + str(userid)
-    print "--    State: " + str(state)
-    if (state.sid is State.RangeSelected):
-        print "--     Step: " + state.step.name
-    print "--   Action: " + str(action)
-    print "--------------"
-    print "--      TID: " + str(tid)
-    print "--      EID: " + str(eid)
-    print "--      CID: " + str(cid)
-    print "--  Num Ent: " + num_entities
-    print "--------------"
-    print "--     Type: " + str(type_name)
-    print "--   Entity: " + str(entity_name)
+    print flow
 
 <<<<<<< HEAD
 <<<<<<< HEAD

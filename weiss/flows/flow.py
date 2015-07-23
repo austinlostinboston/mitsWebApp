@@ -10,8 +10,8 @@ import logging
 
 from django.utils import timezone
 
-from weiss.flows.factory import getFlowManager, StateFactory
-from weiss.models import State, Type, Entity, Comment, Actions, History
+from weiss.flows.stateFactory import StateFactory
+from weiss.models import State, Type, Entity, Comment, Actions, History, Action
 
 logger = logging.getLogger(__name__)
 
@@ -19,9 +19,8 @@ class Flow(object):
     def __init__(self, user, request=None):
         self._user = user
         self._request = request
-        self._fmgr = getFlowManager()
         self._state = StateFactory(State.SystemInitiative)
-        self._action = None
+        self._action = Action.Greeting
         self._query = None
         self._response = None
         self._entities = None
@@ -62,12 +61,14 @@ class Flow(object):
         """Getter for current action
         It is of type models.Action enum
         """
+        assert(isinstance(self._action, Action))
         return self._action
 
     @action.setter
     def action(self, new_action):
         """Setter for action
         """
+        assert(isinstance(new_action, Action))
         self._action = new_action
 
     @property
@@ -198,9 +199,6 @@ class Flow(object):
         logger.info("Transit from %s to %s" % (self.state.name, sid.name))
         self._state = StateFactory(sid)
 
-    def __str__(self):
-        return "%s in %s" % (self.user, self.state.name)
-
     def filter(self, predicate):
         """filter and keep entities base on predicate, which is a function
         :param predicate:
@@ -223,17 +221,54 @@ class Flow(object):
 >>>>>>> 2e0cee4... a lot syntax changes
 =======
 
-    def start_line(self, query, action):
+    def start_line(self, action, query=""):
         self._query = query
         self._action = action
 
     def end_line(self, response):
         self._response = response
-        aid = Actions.objects.get(aid=self.aid)
+        aid = Actions.objects.get(aid=self.action.value)
         History.objects.create(query=self.query,
                                userid=self.user,
                                response=response,
                                aid=aid,
                                eid=self.entity,
                                time=timezone.now())
+<<<<<<< HEAD
 >>>>>>> f6651f7... refactor action util
+=======
+
+    def size(self):
+        if self.entities is None:
+            return 0
+        else:
+            return len(self.entities)
+
+    def __str__(self):
+        res = "--  Flow State\n"        \
+              "--  User ID: %s\n"       \
+              "--    State: %s\n"       \
+              "--     Step: %s\n"       \
+              "--   Action: %s\n"       \
+              "--------------\n"        \
+              "--      TID: %s\n"       \
+              "--      EID: %s\n"       \
+              "--      CID: %s\n"       \
+              "--  Num Ent: %s\n"       \
+              "--------------\n"        \
+              "--     Type: %s\n"       \
+              "--   Entity: %s\n" % (self.user,
+                                     self.state,
+                                     self.state.step,
+                                     self.action.name,
+                                     self.tid,
+                                     self.eid,
+                                     self.cid,
+                                     self.size(),
+                                     self.type,
+                                     self.entity)
+
+        return res
+
+
+>>>>>>> 264440e... a lot of bug fixes, new request and response logic is working
