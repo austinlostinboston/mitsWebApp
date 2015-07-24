@@ -1,3 +1,9 @@
+"""
+This file contains responses for different API
+
+Author: Ming Fang
+"""
+
 class InitResponse(object):
     """
     unregister user will be assign one flow id

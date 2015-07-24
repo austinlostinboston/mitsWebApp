@@ -3,7 +3,18 @@ Flow
 Flow represents the context for a user. Each instance contains:
     1. information about the user
     2. state information
+<<<<<<< HEAD
     3. misc
+=======
+    3. current action
+    4. current entity or entities
+    5. current query
+    6. current response
+    7. current type
+    8. current comment
+
+
+>>>>>>> 227bccf... format refines
 Author: Ming Fang
 """
 import logging
@@ -192,10 +203,18 @@ class Flow(object):
 
     @property
     def query(self):
+        """
+        Getter for query, a string
+        :return:
+        """
         return self._query
 
     @property
     def response(self):
+        """
+        Getter for response, a string
+        :return:
+        """
         return self._response
 
     def transit(self, sid):
@@ -229,10 +248,21 @@ class Flow(object):
 =======
 
     def start_line(self, action, query=""):
+        """
+        Start a line.
+        :param action:
+        :param query: The query string
+        :return:
+        """
         self._query = query
         self._action = action
 
     def end_line(self, response):
+        """
+        End a line. Create a record in the backend db
+        :param response: The response string
+        :return:
+        """
         self._response = response
         aid = Actions.objects.get(aid=self.action.value)
         History.objects.create(query=self.query,
@@ -246,38 +276,41 @@ class Flow(object):
 =======
 
     def size(self):
+        """Get the size of the entities
+
+            handle None case
+        :return: the size of entities
+        """
         if self.entities is None:
             return 0
         else:
             return len(self.entities)
 
     def __str__(self):
-        res = "--  Flow State\n"        \
-              "--  User ID: %s\n" \
-              "--User name: %s\n" \
-              "--    State: %s\n"       \
-              "--     Step: %s\n"       \
-              "--   Action: %s\n"       \
-              "--------------\n"        \
-              "--      TID: %s\n"       \
-              "--      EID: %s\n"       \
-              "--      CID: %s\n"       \
-              "--  Num Ent: %s\n"       \
-              "--------------\n"        \
-              "--     Type: %s\n"       \
-              "--   Entity: %s\n" % (self.user_id,
-                                     self.user,
-                                     self.state,
-                                     self.state.step,
-                                     self.action.name,
-                                     self.tid,
-                                     self.eid,
-                                     self.cid,
-                                     self.size(),
-                                     self.type,
-                                     self.entity)
-
-        return res
+        return "--  Flow State\n"        \
+               "--  User ID: %s\n"       \
+               "--User name: %s\n"       \
+               "--    State: %s\n"       \
+               "--     Step: %s\n"       \
+               "--   Action: %s\n"       \
+               "--------------\n"        \
+               "--      TID: %s\n"       \
+               "--      EID: %s\n"       \
+               "--      CID: %s\n"       \
+               "--  Num Ent: %s\n"       \
+               "--------------\n"        \
+               "--     Type: %s\n"       \
+               "--   Entity: %s\n" % (self.user_id,
+                                      self.user,
+                                      self.state,
+                                      self.state.step,
+                                      self.action.name,
+                                      self.tid,
+                                      self.eid,
+                                      self.cid,
+                                      self.size(),
+                                      self.type,
+                                      self.entity)
 
 
 >>>>>>> 264440e... a lot of bug fixes, new request and response logic is working

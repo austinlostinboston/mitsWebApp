@@ -1,3 +1,8 @@
+"""
+This file contain serializers for API requests and responses
+
+Author: Ming Fang
+"""
 from rest_framework import serializers
 from weiss.api.responses import *
 from weiss.api.requests import *

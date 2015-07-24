@@ -123,9 +123,9 @@ class DialogueManager(object):
 
         flow.start_line(action, query)
 
-        actionExecutor = self.getExecutor(action)
+        executor = self.getExecutor(action)
 
-        actionExecutor(flow, decision)  # transition happens inside
+        executor(flow, decision)  # transition happens inside
 
         response = responseHandler(flow)
 
