@@ -43,7 +43,7 @@ def responseHandler(flow, test=False):
     action = flow.action
     aid = action.value
 
-    ## 
+    ## id's
     cid = flow.cid
     eid = flow.eid
     tid = flow.tid
@@ -64,9 +64,15 @@ def responseHandler(flow, test=False):
 =======
     entity_object = flow.entity
     comment_object = flow.comment
+    sent_stats = flow.sentiment_stats
 
+    ## Handle when entity is none or present
     if entity_object:
         entity_name = entity_object.name
+    else:
+        entity_name = None
+
+    ## Handle when comment is none or present
     if comment_object:
         comment_body = comment_object.body
     else:
@@ -174,9 +180,9 @@ def responseHandler(flow, test=False):
     if "[" in response and "]" in response:
         ## Types
         if "[type]" in response:
-            response = response.replace("[type]", flow.type.name)
+            response = response.replace("[type]", flow.type.name.lower())
         if "[types]" in response:
-            response = response.replace("[types]", pluralType(flow.type.name))
+            response = response.replace("[types]", pluralType(flow.type.name.lower()))
 
         ## Entities
         if "[num_entities]" in response:
@@ -188,15 +194,25 @@ def responseHandler(flow, test=False):
         
         if regex.search(response) is not None:
             ent_list_length = regex.findall(response)[0]
+
+            if len(entities) >= ent_list_length:
+                list_entities = ent_list_length
+            else:
+                list_entities = len(entities)
+
             str_ent_list = ''
             for entity in entities[:int(ent_list_length)]:
                 str_ent_list += entity.name + ", "
                 print str_ent_list
             response = response.replace("[list-" + str(ent_list_length) + "]", str_ent_list)
+            response = response.replace("[list-entities]", str(list_entities))
 
         ## Comments
         if "[body]" in response:
             response = response.replace("[body]", comment_body)
+
+        ## Sentiment
+        response = placeSentiment(response, sent_stats)
 
     print "[RESPONSE] " + response
 
@@ -263,4 +279,34 @@ def selectComment(cid, eid, tid, sentiment="="):
 >>>>>>> 7991b98...  a lot syntax change
 =======
 
+<<<<<<< HEAD
 >>>>>>> ac51fe6... response gen working minimally
+=======
+def placeSentiment(response, sentiment_stats):
+    if sentiment_stats:
+        total = sentiment_stats.num_all
+        pos = sentiment_stats.num_pos
+        neu = sentiment_stats.num_neu
+        neg = total - (pos + neu)
+        percent = {'%.2F'} % (pos / total * 1.00)
+        popular = None
+        if percent > .9 and percent < 1:
+            popular = "very popular."
+        elif percent > .65 and percent < .89:
+            popular = "liked by most"
+        elif percent > .35 and percent < .64:
+            popular =  "is an even split among reviewers."
+        elif percent > .1 and percent < .34:
+            popular = "not liked by many"
+        else: 
+            popular = "basically hated by everyone"
+
+        response = response.replace("[popularity]", popular)
+        response = response.replace("[percent]", percent)
+
+        return response
+
+    else:
+        return response
+
+>>>>>>> 43d73d1... added to response generator

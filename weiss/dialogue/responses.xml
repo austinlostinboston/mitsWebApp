@@ -41,14 +41,14 @@
 
     <action id="6" name="SentimentStatistics">
       <message id="02.06.test">EntitySelected: This is sentinment stats</message>
-      <message id="02.06.01">This place [popularity]. [percent] of it's reviews thought it was [sent].</message>
+      <message id="02.06.01">This [type] is [popularity]. [percent] of it's reviews thought it was good.</message>
       <message id="02.06.02"></message>
       <message id="02.06.03"></message>
     </action>
 
     <action id="7" name="EntitySelection">
       <message id="02.07.test">EntitySelected: Entity [entity] selected.</message>
-      <message id="02.07.01">Sure, I know about [entity].</message>
+      <message id="02.07.01">Sure, I know about [entity]. What would you like to know?</message>
       <message id="02.07.02"></message>
       <message id="02.07.03"></message>
     </action>
@@ -71,7 +71,7 @@
   <state id="3" name="CommentSelected">
     <action id="1" name="NextRandomComment">
       <message id="03.01.test">CommentSelected: Next random comment</message>
-      <message id="03.01.01">Fine, since you can't make a decision we'll talk about</message>
+      <message id="03.01.01">Fine, since you can't make a decision we'll talk about [body].</message>
       <message id="03.01.02"></message>
       <message id="03.01.03"></message>
     </action>
@@ -115,16 +115,21 @@
   <state id="4" name="RangeSelected">
     <action id="5" name="NextRandomEntity">
       <message id="04.05.test">RangeSelected: Next random entity with current type. There were [num_entities] [types] found. The first few are [list-5].</message>
-      <message id="04.05.01">There are [num_entities] that match your question. Here are 10; [list-10]. Pick one.</message>
+      <message id="04.05.01">There are [num_entities] that match your question. Here are [list-entities]; [list-10]. Pick one.</message>
       <message id="04.05.02"></message>
       <message id="04.05.03"></message>
     </action>
 
     <action id="7" name="EntitySelected">
       <message id="04.07.test">RangeSelected: Entity selection. There were [num_entities] [types] found. The first few are [list-5].</message>
-      <message id="04.07.01">There are [num_entities] that match your question. Here are 10; [list-10]. Pick one.</message>
+      <message id="04.07.01">There are [num_entities] that match your question. Here are [list-entities]; [list-10]. Pick one.</message>
       <message id="04.07.02"></message>
       <message id="04.07.03"></message>
+    </action>
+
+    <action id="10" name="UknownQuery">
+      <message id="04.10.test">RangeSelected: Unknown Query.</message>
+      <message id="04.10.01">Hmm, I don't see that option in the list. Please pick one of the options in the list.</message>
     </action>
   </state>
 </responses>
