@@ -123,6 +123,8 @@ class Flow(object):
         """
         self._eid = new_eid
         self._entity = None
+        self.cid = None
+        self.tid = None
 
     @property
     def entity(self):
@@ -142,6 +144,8 @@ class Flow(object):
         """
         self._entity = new_entity
         self._eid = None
+        self.cid = None
+        self.tid = None
 
     @property
     def cid(self):
@@ -179,7 +183,11 @@ class Flow(object):
         """Getter for current type
         of type models.Type
         """
-        return self._type
+        if self._type is not None:
+            return self._type
+        elif self.entity is not None:
+            self._type = Type(self.entity.tid.tid)
+            return self._type
 
     @type.setter
     def type(self, new_type):
@@ -192,7 +200,7 @@ class Flow(object):
     def tid(self):
         """Getter for tid
         """
-        if self._type is None:
+        if self.type is None:
             return None
         else:
             return self._type.value
