@@ -174,7 +174,7 @@ def responseHandler(flow, test=False):
     if "[" in response and "]" in response:
         ## Types
         if "[type]" in response:
-            response = response.replace("[type]", flow.type.name
+            response = response.replace("[type]", flow.type.name)
         if "[types]" in response:
             response = response.replace("[types]", pluralType(flow.type.name))
 
