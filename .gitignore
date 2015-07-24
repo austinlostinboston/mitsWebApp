@@ -27,3 +27,6 @@ weiss/audio
 # intellij
 .idea
 *.iml
+
+# rest framework static files
+weiss/static/rest_framework
