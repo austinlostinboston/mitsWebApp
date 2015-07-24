@@ -120,7 +120,7 @@ class Flow(object):
         """Setter for eid
         """
         self._eid = new_eid
-        self._entities = None
+        self._entity = None
 
     @property
     def entity(self):
@@ -234,10 +234,14 @@ class Flow(object):
 
     def keep(self, idx):
         """Keep one of the entities based on idx
+
+        TODO: Look closer into this case, query set behaves differently than build in list
         :param idx: the index of entity that is kept
         :return: void
         """
+        logger.debug("Keep %s, entities = %s" % (idx, self.entities))
         assert (idx < len(self.entities))
+<<<<<<< HEAD
         self.entity = self.entities[idx]
 <<<<<<< HEAD
         self.entities = [self.entity]
@@ -246,6 +250,10 @@ class Flow(object):
 <<<<<<< HEAD
 >>>>>>> 2e0cee4... a lot syntax changes
 =======
+=======
+        self.entities = [self.entities[idx]]
+        self.entity = self.entities[0]
+>>>>>>> 10b06d8... fix keep method
 
     def start_line(self, action, query=""):
         """
