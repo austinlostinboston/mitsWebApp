@@ -349,7 +349,7 @@ class Flow(object):
 
         @property
         def num_neu(self):
-            return self.num_neu
+            return self._num_neu
 
         @property
         def num_neg(self):
