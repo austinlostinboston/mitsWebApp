@@ -19,7 +19,7 @@ function play_response(hid) {
     {% for line in dialog reversed %}
     {% if line.query != "" %}
     <div>
-        <div class="well well-lg dialogbox" style="float:left" >
+        <div class="well well-lg dialogbox" style="float:right" >
             {{ line.query }}
         </div>
         <div style="clear:both"></div>
@@ -51,7 +51,7 @@ function play_response(hid) {
         <div style="clear:both"></div>
     </div>
     <div style="right">
-        <div class="well well-lg dialogbox" id = "responses area" style="float:right" >
+        <div class="well well-lg dialogbox" id = "responses area" style="float:left" >
             {{ line.response }}
             <button type="submit" id="responseplay"+"{{line.hid}}" class="btn btn-default input-lg " aria-expanded="false" onclick="play_response({{line.hid}});" value="{{ line.hid }}">
                <!--  Verbal Response  --><span class="glyphicon glyphicon-volume-up"></span></button>

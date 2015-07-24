@@ -160,8 +160,9 @@ class DialogueManager(object):
 
         # more than 1 greeting
         if num_greeting > 1:
-            num_greeting -= 1
-            lines = lines[:-num_greeting]
+            num_greeting -= 1 # keep at least one
+            num_keep = len(lines) - num_greeting
+            lines = lines[:num_keep]
 
         for line in lines:
             line.response = self.html_parser.unescape(line.response)
