@@ -42,6 +42,7 @@ class Flow(object):
         self._tid = None
         self._cid = None
         self._comment = None
+        self._sentiment_stats = None
 
     @property
     def user(self):
@@ -217,6 +218,14 @@ class Flow(object):
         """
         return self._response
 
+    @property
+    def sentiment_stats(self):
+        return self._sentiment_stats
+
+    @sentiment_stats.setter
+    def sentiment_stats(self, new_stats):
+        self._sentiment_stats = new_stats
+
     def transit(self, sid):
         """
         make a transition
@@ -305,6 +314,7 @@ class Flow(object):
                "--      TID: %s\n"       \
                "--      EID: %s\n"       \
                "--      CID: %s\n"       \
+               "--    Stats: %s\n"       \
                "--  Num Ent: %s\n"       \
                "--------------\n"        \
                "--     Type: %s\n"       \
@@ -316,6 +326,7 @@ class Flow(object):
                                       self.tid,
                                       self.eid,
                                       self.cid,
+                                      self.sentiment_stats,
                                       self.size(),
                                       self.type,
                                       self.entity)
