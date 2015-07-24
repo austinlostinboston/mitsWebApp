@@ -51,6 +51,7 @@ def responseHandler(flow, test=False):
 
 <<<<<<< HEAD
     ## Text variables
+<<<<<<< HEAD
     type = flow.type
     entity_name = flow.entity
     comment_body = flow.comment
@@ -60,20 +61,32 @@ def responseHandler(flow, test=False):
         comment_ob = selectComment(cid, eid, tid)
         response = "One person said \" %s \"" % (comment_ob.body)
 >>>>>>> 7991b98...  a lot syntax change
+=======
+    entity_object = flow.entity
+    comment_object = flow.comment
+
+    if entity_object:
+        entity_name = entity_object.name
+    if comment_object:
+        comment_body = comment_object.body
+    else:
+        comment_body = None
+    
+>>>>>>> 26ca79b... unset test option in response generator. added responses.
 
     if entities is None:
         num_entities = str(None)
     else:
         num_entities = str(len(entities))
 
+    ## Change message used for tests
     if test:
         rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".test"
     else:
         rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".01"
 
-    print "===================================================="
-    print "--------------  Response Generator  ----------------"
-    print flow   # implicitly call __str__ of flow
+    ## prints out current flow object
+    print flow 
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -160,13 +173,16 @@ def responseHandler(flow, test=False):
 
     if "[" in response and "]" in response:
         ## Types
-        response = response.replace("[type]", flow.type.name.lower())
+        if "[type]" in response:
+            response = response.replace("[type]", flow.type.name
         if "[types]" in response:
-            response = response.replace("[types]", pluralType(flow.type.name.lower()))
+            response = response.replace("[types]", pluralType(flow.type.name))
 
         ## Entities
-        response = response.replace("[num_entities]", str(num_entities))
-        response = response.replace("[entity]", str(entity_name))
+        if "[num_entities]" in response:
+            response = response.replace("[num_entities]", str(num_entities))
+        if "[entity]" in response:
+            response = response.replace("[entity]", str(entity_name))
 
         regex = re.compile(r'\[list\-(\d+)\]')
         
@@ -177,6 +193,10 @@ def responseHandler(flow, test=False):
                 str_ent_list += entity.name + ", "
                 print str_ent_list
             response = response.replace("[list-" + str(ent_list_length) + "]", str_ent_list)
+
+        ## Comments
+        if "[body]" in response:
+            response = response.replace("[body]", comment_body)
 
     print "[RESPONSE] " + response
 

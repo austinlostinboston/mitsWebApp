@@ -3,6 +3,7 @@
 <responses>
   <state id="0" name="SystemInitiative">
     <action id="9" name="Greeting">
+      <message id="00.09.test">Test Mode Activated: Hi I'm Weiss. What would you like to talk about, movies? news? or restaurants?</message>
       <message id="00.09.01">Hi I'm Weiss. What would you like to talk about, movies? news? or restaurants?</message>
     </action>
 
@@ -16,14 +17,14 @@
 
   <state id="1" name="TypeSelected">
     <action id="8" name="TypeSelection">
-      <message id="01.08.test">TypeSelected: Type [type] is selected.</message>
+      <message id="01.08.test">TypeSelected: Type [type] selected.</message>
       <message id="01.08.01">Sure, now describe or name a [type] you want to talk about?</message>
       <message id="01.08.02">Absolutely, let's talk about [types]. </message>
       <message id="01.08.03">Let's talk about [types].</message>
     </action>
 
     <action id="10" name="UnknownAction">
-      <message id="01.08.test">TypeSelected: Unknown action.</message>
+      <message id="01.10.test">TypeSelected: Unknown action.</message>
       <message id="01.10.01">I couldn't understand what you wanted to talk about. Try again please.</message>
       <message id="01.10.02">What was that?</message>
       <message id="01.10.03">Let's try that again.</message>
@@ -31,89 +32,99 @@
   </state>
 
   <state id="2" name="EntitySelected">
-    <action id="6">
+    <action id="5" name="NextRandomEntity">
+      <message id="02.05.test">EntitySelected: Random Entity [entity] selected.</message>
+      <message id="02.05.01">Since you can't make up your mind, we'll just talk about [entity].</message>
+      <message id="02.05.02"></message>
+      <message id="02.05.03"></message>
+    </action>
+
+    <action id="6" name="SentimentStatistics">
       <message id="02.06.test">EntitySelected: This is sentinment stats</message>
-      <message id="02.06.01"></message>
+      <message id="02.06.01">This place [popularity]. [percent] of it's reviews thought it was [sent].</message>
       <message id="02.06.02"></message>
       <message id="02.06.03"></message>
     </action>
 
-    <action id="7">
-      <message id="02.07.01">EntitySelected: Selected entity [entity]</message>
+    <action id="7" name="EntitySelection">
+      <message id="02.07.test">EntitySelected: Entity [entity] selected.</message>
+      <message id="02.07.01">Sure, I know about [entity].</message>
+      <message id="02.07.02"></message>
+      <message id="02.07.03"></message>
     </action>
 
-    <action id="10">
+    <action id="10" name="UnknownQuery">
       <message id="02.10.test">EntitySelected: Unknown Query</message>
-      <message id="02.10.01">EntitySelected: Unknown Query</message>
-      <message id="02.10.02">EntitySelected: Unknown Query</message>
-      <message id="02.10.03">EntitySelected: Unknown Query</message>
+      <message id="02.10.01">I'm afraid I know nothing about [entity].</message>
+      <message id="02.10.02"></message>
+      <message id="02.10.03"></message>
     </action>
 
-    <action id="11">
-      <message id="02.11.test">EntitySelected: Entity Confirmation</message>
-      <message id="02.11.01">EntitySelected: Entity Confirmation</message>
-      <message id="02.11.02">EntitySelected: Entity Confirmation</message>
-      <message id="02.11.03">EntitySelected: Entity Confirmation</message>
+    <action id="11" name="EntityConfirmation">
+      <message id="02.11.test">EntitySelected: [entity] Confirmation</message>
+      <message id="02.11.01">You have confirmed [entity].</message>
+      <message id="02.11.02"></message>
+      <message id="02.11.03"></message>
     </action>
   </state>
 
   <state id="3" name="CommentSelected">
-    <action id="1">
+    <action id="1" name="NextRandomComment">
       <message id="03.01.test">CommentSelected: Next random comment</message>
-      <message id="03.01.01">CommentSelected: Next random comment</message>
-      <message id="03.01.02">CommentSelected: Next random comment</message>
-      <message id="03.01.03">CommentSelected: Next random comment</message>
+      <message id="03.01.01">Fine, since you can't make a decision we'll talk about</message>
+      <message id="03.01.02"></message>
+      <message id="03.01.03"></message>
     </action>
 
-    <action id="2">
+    <action id="2" name="NextOppositeComment">
       <message id="03.02.test">CommentSelected: Next opposite comment</message>
-      <message id="03.02.01">CommentSelected: Next opposite comment</message>
-      <message id="03.02.02">CommentSelected: Next opposite comment</message>
-      <message id="03.02.03">CommentSelected: Next opposite comment</message>
+      <message id="03.02.01">However, an opposing opinion is "[body]"</message>
+      <message id="03.02.02"></message>
+      <message id="03.02.03"></message>
     </action>
 
-    <action id="3">
+    <action id="3" name="NextPositiveComment">
       <message id="03.03.test">CommentSelected: Next positive momment</message>
-      <message id="03.03.01">CommentSelected: Next positive momment</message>
-      <message id="03.03.02">CommentSelected: Next positive momment</message>
-      <message id="03.03.03">CommentSelected: Next positive momment</message>
+      <message id="03.03.01">A positive Polly said "[body]"</message>
+      <message id="03.03.02"></message>
+      <message id="03.03.03"></message>
     </action>
 
-    <action id="4">
+    <action id="4" name="NextNegativeComment">
       <message id="03.04.test">CommentSelected: Next negative momment</message>
-      <message id="03.04.01">CommentSelected: Next negative momment</message>
-      <message id="03.04.02">CommentSelected: Next negative momment</message>
-      <message id="03.04.03">CommentSelected: Next negative momment</message>
+      <message id="03.04.01">A negative Nancy said "[body]"</message>
+      <message id="03.04.02"></message>
+      <message id="03.04.03"></message>
     </action>
 
-    <action id="6">
+    <action id="6" name="SentimentStatistics">
       <message id="03.06.test">CommentSelected: This is sentinment stats</message>
-      <message id="03.06.01">CommentSelected: This is sentinment stats</message>
-      <message id="03.06.02">CommentSelected: This is sentinment stats</message>
-      <message id="03.06.03">CommentSelected: This is sentinment stats</message>
+      <message id="03.06.01"></message>
+      <message id="03.06.02"></message>
+      <message id="03.06.03"></message>
     </action>
 
-    <action id="10">
+    <action id="10" name="UnknownQuery">
       <message id="03.10.test">CommentSelected: Unknown Query</message>
-      <message id="03.10.01">CommentSelected: Unknown Query</message>
-      <message id="03.10.02">CommentSelected: Unknown Query</message>
-      <message id="03.10.03">CommentSelected: Unknown Query</message>
+      <message id="03.10.01">I'm really not sure what comment to give you.</message>
+      <message id="03.10.02"></message>
+      <message id="03.10.03"></message>
     </action>
   </state>
 
   <state id="4" name="RangeSelected">
-    <action id="5">
+    <action id="5" name="NextRandomEntity">
       <message id="04.05.test">RangeSelected: Next random entity with current type. There were [num_entities] [types] found. The first few are [list-5].</message>
-      <message id="04.05.01">RangeSelected: Next random entity with current type. There were [num_entities] [types] found. The first few are [list-5].</message>
-      <message id="04.05.02">RangeSelected: Next random entity with current type. There were [num_entities] [types] found. The first few are [list-5].</message>
-      <message id="04.05.03">RangeSelected: Next random entity with current type. There were [num_entities] [types] found. The first few are [list-5].</message>
+      <message id="04.05.01">There are [num_entities] that match your question. Here are 10; [list-10]. Pick one.</message>
+      <message id="04.05.02"></message>
+      <message id="04.05.03"></message>
     </action>
 
-    <action id="7">
+    <action id="7" name="EntitySelected">
       <message id="04.07.test">RangeSelected: Entity selection. There were [num_entities] [types] found. The first few are [list-5].</message>
-      <message id="04.07.01">RangeSelected: Entity selection. There were [num_entities] [types] found. The first few are [list-5].</message>
-      <message id="04.07.02">RangeSelected: Entity selection. There were [num_entities] [types] found. The first few are [list-5].</message>
-      <message id="04.07.03">RangeSelected: Entity selection. There were [num_entities] [types] found. The first few are [list-5].</message>
+      <message id="04.07.01">There are [num_entities] that match your question. Here are 10; [list-10]. Pick one.</message>
+      <message id="04.07.02"></message>
+      <message id="04.07.03"></message>
     </action>
   </state>
 </responses>

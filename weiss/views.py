@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 # Imports model objects to access database
-from weiss.models import Comment, Entity, Type, MiniEntity, Evaluation, Method, History, Action
+from weiss.models import Comment, Entity, Types, MiniEntity, Evaluation, Method, History, Action
 from weiss.forms import RegistrationForm
 from webapps.settings import BASE_DIR
 
@@ -170,7 +170,7 @@ def dashboard(request):
     # Count records in each table
     comments = Comment.objects.all().count()
     entities = Entity.objects.all().count()
-    types = Type.objects.all().count()
+    types = Types.objects.all().count()
 
     # Add items to the http response
     context['comments'] = comments
@@ -192,7 +192,7 @@ def types(request, type_id):
         query = Q(tid=type_id, name__icontains=search_terms) | Q(tid=type_id, description__icontains=search_terms)
         all_entities = Entity.objects.filter(query)
     else:
-        context['type'] = Type.objects.get(tid=type_id)
+        context['type'] = Types.objects.get(tid=type_id)
         all_entities = Entity.objects.filter(tid=type_id)
 
     context['all_entities'] = all_entities
