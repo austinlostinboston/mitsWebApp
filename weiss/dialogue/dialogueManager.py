@@ -99,7 +99,7 @@ class DialogueManager(object):
         flow = self.fmgr.lookUp(user_id)
 
         if flow is None:
-            logger.debug("No such flow")
+            logger.debug("No such flow %s" % query_obj)
             return None
 
         flow.request = request
