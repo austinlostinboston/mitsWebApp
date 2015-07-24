@@ -27,6 +27,7 @@ from weiss.models import State, Type, Entity, Comment, Actions, History, Action
 logger = logging.getLogger(__name__)
 
 class Flow(object):
+
     def __init__(self, user_id, user=None, request=None):
         self._user = user
         self._user_id = user_id
@@ -224,7 +225,12 @@ class Flow(object):
 
     @sentiment_stats.setter
     def sentiment_stats(self, new_stats):
-        self._sentiment_stats = new_stats
+        try:
+            num_pos, num_neu, num_all = new_stats
+        except ValueError:
+            logger.error("sentiment_stats should be a 3 items tuple")
+            return
+        self._sentiment_stats = self.SentimentStats(num_pos, num_neu, num_all)
 
     def transit(self, sid):
         """
@@ -331,5 +337,32 @@ class Flow(object):
                                       self.type,
                                       self.entity)
 
+    class SentimentStats(object):
+        def __init__(self, num_pos, num_neu, num_all):
+            self._num_pos = num_pos
+            self._num_neu = num_neu
+            self._num_all = num_all
+
+        @property
+        def num_pos(self):
+            return self._num_pos
+
+        @property
+        def num_neu(self):
+            return self.num_neu
+
+        @property
+        def num_neg(self):
+            return self._num_all - self._num_pos - self._num_neu
+
+        @property
+        def num_all(self):
+            return self._num_all
+
+        def __str__(self):
+            return "Pos: %s, Neu: %s, Neg: %s, All: %s" % (self.num_pos,
+                                                           self.num_neu,
+                                                           self.num_neg,
+                                                           self.num_all)
 
 >>>>>>> 264440e... a lot of bug fixes, new request and response logic is working

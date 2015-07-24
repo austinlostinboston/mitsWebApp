@@ -325,8 +325,10 @@ def sentimentStats(flow, decision):
     else:
         query = Q(eid=curr_eid, sentiment__gt=0)
         num_pos = Comment.objects.filter(query).count()
+        query = Q(eid=curr_eid, sentiment__eq=0)
+        num_neu = Comment.objects.filter(query).count()
         num_all = Comment.objects.filter(eid=curr_eid).count()
-        flow.sentiment_stats = float(num_pos) / num_all
+        flow.sentiment_stats = num_pos, num_neu, num_all
         """Handle by res gen
         if percent > .9:
             return "Almost everyone thought it was good."
