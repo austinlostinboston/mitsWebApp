@@ -109,8 +109,9 @@ class Planner(object):
 
     def _entity_or_comment_selected_helper(self, query, arguments):
         self._parser.type_recognition(query, arguments)
-        action = self._classifier.classify(query)
-        if action == Action.EntitySelection:
+        arguments['aid'] = self._classifier.classify(query)
+
+        if arguments['aid'] == Action.EntitySelection:
             self._parser.entity_recognition(query, arguments)
             if 'keywords' not in arguments:
                 if arguments['tid'] != Type.Unknown:
@@ -122,12 +123,10 @@ class Planner(object):
                         arguments['aid'] = Action.UnknownAction
             else:
                 arguments['aid'] = Action.EntitySelection
-        elif action == Action.NextRandomComment:
+        elif arguments['aid'] == Action.NextRandomComment:
             sentiment = self._parser.calculate_sentiment(query)
             logger.debug(sentiment)
             if sentiment < -1: 
                 arguments['aid'] = Action.NextNegativeComment
             elif sentiment > 1: 
                 arguments['aid'] = Action.NextPositiveComment
-        else:
-            arguments['aid'] = action
