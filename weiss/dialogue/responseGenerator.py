@@ -288,21 +288,21 @@ def placeSentiment(response, sentiment_stats):
         pos = sentiment_stats.num_pos
         neu = sentiment_stats.num_neu
         neg = total - (pos + neu)
-        percent = {'%.2f'} % (float(pos / total * 1.00))
+        percent = float('%.2f' % (pos / (total * 1.00)))
         popular = None
-        if percent > .9 and percent < 1:
+        if percent > 0.9 and percent < 1.00:
             popular = "very popular."
-        elif percent > .65 and percent < .89:
+        elif percent > 0.65 and percent < 0.89:
             popular = "liked by most"
-        elif percent > .35 and percent < .64:
+        elif percent > 0.35 and percent < 0.64:
             popular =  "is an even split among reviewers."
-        elif percent > .1 and percent < .34:
+        elif percent > 0.1 and percent < 0.34:
             popular = "not liked by many"
         else: 
             popular = "basically hated by everyone"
 
         response = response.replace("[popularity]", popular)
-        response = response.replace("[percent]", percent)
+        response = response.replace("[percent]", str(int(percent*100)) + '%')
 
         return response
 

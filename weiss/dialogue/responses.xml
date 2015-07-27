@@ -41,7 +41,7 @@
 
     <action id="6" name="SentimentStatistics">
       <message id="02.06.test">EntitySelected: This is sentinment stats</message>
-      <message id="02.06.01">This [type] is [popularity]. [percent] of it's reviews thought it was good.</message>
+      <message id="02.06.01">This [type] is [popularity]. [percent] of it's reviews said something nice.</message>
       <message id="02.06.02"></message>
       <message id="02.06.03"></message>
     </action>
