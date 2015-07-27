@@ -48,6 +48,7 @@ def responseHandler(flow, test=False):
     eid = flow.eid
     tid = flow.tid
     entities = flow.entities
+    types = flow.types
 
 <<<<<<< HEAD
     ## Text variables
@@ -78,18 +79,40 @@ def responseHandler(flow, test=False):
     else:
         comment_body = None
     
+<<<<<<< HEAD
 >>>>>>> 26ca79b... unset test option in response generator. added responses.
 
+=======
+    ## Grabs num of entities
+>>>>>>> c7bfd37... added a type range response
     if entities is None:
-        num_entities = str(None)
+        num_entities = 0
     else:
-        num_entities = str(len(entities))
+        num_entities = len(entities)
+
+    ## Grabs number of types in entity list
+    if types is None:
+        num_types = 1
+    else:
+        num_types = len(types)
+
+    ## Set type of range in flow
+    if num_types > 1:
+        range_type = 'type'
+        rid = '.t'
+    elif num_entities > 1:
+        range_type = 'entity'
+        rid = '.e'
+    else:
+        range_type = None
+        rid = ''
+
 
     ## Change message used for tests
     if test:
         rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".test"
     else:
-        rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".01"
+        rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".01" + rid
 
     ## prints out current flow object
     print flow 
@@ -182,7 +205,10 @@ def responseHandler(flow, test=False):
         if "[type]" in response:
             response = response.replace("[type]", flow.type.name.lower())
         if "[types]" in response:
-            response = response.replace("[types]", pluralType(flow.type.name.lower()))
+            if range_type == 'type':
+                response = response.replace("[types]", typeList(types))
+            if range_type == 'entity':
+                response = response.replace("[types]", pluralType(flow.type.name.lower()))
 
         ## Entities
         if "[num_entities]" in response:
@@ -196,9 +222,9 @@ def responseHandler(flow, test=False):
             ent_list_length = regex.findall(response)[0]
 
             if len(entities) >= ent_list_length:
-                list_entities = ent_list_length
-            else:
                 list_entities = len(entities)
+            else:
+                list_entities = ent_list_length
 
             str_ent_list = ''
             for entity in entities[:int(ent_list_length)]:
@@ -220,9 +246,11 @@ def responseHandler(flow, test=False):
 
 
 def pluralType(type_ins):
-    type_name = type_ins
+    type_name = type_ins.lower()
     if type_name[-1] != "s":
         type_name += "s"
+    if type_name == 'news':
+        type_name = 'news articles'
 
     return type_name
 <<<<<<< HEAD
@@ -309,4 +337,20 @@ def placeSentiment(response, sentiment_stats):
     else:
         return response
 
+<<<<<<< HEAD
 >>>>>>> 43d73d1... added to response generator
+=======
+
+def typeList(types):
+    type_list = ''
+    for i, type_ob in enumerate(types):
+        type_list += pluralType(type_ob.name)
+        if (i + 1) == (len(types) - 1):
+            type_list += ' or '
+        if (i + 1) == len(types):
+            pass
+        if (i + 1) < (len(types) - 1):
+            type_list += ', '
+
+    return type_list
+>>>>>>> c7bfd37... added a type range response
