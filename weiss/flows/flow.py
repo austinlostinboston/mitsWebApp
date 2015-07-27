@@ -204,8 +204,8 @@ class Flow(object):
         """Setter for type
         """
         assert (isinstance(new_type, Type))
+        self.types = None
         self._type = new_type
-        self.type = None
 
     @property
     def tid(self):
@@ -220,8 +220,8 @@ class Flow(object):
     def tid(self, new_tid):
         """Setter for tid
         """
-        self._type = Type(new_tid)
         self.types = None
+        self._type = Type(new_tid)
 
     @property
     def query(self):
