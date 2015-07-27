@@ -83,17 +83,21 @@ class Planner(object):
             if arguments['tid'] == Type.Unknown:
                 arguments['aid'] = Action.UnknownAction
             else:
-                arguments['aid'] = Action.TypeSelection
+                arguments['aid'] = Action.EntityConfirmation
         elif step == Step.TypeSelected:
             logger.debug("TypeSelected")
-            self._parser.find_number(query.lower(), arguments, entities)
-            if 'idx' not in arguments:
-                self._parser.entity_recognition(query, arguments)
-                self._parser.keyword_matching(arguments, entities)
-            if 'idx' in arguments:
-                arguments['aid'] = Action.EntityConfirmation
+            self._parser.type_recognition(query, arguments)
+            if arguments['tid'] != Type.Unknown:
+                arguments['aid'] = Action.TypeSelection
             else:
-                arguments['aid'] = Action.UnknownAction
+                self._parser.find_number(query.lower(), arguments, entities)
+                if 'idx' not in arguments:
+                    self._parser.entity_recognition(query, arguments)
+                    self._parser.keyword_matching(arguments, entities)
+                if 'idx' in arguments:
+                    arguments['aid'] = Action.EntityConfirmation
+                else:
+                    arguments['aid'] = Action.UnknownAction
 
 
     def _entity_selected(self, query, arguments):
