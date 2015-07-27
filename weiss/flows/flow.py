@@ -22,7 +22,7 @@ import logging
 from django.utils import timezone
 
 from weiss.flows.stateFactory import StateFactory
-from weiss.models import State, Type, Entity, Comment, Actions, History, Action
+from weiss.models import State, Type, Entity, Comment, Actions, History, Action, Summary
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +45,9 @@ class Flow(object):
         self._cid = None
         self._comment = None
         self._sentiment_stats = None
+
+        self._summary = None
+        self._sbid = None
 
     @property
     def user(self):
@@ -222,6 +225,34 @@ class Flow(object):
         """
         self.types = None
         self._type = Type(new_tid)
+
+    @property
+    def summary(self):
+        if self._summary is None and self._sbid is None:
+            return None
+        elif self._summary is not None:
+            return self._summary
+        else:
+            return Summary.objects.get(sbid=self._sbid)
+
+    @summary.setter
+    def summary(self, new_summary):
+        self._summary = new_summary
+        self._sbid = None
+
+    @property
+    def sbid(self):
+        if self._summary is None and self._sbid is None:
+            return None
+        elif self._summary is not None:
+            return self._summary.sbid
+        else:
+            return self._sbid
+
+    @sbid.setter
+    def sbid(self, new_sbid):
+        self._sbid = new_sbid
+        self._summary = None
 
     @property
     def query(self):

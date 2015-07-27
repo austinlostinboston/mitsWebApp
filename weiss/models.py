@@ -177,25 +177,15 @@ class History(models.Model):
         db_table = 'history'
 
 
-class SummaryBody(models.Model):
+class Summary(models.Model):
     sbid = models.BigIntegerField(primary_key=True)
     cid = models.ForeignKey(Comment, db_column='cid')
+    rank = models.IntegerField()
     mid = models.ForeignKey(Method, db_column='mid')
     body = models.TextField()
 
     class Meta:
         managed = False
-        db_table = 'summary_body'
-
-
-class SummarySource(models.Model):
-    ssid = models.BigIntegerField(primary_key=True)
-    sbid = models.ForeignKey(SummaryBody, db_column='sbid')
-    cid = models.ForeignKey(Comment, db_column='cid')
-
-    class Meta:
-        managed = False
-        db_table = 'summary_source'
-
+        db_table = 'summary'
 
 
