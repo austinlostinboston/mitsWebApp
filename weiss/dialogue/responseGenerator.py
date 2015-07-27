@@ -288,7 +288,7 @@ def placeSentiment(response, sentiment_stats):
         pos = sentiment_stats.num_pos
         neu = sentiment_stats.num_neu
         neg = total - (pos + neu)
-        percent = {'%.2F'} % (pos / total * 1.00)
+        percent = {'%.2f'} % (float(pos / total * 1.00))
         popular = None
         if percent > .9 and percent < 1:
             popular = "very popular."

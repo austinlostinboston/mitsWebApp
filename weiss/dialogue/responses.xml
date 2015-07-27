@@ -62,7 +62,7 @@
 
     <action id="11" name="EntityConfirmation">
       <message id="02.11.test">EntitySelected: [entity] Confirmation</message>
-      <message id="02.11.01">You have confirmed [entity].</message>
+      <message id="02.11.01">You have confirmed [entity]. What would you like to know?</message>
       <message id="02.11.02"></message>
       <message id="02.11.03"></message>
     </action>
@@ -115,14 +115,14 @@
   <state id="4" name="RangeSelected">
     <action id="5" name="NextRandomEntity">
       <message id="04.05.test">RangeSelected: Next random entity with current type. There were [num_entities] [types] found. The first few are [list-5].</message>
-      <message id="04.05.01">There are [num_entities] that match your question. Here are [list-entities]; [list-10]. Pick one.</message>
+      <message id="04.05.01">There are [num_entities] [types] that might interest you. Here are [list-entities]; [list-10]. Pick one.</message>
       <message id="04.05.02"></message>
       <message id="04.05.03"></message>
     </action>
 
     <action id="7" name="EntitySelected">
       <message id="04.07.test">RangeSelected: Entity selection. There were [num_entities] [types] found. The first few are [list-5].</message>
-      <message id="04.07.01">There are [num_entities] that match your question. Here are [list-entities]; [list-10]. Pick one.</message>
+      <message id="04.07.01">There are [num_entities] [types] that might interest you. Here are [list-entities]; [list-10]. Pick one.</message>
       <message id="04.07.02"></message>
       <message id="04.07.03"></message>
     </action>
