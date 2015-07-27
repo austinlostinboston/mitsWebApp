@@ -142,7 +142,9 @@ def next_positive_summary(flow, decision):
         summary = Summary.objects.filter(eid__eid=curr_entity.eid,
                                          cid__sentiment__gt=0).order_by('rank')[flow.next_pos_rank]
     except Summary.DoesNotExist:
-        return nextRandomPositiveCmt()
+        logger.warn("Run out of summary for this entity")
+        flow.summary = None
+        return
     flow.next_pos_rank += 1
     flow.summary = summary
     flow.comment = summary.cid
@@ -158,7 +160,9 @@ def next_negative_summary(flow, decision):
         summary = Summary.objects.filter(eid__eid=curr_entity.eid,
                                          cid__sentiment__lt=0).order_by('rank')[flow.next_neg_rank]
     except Summary.DoesNotExist:
-        return nextRandomNegativeCmt(flow, decision)
+        flow.summary = None
+        logger.warn("Run out of summary for this entity")
+        return
     flow.next_neg_rank += 1
     flow.summary = summary
     flow.comment = summary.cid

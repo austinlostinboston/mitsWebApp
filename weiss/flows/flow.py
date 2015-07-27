@@ -390,6 +390,9 @@ class Flow(object):
                "--      TID: %s\n"       \
                "--      EID: %s\n"       \
                "--      CID: %s\n"       \
+               "--     SBID: %s\n"       \
+               "-- next pos: %s\n"       \
+               "-- next neg: %s\n"       \
                "--    Stats: %s\n"       \
                "--  Num Ent: %s\n"       \
                "--------------\n"        \
@@ -403,6 +406,9 @@ class Flow(object):
                                       self.tid,
                                       self.eid,
                                       self.cid,
+                                      self.sbid,
+                                      self.next_pos_rank,
+                                      self.next_neg_rank,
                                       self.sentiment_stats,
                                       self.size(),
                                       self.type,
