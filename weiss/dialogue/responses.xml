@@ -99,7 +99,7 @@
 
     <action id="6" name="SentimentStatistics">
       <message id="03.06.test">CommentSelected: This is sentinment stats</message>
-      <message id="03.06.01"></message>
+      <message id="03.06.01">This [type] is [popularity]. [percent] of it's reviews said something nice.</message>
       <message id="03.06.02"></message>
       <message id="03.06.03"></message>
     </action>
