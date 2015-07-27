@@ -40,6 +40,7 @@ class Flow(object):
         self._entity = None
         self._eid = None
         self._type = None
+        self._types = None
         self._tid = None
         self._cid = None
         self._comment = None
@@ -179,6 +180,15 @@ class Flow(object):
             return self._comment
 
     @property
+    def types(self):
+        return self._types
+
+    @types.setter
+    def types(self, new_types):
+        self._types = new_types
+        self._type = None
+
+    @property
     def type(self):
         """Getter for current type
         of type models.Type
@@ -195,6 +205,7 @@ class Flow(object):
         """
         assert (isinstance(new_type, Type))
         self._type = new_type
+        self.type = None
 
     @property
     def tid(self):
@@ -210,6 +221,7 @@ class Flow(object):
         """Setter for tid
         """
         self._type = Type(new_tid)
+        self.types = None
 
     @property
     def query(self):
@@ -325,6 +337,7 @@ class Flow(object):
                "--     Step: %s\n"       \
                "--   Action: %s\n"       \
                "--------------\n"        \
+               "--    Types: %s\n"       \
                "--      TID: %s\n"       \
                "--      EID: %s\n"       \
                "--      CID: %s\n"       \
@@ -337,6 +350,7 @@ class Flow(object):
                                       self.state,
                                       self.state.step,
                                       self.action.name,
+                                      self.types,
                                       self.tid,
                                       self.eid,
                                       self.cid,

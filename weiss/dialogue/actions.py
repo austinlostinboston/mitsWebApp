@@ -13,6 +13,7 @@ from django.db.models import Q
 from weiss.models import Comment, Entity, Step
 from weiss.flows.states import *
 from weiss.utils.switch import switch
+from weiss.dialogue import actionUtil
 
 logger = logging.getLogger(__name__)
 
@@ -279,12 +280,19 @@ def entitySelection(flow, decision):
             return
             # return "Sure, let's talk about \"%s\"" % entity.name
         elif len(entities) > 1:
-            # It gave a shitload, go to RangeSelected with state.range set
+            # It gave a shitload, go to RangeSelected with state.entities set
             flow.transit(State.RangeSelected)
             if curr_tid is not None:
                 flow.state.step = Step.TypeSelected
             else:
-                flow.state.step = Step.RangeInitiative
+                type_range = actionUtil.get_type_range(entities)
+                if len(type_range) == 1:
+                    flow.state.step = Step.TypeSelected
+                    flow.type = type_range[0]
+                else:
+                    assert len(type_range) > 1
+                    flow.state.step = Step.RangeInitiative
+                    flow.types = type_range
             return
         else:
             # if there is no such entity, we loosen the requirement
@@ -301,12 +309,19 @@ def entitySelection(flow, decision):
                     flow.keep(0)
                     return
                 elif len(entities) > 1:
-                    # It gave a shitload, go to RangeSelected with state.range set
+                    # It gave a shitload, go to RangeSelected with state.entities set
                     flow.transit(State.RangeSelected)
                     if curr_tid is not None:
                         flow.state.step = Step.TypeSelected
                     else:
-                        flow.state.step = Step.RangeInitiative
+                        type_range = actionUtil.get_type_range(entities)
+                        if len(type_range) == 1:
+                            flow.state.step = Step.TypeSelected
+                            flow.type = type_range[0]
+                        else:
+                            assert len(type_range) > 1
+                            flow.state.step = Step.RangeInitiative
+                            flow.types = type_range
                     return
         # either no keyword is given or no entity matched
         # TODO: handle these cases

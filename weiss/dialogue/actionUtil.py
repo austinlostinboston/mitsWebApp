@@ -6,7 +6,7 @@ Author: Ming Fang
 
 from django.contrib.auth.models import User
 
-from weiss.models import History
+from weiss.models import History, Type
 
 
 def confirmAciton(user_name, aid):
@@ -21,3 +21,11 @@ def confirmAciton(user_name, aid):
     # Update database
     his.save()
     return
+
+def get_type_range(entities):
+    range = set()
+    for entity in entities:
+        this_type = Type(entity.tid.tid)
+        if this_type not in range:
+            range.add(this_type)
+    return range
