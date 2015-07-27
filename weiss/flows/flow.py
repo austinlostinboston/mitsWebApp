@@ -124,7 +124,7 @@ class Flow(object):
         self._eid = new_eid
         self._entity = None
         self.cid = None
-        self.tid = None
+        self._type = None
 
     @property
     def entity(self):
@@ -144,8 +144,8 @@ class Flow(object):
         """
         self._entity = new_entity
         self._eid = None
+        self._type = None
         self.cid = None
-        self.tid = None
 
     @property
     def cid(self):
