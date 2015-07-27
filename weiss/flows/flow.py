@@ -48,6 +48,8 @@ class Flow(object):
 
         self._summary = None
         self._sbid = None
+        self._next_pos_rank = 0
+        self._next_neg_rank = 0
 
     @property
     def user(self):
@@ -253,6 +255,22 @@ class Flow(object):
     def sbid(self, new_sbid):
         self._sbid = new_sbid
         self._summary = None
+
+    @property
+    def next_pos_rank(self):
+        return self._next_pos_rank
+
+    @next_pos_rank.setter
+    def next_pos_rank(self, new_next_pos_rank):
+        self._next_neg_rank = new_next_pos_rank
+
+    @property
+    def next_neg_rank(self):
+        return self._next_neg_rank
+
+    @next_neg_rank.setter
+    def next_neg_rank(self, new_next_neg_rank):
+        self._next_neg_rank = new_next_neg_rank
 
     @property
     def query(self):

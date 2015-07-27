@@ -10,7 +10,7 @@ import logging
 
 from django.db.models import Q
 
-from weiss.models import Comment, Entity, Step
+from weiss.models import Comment, Entity, Step, Summary
 from weiss.flows.states import *
 from weiss.utils.switch import switch
 from weiss.dialogue import actionUtil
@@ -132,6 +132,49 @@ def nextRandomPositiveCmt(flow, decision):
     flow.transit(State.CommentSelected)
     return
 
+def next_positive_summary(flow, decision):
+    curr_entity = flow.entity
+    if curr_entity is None:
+        logger.error("no entity decided")
+        return
+
+    try:
+        summary = Summary.objects.filter(eid__eid=curr_entity.eid,
+                                         cid__sentiment__gt=0).order_by('rank')[flow.next_pos_rank]
+    except Summary.DoesNotExist:
+        return nextRandomPositiveCmt()
+    flow.next_pos_rank += 1
+    flow.summary = summary
+    flow.comment = summary.cid
+    return
+
+def next_negative_summary(flow, decision):
+    curr_entity = flow.entity
+    if curr_entity is None:
+        logger.error("no entity decided")
+        return
+
+    try:
+        summary = Summary.objects.filter(eid__eid=curr_entity.eid,
+                                         cid__sentiment__lt=0).order_by('rank')[flow.next_neg_rank]
+    except Summary.DoesNotExist:
+        return nextRandomNegativeCmt(flow, decision)
+    flow.next_neg_rank += 1
+    flow.summary = summary
+    flow.comment = summary.cid
+    return
+
+def next_opposite_summary(flow, decision):
+    curr_comment = flow.comment
+
+    if curr_comment is None:
+        logger.error("No comment decided")
+        return
+
+    if curr_comment.sentient > 0:
+        return next_negative_summary(flow, decision)
+    else:
+        return next_positive_summary(flow, decision)
 
 def nextRandomNegativeCmt(flow, decision):
     """Pick a random negative comment
