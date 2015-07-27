@@ -175,10 +175,22 @@ def next_opposite_summary(flow, decision):
         logger.error("No comment decided")
         return
 
-    if curr_comment.sentient > 0:
+    if curr_comment.sentiment > 0:
         return next_negative_summary(flow, decision)
     else:
         return next_positive_summary(flow, decision)
+
+def next_summary(flow, decision):
+
+    curr_comment = flow.comment
+
+    if curr_comment is None:
+        return next_positive_summary(flow, decision)
+    if curr_comment.sentiment > 0:
+        return next_positive_summary(flow, decision)
+    else:
+        return next_negative_summary(flow, decision)
+
 
 def nextRandomNegativeCmt(flow, decision):
     """Pick a random negative comment

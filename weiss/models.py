@@ -46,6 +46,11 @@ class Action(Enum):
     UnknownAction = 10
     EntityConfirmation = 11
 
+    NextSummary = 21
+    NextPositiveSummary = 22
+    NextNegativeSummary = 23
+    NextOppositeSummary = 24
+
 
 class State(Enum):
     """

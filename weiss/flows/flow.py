@@ -131,6 +131,8 @@ class Flow(object):
         self._entity = None
         self.cid = None
         self._type = None
+        self.next_pos_rank = 0
+        self.next_neg_rank = 0
 
     @property
     def entity(self):
@@ -152,6 +154,9 @@ class Flow(object):
         self._eid = None
         self._type = None
         self.cid = None
+        self.summary = None
+        self.next_pos_rank = 0
+        self.next_neg_rank = 0
 
     @property
     def cid(self):

@@ -82,6 +82,18 @@ class DialogueManager(object):
             elif case(Action.EntityConfirmation):
                 return entityConfirmation
 
+            elif case(Action.NextSummary):
+                return next_summary
+
+            elif case(Action.NextPositiveSummary):
+                return next_positive_summary
+
+            elif case(Action.NextNegativeSummary):
+                return next_negative_summary
+
+            elif case(Action.NextPositiveSummary):
+                return next_opposite_summary
+
             elif case():
                 raise KeyError("No such action %s" % action)
 
