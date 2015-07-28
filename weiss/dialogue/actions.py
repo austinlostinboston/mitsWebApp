@@ -440,12 +440,12 @@ def entityConfirmation(flow, decision):
             assert "tid" in decision
             tid = decision['tid']
             flow.type = tid
-            flow.filter(lambda entity: entity.tid == tid.value)
-            state.transit(Step.TypeSelected)
-        if case(Step.TypeSelected):
+            flow.filter(lambda entity: entity.tid.tid == tid.value)
+            state.step = Step.TypeSelected
+        elif case(Step.TypeSelected):
             assert "idx" in decision
             flow.keep(decision["idx"])
-        if case():
+        elif case():
             logger.error("No such step in RangeSelected state")
 
     if len(flow.entities) == 1:

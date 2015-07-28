@@ -319,7 +319,7 @@ class Flow(object):
         :param predicate:
         :return: void
         """
-        filter(self._entities, predicate)
+        self.entities = filter(predicate, self.entities)
 
     def keep(self, idx):
         """Keep one of the entities based on idx
@@ -400,6 +400,7 @@ class Flow(object):
                "-- next neg: %s\n"       \
                "--    Stats: %s\n"       \
                "--  Num Ent: %s\n"       \
+               "--     Ents: %s\n"       \
                "--------------\n"        \
                "--     Type: %s\n"       \
                "--   Entity: %s\n" % (self.user_id,
@@ -416,6 +417,7 @@ class Flow(object):
                                       self.next_neg_rank,
                                       self.sentiment_stats,
                                       self.size(),
+                                      self.entities,
                                       self.type,
                                       self.entity)
 
