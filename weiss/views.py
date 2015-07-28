@@ -379,7 +379,7 @@ def rep_vote(request):
 def init(request):
     if request.method == 'GET':
         dmgr = getDialogueManager()
-        flow = dmgr.start_new_dialogue()
+        flow = dmgr.start_new_dialogue(request)
         init_res = InitResponse(flow.response)
         serializer = InitResponseSerializer(init_res)
         return Response(serializer.data)
