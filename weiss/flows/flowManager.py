@@ -11,7 +11,9 @@ Author: Ming Fang <mingf@cs.cmu.edu>
 """
 
 import logging
+
 from weiss.flows.flow import Flow
+
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +21,6 @@ logger = logging.getLogger(__name__)
 class FlowManager:
     def __init__(self):
         self._flowTable = {}
-        self.next_userid = 2147483647
 
     def register(self, uid, flow):
         """Register a user's flow object

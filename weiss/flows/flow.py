@@ -18,6 +18,7 @@ Flow represents the context for a user. Each instance contains:
 Author: Ming Fang
 """
 import logging
+import uuid
 
 from django.utils import timezone
 
@@ -29,13 +30,11 @@ logger = logging.getLogger(__name__)
 class Flow(object):
 
     def __init__(self, request):
-        if request.user is None:
-            user = request.session.session_key
-            user_id = request.session.session_key
+        if request.user.id is None:
+            user_id = uuid.uuid1()
         else:
-            user = request.user
-            user_id = user.id
-        self._user = user
+            user_id = uuid.UUID(int=request.user.id)
+        self._user = request.user
         self._user_id = user_id
         self._request = None
         self._state = StateFactory(State.SystemInitiative)
