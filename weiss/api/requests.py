@@ -5,12 +5,11 @@ Author: Ming Fang
 """
 class QueryRequest(object):
 
-    def __init__(self, fid, query):
-        self.fid = fid
+    def __init__(self, query):
         self.query = query
 
     def __str__(self):
-        return "fid: %s, query: %s" % (self.fid, self.query)
+        return "query: %s" % self.query
 
 class CloseRequest(object):
 

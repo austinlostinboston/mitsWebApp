@@ -102,29 +102,26 @@ class DialogueManager(object):
         """
         if query_obj is not None:
             query = query_obj.query
-            user_id = query_obj.fid
         else:
-            user_id = request.user.id
             query = str(request.POST.get('queryinput', False))
         logger.debug("query:%s" % query)
 
-        flow = self.fmgr.lookUp(user_id)
+        flow = request.session.get('flow', None)
 
         if flow is None:
             logger.debug("No such flow %s" % query_obj)
             return None
 
-        flow.request = request
         decision = self.planner.plan(query, flow)
         self.dispatch(flow, query, decision)
 
+        flow.save_into(request)
         return flow
 
     def dispatch(self, flow, query, decision):
         """Dispatch a request based on query
         """
         flow.action = decision['aid']
-        request = flow.request
         action = flow.action
         logger.debug(action.name)
 
@@ -145,13 +142,14 @@ class DialogueManager(object):
 
         return
 
-    def start_new_dialogue(self, request=None):
+    def start_new_dialogue(self, request):
         flow = self.fmgr.new(request)
         greeting_executor = self.getExecutor(Action.Greeting)
         greeting_executor(flow, None)
         response = responseHandler(flow)
         flow.start_line(Action.Greeting)
         flow.end_line(response)
+        flow.save_into(request)
         return flow
 
     def end_dialogue(self, user):

@@ -15,7 +15,6 @@ class InitResponseSerializer(serializers.Serializer):
         return InitResponse(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.fid = validated_data.get('fid', instance.fid)
         instance.response = validated_data.get('response', instance.response)
         return instance
 
@@ -27,7 +26,6 @@ class QueryRequestSerializer(serializers.Serializer):
         return QueryRequest(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.fid = validated_data.get('fid', instance.fid)
         instance.query = validated_data.get('query', instance.response)
         return instance
 

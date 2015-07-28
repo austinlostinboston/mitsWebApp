@@ -23,6 +23,7 @@ class FlowManager:
 
     def register(self, uid, flow):
         """Register a user's flow object
+            deprecated
 
         :param uid: the user id
         :param flow: the flow obj associated with the user
@@ -33,20 +34,16 @@ class FlowManager:
 
     def lookUp(self, uid):
         """Look up a flow given a user id, a int
-
+            deprecated
         :param uid: the user id to be looked up, get it by request.user
         :return: the flow obj associated with the given user, or None if not found
         """
         return self._flowTable.get(uid, None)
 
-    def new(self, request=None):
-        if request is None:
-            flow = Flow(self.next_userid)
-            self.next_userid -= 1
-        else:
-            flow = Flow(request.user.id, request.user, request)
+    def new(self, request):
+        flow = Flow(request)
         assert(type(flow.user_id) is int, "%s" % type(flow.user_id))
-        self.register(flow.user_id, flow)
+        #self.register(flow.user_id, flow)
         return flow
 
     def delete(self, user):

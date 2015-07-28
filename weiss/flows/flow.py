@@ -28,10 +28,16 @@ logger = logging.getLogger(__name__)
 
 class Flow(object):
 
-    def __init__(self, user_id, user=None, request=None):
+    def __init__(self, request):
+        if request.user is None:
+            user = request.session.session_key
+            user_id = request.session.session_key
+        else:
+            user = request.user
+            user_id = user.id
         self._user = user
         self._user_id = user_id
-        self._request = request
+        self._request = None
         self._state = StateFactory(State.SystemInitiative)
         self._action = Action.Greeting
         self._query = None
@@ -382,6 +388,13 @@ class Flow(object):
             return 0
         else:
             return len(self.entities)
+
+    def save_into(self, request):
+        """
+        Save myself to session
+        :return:
+        """
+        request.session['flow'] = self
 
     def __str__(self):
         return "--  Flow State\n"        \
