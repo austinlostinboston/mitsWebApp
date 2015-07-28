@@ -110,6 +110,34 @@
       <message id="03.10.02"></message>
       <message id="03.10.03"></message>
     </action>
+
+    <action id="21" name="NextRandomSummary">
+      <message id="03.21.test">CommentSelected: Next random Summary</message>
+      <message id="03.21.01">Fine, since you can't make a decision we'll talk about [summary].</message>
+      <message id="03.21.02"></message>
+      <message id="03.21.03"></message>
+    </action>
+
+    <action id="22" name="NextOppositeSummary">
+      <message id="03.22.test">CommentSelected: Next opposite Summary</message>
+      <message id="03.22.01">Fine, since you can't make a decision we'll talk about [summary].</message>
+      <message id="03.22.02"></message>
+      <message id="03.22.03"></message>
+    </action>
+
+    <action id="23" name="NextPositiveSummary">
+      <message id="03.23.test">CommentSelected: Next positive Summary</message>
+      <message id="03.23.01">Fine, since you can't make a decision we'll talk about [summary].</message>
+      <message id="03.23.02"></message>
+      <message id="03.23.03"></message>
+    </action>
+
+    <action id="24" name="NextNegativeSummary">
+      <message id="03.24.test">CommentSelected: Next negative Summary</message>
+      <message id="03.24.01">Fine, since you can't make a decision we'll talk about [summary].</message>
+      <message id="03.24.02"></message>
+      <message id="03.24.03"></message>
+    </action>
   </state>
 
   <state id="4" name="RangeSelected">
@@ -136,7 +164,7 @@
 
     <action id="11" name="EntityConfirmation">
       <message id="04.11.test">RangeSelected: Entity Confirmation [type]</message>
-      <message id="04.11.01.e">You have confirmed Type: [type] and Entity: [entity].</message>
+      <message id="04.11.01.e">There are [num_entities] [types] that might interest you. Here are [list-entities]; [list-5]. Pick one.</message>
     </action>
   </state>
 </responses>
