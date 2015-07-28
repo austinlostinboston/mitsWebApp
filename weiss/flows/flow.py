@@ -508,7 +508,10 @@ class Flow(object):
                                       self.type,
                                       self.entity)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903a145... fix inner class is not seriliazble problems
 class SentimentStats(object):
     def __init__(self, num_pos, num_neu, num_all):
         self._num_pos = num_pos
@@ -530,6 +533,15 @@ class SentimentStats(object):
     @property
     def num_all(self):
         return self._num_all
+<<<<<<< HEAD
+=======
+
+    def __str__(self):
+        return "Pos: %s, Neu: %s, Neg: %s, All: %s" % (self.num_pos,
+                                                       self.num_neu,
+                                                       self.num_neg,
+                                                       self.num_all)
+>>>>>>> 903a145... fix inner class is not seriliazble problems
 
     def __str__(self):
         return "Pos: %s, Neu: %s, Neg: %s, All: %s" % (self.num_pos,
