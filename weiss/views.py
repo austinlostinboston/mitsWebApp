@@ -19,6 +19,8 @@ import random
 import os
 import logging
 import ast
+import json
+from django.contrib.sessions.backends.db import SessionStore
 
 # Import from personal moduls
 from weiss.commentChooser import pageRankComment
@@ -380,6 +382,10 @@ def init(request):
     if request.method == 'GET':
         dmgr = getDialogueManager()
         flow = dmgr.start_new_dialogue()
+        request.session['flow'] = flow
+        #request.session = engine.SessionStore(session_key)
+        #request.session
+        #print request.session[str(flow.user_id)]
         init_res = InitResponse(flow.user_id, flow.response)
         serializer = InitResponseSerializer(init_res)
         return Response(serializer.data)
@@ -391,7 +397,12 @@ def inquire(request):
         req_serializer = QueryRequestSerializer(data=request.data)
         if req_serializer.is_valid():
             query_req = req_serializer.save()
-            flow = getDialogueManager().handle(request, query_req)
+            #flow = getDialogueManager().handle(request, query_req)
+            #received_json_data=json.loads(req_serializer.)
+            #print str(query_req.fid)
+            flow = request.session['flow']
+            print flow
+
             if flow is None:
                 return Response(status=status.HTTP_404_NOT_FOUND)
             response = QueryResponse(flow.response)

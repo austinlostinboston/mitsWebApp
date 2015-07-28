@@ -41,6 +41,9 @@ logpath = "log/djangoDebug.log"
 logpath = os.path.join(BASE_DIR, 'log/djangoLog')
 >>>>>>> c2fce5f... added protected settings file
 
+#Json setting
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+#SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 # Application definition
 
