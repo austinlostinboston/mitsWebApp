@@ -135,8 +135,8 @@
     </action>
 
     <action id="11" name="EntityConfirmation">
-      <message id="04.10.test">RangeSelected: Entity Confirmation [type]</message>
-      <message id="04.10.01.e">You have confirmed Type: [type] and Entity: [entity].</message>
+      <message id="04.11.test">RangeSelected: Entity Confirmation [type]</message>
+      <message id="04.11.01.e">You have confirmed Type: [type] and Entity: [entity].</message>
     </action>
   </state>
 </responses>
