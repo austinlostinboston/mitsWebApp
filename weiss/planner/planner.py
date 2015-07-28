@@ -103,8 +103,8 @@ class Planner(object):
     def _entity_selected(self, query, arguments):
         self._entity_or_comment_selected_helper(query, arguments)
 
-        if arguments['aid'] == Action.NextOppositeComment:
-            arguments['aid'] = Action.NextRandomComment
+        if arguments['aid'] == Action.NextOppositeSummary:
+            arguments['aid'] = Action.NextSummary
 
 
     def _comment_selected(self, query, arguments):
@@ -127,10 +127,10 @@ class Planner(object):
                         arguments['aid'] = Action.UnknownAction
             else:
                 arguments['aid'] = Action.EntitySelection
-        elif arguments['aid'] == Action.NextRandomComment:
+        elif arguments['aid'] == Action.NextSummary:
             sentiment = self._parser.calculate_sentiment(query)
             logger.debug(sentiment)
             if sentiment < -1: 
-                arguments['aid'] = Action.NextNegativeComment
+                arguments['aid'] = Action.NextNegativeSummary
             elif sentiment > 1: 
-                arguments['aid'] = Action.NextPositiveComment
+                arguments['aid'] = Action.NextPositiveSummary
