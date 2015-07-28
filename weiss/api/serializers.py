@@ -8,7 +8,6 @@ from weiss.api.responses import *
 from weiss.api.requests import *
 
 class InitResponseSerializer(serializers.Serializer):
-    fid = serializers.IntegerField()
     response = serializers.CharField()
 
     def create(self, validated_data):
@@ -19,7 +18,6 @@ class InitResponseSerializer(serializers.Serializer):
         return instance
 
 class QueryRequestSerializer(serializers.Serializer):
-    fid = serializers.IntegerField()
     query = serializers.CharField()
 
     def create(self, validated_data):
