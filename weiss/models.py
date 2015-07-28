@@ -47,9 +47,9 @@ class Action(Enum):
     EntityConfirmation = 11
 
     NextSummary = 21
-    NextPositiveSummary = 22
-    NextNegativeSummary = 23
-    NextOppositeSummary = 24
+    NextOppositeSummary = 22
+    NextPositiveSummary = 23
+    NextNegativeSummary = 24
 
 
 class State(Enum):
