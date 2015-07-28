@@ -133,5 +133,10 @@
       <message id="04.10.test">RangeSelected: Unknown Query.</message>
       <message id="04.10.01">Hmm, I don't see that option in the list. Please pick one of the options in the list.</message>
     </action>
+
+    <action id="11" name="EntityConfirmation">
+      <message id="04.10.test">RangeSelected: Entity Confirmation [type]</message>
+      <message id="04.10.01.e">You have confirmed Type: [type] and Entity: [entity].</message>
+    </action>
   </state>
 </responses>
