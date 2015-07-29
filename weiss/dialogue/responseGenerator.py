@@ -66,6 +66,10 @@ def responseHandler(flow, test=False):
     entity_object = flow.entity
     comment_object = flow.comment
     sent_stats = flow.sentiment_stats
+    summary = flow.summary
+
+    if summary:
+        print "[summary]" + summary
 
     ## Handle when entity is none or present
     if entity_object:
@@ -240,7 +244,7 @@ def responseHandler(flow, test=False):
         ## Sentiment
         response = placeSentiment(response, sent_stats)
 
-    print "[RESPONSE] " + response
+    print "[RESPONSE] " + response.encode('utf8')
 
     return response
 
@@ -318,13 +322,13 @@ def placeSentiment(response, sentiment_stats):
         neg = total - (pos + neu)
         percent = float('%.2f' % (pos / (total * 1.00)))
         popular = None
-        if percent > 0.9 and percent < 1.00:
+        if percent > 0.9 and percent <= 1.00:
             popular = "very popular."
-        elif percent > 0.65 and percent < 0.89:
+        elif percent > 0.65 and percent <= 0.89:
             popular = "liked by most"
-        elif percent > 0.35 and percent < 0.64:
+        elif percent > 0.35 and percent <= 0.64:
             popular =  "is an even split among reviewers."
-        elif percent > 0.1 and percent < 0.34:
+        elif percent > 0.1 and percent <= 0.34:
             popular = "not liked by many"
         else: 
             popular = "basically hated by everyone"
