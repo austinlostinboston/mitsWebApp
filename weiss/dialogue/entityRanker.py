@@ -40,6 +40,9 @@ def _ranked_by_num_reviews(entities):
     """
     select from a list of entities based on # of reviews
     """
-    return sorted(entities, key=lambda x: Comment.objects.filter(eid=x.eid).count(), reverse=True)
+    return sorted(entities, key=_get_num_of_reviews, reverse=True)
+
+def _get_num_of_reviews(entity):
+    return Comment.objects.filter(eid=entity.eid).count()
 
 
