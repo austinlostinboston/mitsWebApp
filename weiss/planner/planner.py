@@ -5,6 +5,7 @@ from weiss.models import State, Type, Action, Step
 from weiss.utils.switch import switch
 
 import logging
+import string
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,8 @@ class Planner(object):
         arguments = {}
         state = flow.state
         # plausible = state.nextPossibleActions
+        query = query.lower()
+        query = query.translate(string.maketrans("", ""), string.punctuation)
         query = query.decode('utf8','ignore').encode('ascii','ignore')
 
         for case in switch(state.sid):
