@@ -112,7 +112,7 @@ class Classifier(object):
         """
         x = self._convert_query_to_dictionary(query)
         p_label, p_val = predict(self.labels, x, self.action_model, '-b 0')
-        if p_val[0][int(p_label[0]) - 1] == 0:
+        if p_val[0][self.labels.index(p_label[0])] == 0:
             p_label[0] = 10
 
 <<<<<<< HEAD
