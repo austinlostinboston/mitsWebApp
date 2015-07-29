@@ -103,7 +103,7 @@ class DialogueManager(object):
         if query_obj is not None:
             query = query_obj.query
         else:
-            query = str(request.POST.get('queryinput', False))
+            query = str(request.POST.get('queryinput', None))
         logger.debug("query:%s" % query)
 
         flow = request.session.get('flow', None)

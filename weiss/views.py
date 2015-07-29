@@ -102,14 +102,15 @@ def actionboard(request):
 
     if request.method == 'POST':
         args = {}
-        args['aid'] = int(request.POST['aid'])
+        args['aid'] = Action(int(request.POST['aid']))
         args['keywords'] = request.POST['queryinput']
-        getDialogueManager().dispatch(request, None, args)
+        flow = request.session.get('flow', None)
+        getDialogueManager().dispatch(flow, None, args)
     else:
         dmgr.start_new_dialogue(request)
 
     context['actions'] = [(action.value, action.name) for action in Action]
-    context['dialog'] = dmgr.get_dialogue(request.user)
+    context['dialog'] = dmgr.get_dialogue(request.user.id)
     return render(request, 'weiss/actionboard.html', context)
 
 
