@@ -54,6 +54,7 @@ class Parser(object):
 
         tuples = []
         trees = []
+
         for i in entities:
             if isinstance(i, tuple):
                 if ((i[1][:2] == 'NN' or i[1][:2] == 'JJ')
@@ -71,9 +72,11 @@ class Parser(object):
                     trees.append(' '.join(phrase))
 
         if len(trees) > 0:
-            arguments['keywords'] = '#'.join(trees).strip('#')
+            arguments['keywords'] = trees
+            logger.debug("Here are the keywords: %s" % arguments['keywords'])
         elif len(tuples) > 0:
-            arguments['keywords'] = '#'.join(tuples).strip('#')
+            arguments['keywords'] = tuples
+            logger.debug("Here are the keywords: %s" % arguments['keywords'])
 
     def _set_type_words(self):
         """Initialize synonymy words of movie, article and restaurant

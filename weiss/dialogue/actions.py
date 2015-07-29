@@ -318,7 +318,7 @@ def entitySelection(flow, decision):
     if "keywords" in decision:
         # select by first 3 keywords
         keywords = decision["keywords"]
-        keywords = keywords.split("#")
+
         logger.debug(keywords)
         if len(keywords) >= 3:
             keywords = keywords[:3]
