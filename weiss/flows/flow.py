@@ -24,6 +24,7 @@ from django.utils import timezone
 
 from weiss.flows.stateFactory import StateFactory
 from weiss.models import State, Type, Entity, Comment, Actions, History, Action, Summary
+from weiss.dialogue import entityRanker
 
 logger = logging.getLogger(__name__)
 
@@ -353,6 +354,13 @@ class Flow(object):
         self.entities = [self.entities[idx]]
         self.entity = self.entities[0]
 >>>>>>> 10b06d8... fix keep method
+
+    def rank(self):
+        """Rank the entities
+        """
+        assert self.type in Type
+        self.entities = entityRanker.ranked(self.entities, self.type)
+
 
     def start_line(self, action, query=""):
         """

@@ -335,7 +335,7 @@ def entitySelection(flow, decision):
         if len(entities) == 1:
             # good, we found only one, go to EntitySelected state with curr_eid set
             flow.transit(State.EntitySelected)
-            flow.keep(0) # only one, just keep it
+            flow.keep(0)  # only one, just keep it
             return
             # return "Sure, let's talk about \"%s\"" % entity.name
         elif len(entities) > 1:
@@ -347,6 +347,7 @@ def entitySelection(flow, decision):
                 type_range = actionUtil.get_type_range(entities)
                 if len(type_range) == 1:
                     flow.state.step = Step.TypeSelected
+                    flow.rank()
                     flow.type = type_range[0]
                 else:
                     assert len(type_range) > 1
@@ -375,6 +376,7 @@ def entitySelection(flow, decision):
                     else:
                         type_range = actionUtil.get_type_range(entities)
                         if len(type_range) == 1:
+                            flow.rank()
                             flow.state.step = Step.TypeSelected
                             flow.type = type_range[0]
                         else:
@@ -441,6 +443,7 @@ def entityConfirmation(flow, decision):
             tid = decision['tid']
             flow.type = tid
             flow.filter(lambda entity: entity.tid.tid == tid.value)
+            flow.rank()
             state.step = Step.TypeSelected
         elif case(Step.TypeSelected):
             assert "idx" in decision
