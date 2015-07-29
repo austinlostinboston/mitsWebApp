@@ -194,6 +194,11 @@ class Flow(object):
         else:
             return self._comment
 
+    @comment.setter
+    def comment(self, new_comment):
+        self._cid = None
+        self._comment = new_comment
+
     @property
     def types(self):
         return self._types

@@ -69,7 +69,7 @@ def responseHandler(flow, test=False):
     summary = flow.summary
 
     if summary:
-        print "[summary]" + summary
+        print "[summary]" + str(summary)
 
     ## Handle when entity is none or present
     if entity_object:
