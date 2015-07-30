@@ -330,19 +330,36 @@ def entitySelection(flow, decision):
         keywords = decision["keywords"]
 
         logger.info(keywords)
-        if len(keywords) >= 3:
-            keywords = keywords[:3]
-
-        if flow.match(keywords):
-            return
+        while len(keywords) > 0:
+            if flow.match_by_title(keywords):
+                logger.info("Get the result by %s", keywords)
+                return
+            keywords.pop()
 
         # if there is no such entity, we loosen the requirement
         keywords = decision["keywords"]
         keywords.reverse()
         while len(keywords) > 0:
             keyword = keywords.pop()
-            if flow.match([keyword]):
+            if flow.match_by_title([keyword]):
+                logger.info("Get the result by %s", keywords)
                 return
+
+        keywords = decision["keywords"]
+        while len(keywords) > 0:
+            if flow.match_by_description(keywords):
+                logger.info("Get the result by %s", keywords)
+                return
+            keywords.pop()
+
+        keywords = decision["keywords"]
+        keywords.reverse()
+        while len(keywords) > 0:
+            keyword = keywords.pop()
+            if flow.match_by_description([keyword]):
+                logger.info("Get the result by %s", keywords)
+                return
+
         logger.warn("can not find one entity that even match one of the keywords")
         return
 

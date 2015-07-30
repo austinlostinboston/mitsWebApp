@@ -21,6 +21,7 @@ import logging
 import uuid
 
 from django.utils import timezone
+
 from django.db.models import Q
 
 from weiss.flows.stateFactory import StateFactory
@@ -357,7 +358,7 @@ class Flow(object):
         else:
             return False
 
-    def match(self, keywords):
+    def match_by_title(self, keywords):
         """
         Try to match a list of keywords
         :param keywords: a list of keywords with which we match entities
@@ -376,6 +377,21 @@ class Flow(object):
         self.entities = Entity.objects.filter(q)
         if self.transit_under_range():
             return True
+
+        # failed, return false
+        return False
+
+    def match_by_description(self, keywords):
+        """
+        Try to match a list of keywords
+        :param keywords: a list of keywords with which we match entities
+        :return: True if successfully matched all keywords
+                 False if not exists a entity that matches all keywords
+        """
+        if self.type is not None:
+            base = Q(tid=self.tid)
+        else:
+            base = Q()
 
         # failed, we try to match first 3 key words by description
         q = base
