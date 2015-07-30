@@ -21,6 +21,7 @@ from weiss.models import History
 
 import HTMLParser
 import datetime
+import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +137,12 @@ class DialogueManager(object):
 
         executor(flow, decision)  # transition happens inside
 
-        response = responseHandler(flow)
+        try:
+            response = responseHandler(flow)
+        except Exception as e:
+            response = "Failed to generate response. Please check the log"
+            logger.error("%s", e.message)
+            traceback.print_stack()
 
         flow.end_line(response)
 
