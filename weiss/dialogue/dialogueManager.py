@@ -91,7 +91,7 @@ class DialogueManager(object):
             elif case(Action.NextNegativeSummary):
                 return next_negative_summary
 
-            elif case(Action.NextPositiveSummary):
+            elif case(Action.NextOppositeSummary):
                 return next_opposite_summary
 
             elif case():

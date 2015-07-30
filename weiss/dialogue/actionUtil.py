@@ -30,7 +30,5 @@ def get_type_range(entities):
             type_range.add(this_type)
     return type_range
 
-def get_entities_by_title(keywords):
-    pass
 
 

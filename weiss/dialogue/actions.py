@@ -142,14 +142,20 @@ def next_positive_summary(flow, decision):
     try:
         summary = Summary.objects.filter(cid__eid=curr_entity.eid,
                                          cid__sentiment__gt=0,
-                                         rank=flow.next_pos_rank)
-    except Summary.DoesNotExist:
+                                         rank=flow.next_pos_rank)[0]
+        flow.next_pos_rank += 1
+    except IndexError:
         logger.warn("No summary for %s" % curr_entity.eid)
-        flow.summary = None
-        return
-    flow.next_pos_rank = (flow.next_pos_rank + 1) % MAX_SUMMARY + 1
+        if flow.next_pos_rank != 1:
+            flow.next_pos_rank = 1
+            return next_positive_summary(flow, decision)
+        else:
+            logger.error("Entity %s has not been summarized yet" % curr_entity.eid)
+            flow.summary = None
+            return nextRandomPositiveCmt(flow, decision)
     flow.summary = summary
     flow.comment = summary.cid
+    flow.transit(State.CommentSelected)
     return
 
 def next_negative_summary(flow, decision):
@@ -161,14 +167,20 @@ def next_negative_summary(flow, decision):
     try:
         summary = Summary.objects.filter(cid__eid=curr_entity.eid,
                                          cid__sentiment__lt=0,
-                                         rank=flow.next_neg_rank)
-    except Summary.DoesNotExist:
-        flow.summary = None
+                                         rank=flow.next_neg_rank)[0]
+        flow.next_neg_rank += 1
+    except IndexError:
         logger.warn("No summary for %s" % curr_entity.eid)
-        return
-    flow.next_neg_rank += (flow.next_neg_rank + 1) % MAX_SUMMARY + 1
+        if flow.next_pos_rank != 1:
+            flow.next_pos_rank = 1
+            return next_negative_summary(flow, decision)
+        else:
+            logger.error("Entity %s has not been summarized yet" % curr_entity.eid)
+            flow.summary = None
+            return nextRandomNegativeCmt(flow, decision)
     flow.summary = summary
     flow.comment = summary.cid
+    flow.transit(State.CommentSelected)
     return
 
 def next_opposite_summary(flow, decision):
