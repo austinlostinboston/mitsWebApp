@@ -6,6 +6,7 @@ from weiss.utils.switch import switch
 
 import logging
 import string
+import fuzzy
 
 logger = logging.getLogger(__name__)
 

@@ -6,6 +6,7 @@ from weiss.models import Type
 import nltk
 import logging
 import os
+import fuzzy
 
 logger = logging.getLogger(__name__)
 
@@ -141,15 +142,23 @@ class Parser(object):
     @staticmethod
     def keyword_matching(arguments, entities):
         words = arguments['keywords']
-        phrase = " ".join(words).strip()
-        logger.info("confirmed keywords: %s" % phrase)
+        phonics = set([])
+        overlap = []
+
+        for w in words:
+            phonics.add(fuzzy.nysiis(w))
 
         for i in xrange(0, len(entities)):
-            entity_name = entities[i].name.lower()
-            logger.info("entity_name: %s" % entity_name)
-            if entity_name.find(phrase) != -1:
+            entity_name = nltk.word_tokenize(entities[i].name)
+            entity_phonics = set([])
+            for word in entity_name:
+                entity_phonics.add(fuzzy.nysiis(word))
+            common = len(phonics & entity_phonics) / len(entity_phonics)
+            if common == 1:
                 arguments['idx'] = i
-                break
+                return
+            overlap.append(common)
+        arguments['idx'] = overlap.index(max(overlap))
 
 
     def find_number(self, query, arguments, entities):
@@ -167,9 +176,9 @@ class Parser(object):
             if t[1] == 'JJ' and t[0][-2:] in set(['th', 'nd', 'st', 'rd']):
                 number = t[0]
                 break
-            elif t[1] == 'CD':
+            elif t[1] == 'CD' and t[0]:
                 number = t[0]
-                if number.isdigit():
+                if number.isdigit() and int(number) < 6:
                 	arguments['idx'] = int(number) - 1
                 	return
                 break
