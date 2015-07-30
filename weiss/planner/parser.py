@@ -142,9 +142,11 @@ class Parser(object):
     def keyword_matching(arguments, entities):
         words = arguments['keywords']
         phrase = " ".join(words).strip()
+        logger.info("confirmed keywords: %s" % phrase)
 
         for i in xrange(0, len(entities)):
-            entity_name = entities[i].name
+            entity_name = entities[i].name.lower()
+            logger.info("entity_name: %s" % entity_name)
             if entity_name.find(phrase) != -1:
                 arguments['idx'] = i
                 break
@@ -162,8 +164,7 @@ class Parser(object):
 
         number = None
         for t in tags:
-            logger.info(t[1])
-            if t[1] == 'JJ' and t[0][-2:] in set(['th', 'nd', 'st']):
+            if t[1] == 'JJ' and t[0][-2:] in set(['th', 'nd', 'st', 'rd']):
                 number = t[0]
                 break
             elif t[1] == 'CD':
