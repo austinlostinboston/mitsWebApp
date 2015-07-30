@@ -17,6 +17,7 @@ from weiss.dialogue import actionUtil
 
 logger = logging.getLogger(__name__)
 
+MAX_SUMMARY = 100
 
 def nextRandomEntity(flow, decision):
     """Start next conversation with a random entity
@@ -140,12 +141,13 @@ def next_positive_summary(flow, decision):
 
     try:
         summary = Summary.objects.filter(cid__eid=curr_entity.eid,
-                                         cid__sentiment__gt=0).order_by('rank')[flow.next_pos_rank]
+                                         cid__sentiment__gt=0,
+                                         rank=flow.next_pos_rank)
     except Summary.DoesNotExist:
-        logger.warn("Run out of summary for this entity")
+        logger.warn("No summary for %s" % curr_entity.eid)
         flow.summary = None
         return
-    flow.next_pos_rank += 1
+    flow.next_pos_rank = (flow.next_pos_rank + 1) % MAX_SUMMARY + 1
     flow.summary = summary
     flow.comment = summary.cid
     return
@@ -158,12 +160,13 @@ def next_negative_summary(flow, decision):
 
     try:
         summary = Summary.objects.filter(cid__eid=curr_entity.eid,
-                                         cid__sentiment__lt=0).order_by('rank')[flow.next_neg_rank]
+                                         cid__sentiment__lt=0,
+                                         rank=flow.next_neg_rank)
     except Summary.DoesNotExist:
         flow.summary = None
-        logger.warn("Run out of summary for this entity")
+        logger.warn("No summary for %s" % curr_entity.eid)
         return
-    flow.next_neg_rank += 1
+    flow.next_neg_rank += (flow.next_neg_rank + 1) % MAX_SUMMARY + 1
     flow.summary = summary
     flow.comment = summary.cid
     return
@@ -308,13 +311,8 @@ def entitySelection(flow, decision):
     Return:
         Void
     """
-    curr_tid = flow.tid
-    logger.info("curr tid : %s" % curr_tid)
-    """
-    if decision.has_key("tid"):
-        curr_tid = decision["tid"]
-        session["curr_tid"] = curr_tid
-    """
+    logger.info("curr type : %s" % flow.type)
+
     if "keywords" in decision:
         # select by first 3 keywords
         keywords = decision["keywords"]
@@ -323,69 +321,17 @@ def entitySelection(flow, decision):
         if len(keywords) >= 3:
             keywords = keywords[:3]
 
-        if curr_tid is not None:
-            base = Q(tid=curr_tid)
-        else:
-            base = Q()
+        if flow.match(keywords):
+            return
 
-        for keyword in keywords:
-            q = base & (Q(description__icontains=keyword) | Q(name__icontains=keyword))
-        entities = Entity.objects.filter(q)
-        flow.entities = entities
-        if len(entities) == 1:
-            # good, we found only one, go to EntitySelected state with curr_eid set
-            flow.transit(State.EntitySelected)
-            flow.keep(0)  # only one, just keep it
-            return
-            # return "Sure, let's talk about \"%s\"" % entity.name
-        elif len(entities) > 1:
-            # It gave a shitload, go to RangeSelected with state.entities set
-            flow.transit(State.RangeSelected)
-            if curr_tid is not None:
-                flow.state.step = Step.TypeSelected
-            else:
-                type_range = actionUtil.get_type_range(entities)
-                if len(type_range) == 1:
-                    flow.state.step = Step.TypeSelected
-                    flow.rank()
-                    flow.type = type_range[0]
-                else:
-                    assert len(type_range) > 1
-                    flow.state.step = Step.RangeInitiative
-                    flow.types = type_range
-            return
-        else:
-            # if there is no such entity, we loosen the requirement
-            keywords = decision["keywords"].split("#")
-            keywords.reverse()
-            while len(keywords) > 0:
-                keyword = keywords.pop()
-                q = (base & Q(description__icontains=keyword)) | (base & Q(name__icontains=keyword))
-                entities = Entity.objects.filter(q)
-                flow.entities = entities
-                if len(entities) == 1:
-                    # good, we found only one, go to EntitySelected with curr_eid set
-                    flow.transit(State.EntitySelected)
-                    flow.keep(0)
-                    return
-                elif len(entities) > 1:
-                    # It gave a shitload, go to RangeSelected with state.entities set
-                    flow.transit(State.RangeSelected)
-                    if curr_tid is not None:
-                        flow.state.step = Step.TypeSelected
-                    else:
-                        type_range = actionUtil.get_type_range(entities)
-                        if len(type_range) == 1:
-                            flow.rank()
-                            flow.state.step = Step.TypeSelected
-                            flow.type = type_range[0]
-                        else:
-                            assert len(type_range) > 1
-                            flow.state.step = Step.RangeInitiative
-                            flow.types = type_range
-                    return
-        # either no keyword is given or no entity matched
-        # TODO: handle these cases
+        # if there is no such entity, we loosen the requirement
+        keywords = decision["keywords"]
+        keywords.reverse()
+        while len(keywords) > 0:
+            keyword = keywords.pop()
+            if flow.match([keyword]):
+                return
+        logger.warn("can not find one entity that even match one of the keywords")
         return
 
 

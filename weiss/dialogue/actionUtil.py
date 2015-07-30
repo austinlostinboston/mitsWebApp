@@ -23,9 +23,14 @@ def confirmAciton(user_name, aid):
     return
 
 def get_type_range(entities):
-    range = set()
+    type_range = set()
     for entity in entities:
         this_type = Type(entity.tid.tid)
-        if this_type not in range:
-            range.add(this_type)
-    return range
+        if this_type not in type_range:
+            type_range.add(this_type)
+    return type_range
+
+def get_entities_by_title(keywords):
+    pass
+
+

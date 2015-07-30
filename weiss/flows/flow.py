@@ -21,15 +21,17 @@ import logging
 import uuid
 
 from django.utils import timezone
+from django.db.models import Q
 
 from weiss.flows.stateFactory import StateFactory
-from weiss.models import State, Type, Entity, Comment, Actions, History, Action, Summary
+from weiss.models import State, Type, Entity, Comment, Actions, History, Action, Summary, Step
 from weiss.dialogue import entityRanker
+from weiss.dialogue import actionUtil
 
 logger = logging.getLogger(__name__)
 
-class Flow(object):
 
+class Flow(object):
     def __init__(self, request):
         if request.user.id is None:
             user_id = uuid.uuid1()
@@ -54,8 +56,8 @@ class Flow(object):
 
         self._summary = None
         self._sbid = None
-        self._next_pos_rank = 0
-        self._next_neg_rank = 0
+        self._next_pos_rank = 1
+        self._next_neg_rank = 1
 
     @property
     def user(self):
@@ -93,14 +95,14 @@ class Flow(object):
         """Getter for current action
         It is of type models.Action enum
         """
-        assert(isinstance(self._action, Action))
+        assert (isinstance(self._action, Action))
         return self._action
 
     @action.setter
     def action(self, new_action):
         """Setter for action
         """
-        assert(isinstance(new_action, Action))
+        assert (isinstance(new_action, Action))
         self._action = new_action
 
     @property
@@ -325,6 +327,67 @@ class Flow(object):
         logger.info("Transit from %s to %s" % (self.state.name, sid.name))
         self._state = StateFactory(sid)
 
+    def transit_under_range(self):
+        """
+        make a transition based on the range
+        :return:
+        """
+        assert self.entities is not None
+        if len(self.entities) == 1:
+            # good, we found only one, go to EntitySelected with curr_eid set
+            self.transit(State.EntitySelected)
+            self.keep(0)
+            return True
+        elif len(self.entities) > 1:
+            # It gave a shitload, go to RangeSelected with state.entities set
+            self.transit(State.RangeSelected)
+            if self.type is not None:
+                self.state.step = Step.TypeSelected
+            else:
+                type_range = actionUtil.get_type_range(self.entities)
+                if len(type_range) == 1:
+                    self.type = type_range.pop()
+                    self.state.step = Step.TypeSelected
+                    self.rank()
+                else:
+                    assert len(type_range) > 1
+                    self.state.step = Step.RangeInitiative
+                    self.types = type_range
+            return True
+        else:
+            return False
+
+    def match(self, keywords):
+        """
+        Try to match a list of keywords
+        :param keywords: a list of keywords with which we match entities
+        :return: True if successfully matched all keywords
+                 False if not exists a entity that matches all keywords
+        """
+        if self.type is not None:
+            base = Q(tid=self.tid)
+        else:
+            base = Q()
+
+        # first, we try to match first 3 key words by title
+        q = base
+        for keyword in keywords:
+            q &= Q(name__icontains=keyword)
+        self.entities = Entity.objects.filter(q)
+        if self.transit_under_range():
+            return True
+
+        # failed, we try to match first 3 key words by description
+        q = base
+        for keyword in keywords:
+            q &= Q(description__icontains=keyword)
+        self.entities = Entity.objects.filter(q)
+        if self.transit_under_range():
+            return True
+
+        # failed, return false
+        return False
+
     def filter(self, predicate):
         """filter and keep entities base on predicate, which is a function
         :param predicate:
@@ -360,7 +423,6 @@ class Flow(object):
         """
         assert self.type in Type
         self.entities = entityRanker.ranked(self.entities, self.type)
-
 
     def start_line(self, action, query=""):
         """
@@ -409,25 +471,25 @@ class Flow(object):
         request.session['flow'] = self
 
     def __str__(self):
-        return "--  Flow State\n"        \
-               "--  User ID: %s\n"       \
-               "--User name: %s\n"       \
-               "--    State: %s\n"       \
-               "--     Step: %s\n"       \
-               "--   Action: %s\n"       \
-               "--------------\n"        \
-               "--    Types: %s\n"       \
-               "--      TID: %s\n"       \
-               "--      EID: %s\n"       \
-               "--      CID: %s\n"       \
-               "--     SBID: %s\n"       \
-               "-- next pos: %s\n"       \
-               "-- next neg: %s\n"       \
-               "--    Stats: %s\n"       \
-               "--  Num Ent: %s\n"       \
-               "--     Ents: %s\n"       \
-               "--------------\n"        \
-               "--     Type: %s\n"       \
+        return "--  Flow State\n" \
+               "--  User ID: %s\n" \
+               "--User name: %s\n" \
+               "--    State: %s\n" \
+               "--     Step: %s\n" \
+               "--   Action: %s\n" \
+               "--------------\n" \
+               "--    Types: %s\n" \
+               "--      TID: %s\n" \
+               "--      EID: %s\n" \
+               "--      CID: %s\n" \
+               "--     SBID: %s\n" \
+               "-- next pos: %s\n" \
+               "-- next neg: %s\n" \
+               "--    Stats: %s\n" \
+               "--  Num Ent: %s\n" \
+               "--     Ents: %s\n" \
+               "--------------\n" \
+               "--     Type: %s\n" \
                "--   Entity: %s\n" % (self.user_id,
                                       self.user,
                                       self.state,
@@ -445,6 +507,7 @@ class Flow(object):
                                       self.entities,
                                       self.type,
                                       self.entity)
+
 
 class SentimentStats(object):
     def __init__(self, num_pos, num_neu, num_all):
@@ -473,5 +536,8 @@ class SentimentStats(object):
                                                        self.num_neu,
                                                        self.num_neg,
                                                        self.num_all)
+<<<<<<< HEAD
 
 >>>>>>> 264440e... a lot of bug fixes, new request and response logic is working
+=======
+>>>>>>> 0d650a1... refine keyword matching logic, now we can handle keyword matching pretty well
