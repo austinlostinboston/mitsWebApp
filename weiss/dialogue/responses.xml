@@ -35,8 +35,8 @@
     <action id="5" name="NextRandomEntity">
       <message id="02.05.test">EntitySelected: Random Entity [entity] selected.</message>
       <message id="02.05.01">Since you can't make up your mind, we'll just talk about [entity].</message>
-      <message id="02.05.02"></message>
-      <message id="02.05.03"></message>
+      <message id="02.05.02">Whatever you just said makes no sense, so I'll just pick [entity].</message>
+      <message id="02.05.03">You're struggling right now. I'll pick the [type] for you. Let's talk about [entity].</message>
     </action>
 
     <action id="6" name="SentimentStatistics">
@@ -49,22 +49,50 @@
     <action id="7" name="EntitySelection">
       <message id="02.07.test">EntitySelected: Entity [entity] selected.</message>
       <message id="02.07.01">Sure, I know about [entity]. What would you like to know?</message>
-      <message id="02.07.02"></message>
+      <message id="02.07.02">We can talk about [entity]. </message>
       <message id="02.07.03"></message>
     </action>
 
     <action id="10" name="UnknownQuery">
       <message id="02.10.test">EntitySelected: Unknown Query</message>
       <message id="02.10.01">I'm afraid I know nothing about [entity].</message>
-      <message id="02.10.02"></message>
+      <message id="02.10.02">Sorry, I don't have any information on that.</message>
       <message id="02.10.03"></message>
     </action>
 
     <action id="11" name="EntityConfirmation">
       <message id="02.11.test">EntitySelected: [entity] Confirmation</message>
-      <message id="02.11.01">You have confirmed [entity]. What would you like to know?</message>
-      <message id="02.11.02"></message>
+      <message id="02.11.01">I see you picked [entity]. What would you like to know?</message>
+      <message id="02.11.02">[entity], nice choice! Anything specifc you want to know?</message>
       <message id="02.11.03"></message>
+    </action>
+
+    <action id="21" name="NextRandomSummary">
+      <message id="02.21.test">EntitySelected: Chose random summary [summary].</message>
+      <message id="02.21.01">Since I didn't understand that, I decided to pick a summary. It is "[summary]"</message>
+      <message id="02.21.02"></message>
+      <message id="02.21.03"></message>
+    </action>
+
+    <action id="22" name="NextOppositeSummary">
+      <message id="02.22.test">EntitySelected: Chose opposite summary [summary].</message>
+      <message id="02.22.01">This summary shows a different point of view "[summary]"</message>
+      <message id="02.22.02"></message>
+      <message id="02.22.03"></message>
+    </action>
+
+    <action id="23" name="NextPositiveSummary">
+      <message id="02.23.test">EntitySelected: Chose positive summary.</message>
+      <message id="02.23.01">This is a positive point of view. "[summary]"</message>
+      <message id="02.23.02"></message>
+      <message id="02.23.03"></message>
+    </action>
+
+    <action id="24" name="NextNegativeSummary">
+      <message id="02.24.test">EntitySelected: Chose negative summary.</message>
+      <message id="02.24.01">This is a negative point of view. "[summary]"</message>
+      <message id="02.24.02"></message>
+      <message id="02.24.03"></message>
     </action>
   </state>
 
