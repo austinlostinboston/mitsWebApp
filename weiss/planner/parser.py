@@ -140,7 +140,7 @@ class Parser(object):
 
     @staticmethod
     def keyword_matching(arguments, entities):
-        words = arguments['keywords'].split("#")
+        words = arguments['keywords']
         phrase = " ".join(words).strip()
 
         for i in xrange(0, len(entities)):
