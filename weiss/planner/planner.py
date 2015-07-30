@@ -31,8 +31,8 @@ class Planner(object):
         state = flow.state
         # plausible = state.nextPossibleActions
         query = query.lower()
-        query = query.translate(string.maketrans("", ""), string.punctuation)
         query = query.decode('utf8','ignore').encode('ascii','ignore')
+        query = query.translate(string.maketrans("", ""), string.punctuation)
 
         for case in switch(state.sid):
             if case(State.SystemInitiative):
@@ -93,7 +93,7 @@ class Planner(object):
             if arguments['tid'] != Type.Unknown:
                 arguments['aid'] = Action.TypeSelection
             else:
-                self._parser.find_number(query.lower(), arguments, entities)
+                self._parser.find_number(query, arguments, entities)
                 if 'idx' not in arguments:
                     self._parser.entity_recognition(query, arguments)
                     self._parser.keyword_matching(arguments, entities)
