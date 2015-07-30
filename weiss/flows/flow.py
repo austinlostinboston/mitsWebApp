@@ -339,7 +339,7 @@ class Flow(object):
         :param idx: the index of entity that is kept
         :return: void
         """
-        logger.debug("Keep %s, entities = %s" % (idx, self.entities))
+        logger.info("Keep %s, entities = %s" % (idx, self.entities))
         assert (idx < len(self.entities))
 <<<<<<< HEAD
         self.entity = self.entities[idx]

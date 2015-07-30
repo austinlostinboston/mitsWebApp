@@ -51,19 +51,34 @@ class Parser(object):
         tokens = nltk.word_tokenize(query)
         tags = self._postagger.tag(tokens)
 
+        entities = nltk.chunk.ne_chunk(tags)
+        # print entities
+
         tuples = []
+        trees = []
 
-        for i in tags:
-            if ((i[1][:2] == 'NN' or i[1][:2] == 'JJ')
-                and i[0] not in self._stopwords
-                and self._stemmer.stem(i[0]) not in self._type_words['movie']
-                and self._stemmer.stem(i[0]) not in self._type_words['article']
-                and self._stemmer.stem(i[0]) not in self._type_words['restaurant']):
-                tuples.append(i[0])
+        for i in entities:
+            if isinstance(i, tuple):
+                if ((i[1][:2] == 'NN' or i[1][:2] == 'JJ')
+                    and i[0].lower() not in self._stopwords
+                    and self._stemmer.stem(i[0]) not in self._type_words['movie']
+                    and self._stemmer.stem(i[0]) not in self._type_words['article']
+                    and self._stemmer.stem(i[0]) not in self._type_words['restaurant']):
+                    tuples.append(i[0])
+            elif isinstance(i, nltk.tree.Tree):
+                phrase = []
+                for element in i:
+                    if element[0].lower() not in self._stopwords:
+                        phrase.append(element[0])
+                if len(phrase) > 0:
+                    trees.append(' '.join(phrase))
 
-        if len(tuples) > 0:
+        if len(trees) > 0:
+            arguments['keywords'] = trees
+            logger.info("Here are the keywords: %s" % arguments['keywords'])
+        elif len(tuples) > 0:
             arguments['keywords'] = tuples
-            logger.debug("Here are the keywords: %s" % arguments['keywords'])
+            logger.info("Here are the keywords: %s" % arguments['keywords'])
 
 
     def _set_type_words(self):
@@ -162,7 +177,7 @@ class Parser(object):
 
         number = None
         for t in tags:
-            logger.debug(t[1])
+            logger.info(t[1])
             if t[1] == 'JJ' and t[0][-2:] in set(['th', 'nd', 'st']):
                 number = t[0]
                 break

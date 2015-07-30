@@ -49,8 +49,8 @@ def homepage(request):
 @login_required
 def confirmaction(request, aid):
     User = request.user
-    logger.debug('aid:' + str(aid))
-    logger.debug('user:' + str(User))
+    logger.info('aid:' + str(aid))
+    logger.info('user:' + str(User))
     confirmAciton(User, aid)
     context = {}
     context['actions'] = Action
@@ -81,7 +81,7 @@ def verbalresponse(request):
         audio_file_path = os.path.abspath(BASE_DIR + ("/weiss/audio/%s.wav" % request.user))
 
         conv = ('flite -voice awb -t "%s" -o "%s"' % (response, audio_file_path))
-        logger.debug("command:" + conv)
+        logger.info("command:" + conv)
         os.system(conv)
         # response = commands.getoutput(conv)
 
@@ -96,7 +96,7 @@ def verbalresponse(request):
 
 @login_required
 def actionboard(request):
-    logger.debug("%s" % request)
+    logger.info("%s" % request)
     dmgr = getDialogueManager()
     context = {}
 
@@ -266,7 +266,7 @@ def evaluate(request, eval_type='0'):
     # Setup evaluation
     if eval_type > 0:
         user_evals = Evaluation.objects.filter(userid=user_id, mid__in=[0, 1, 2]).count()
-        logger.debug(user_evals)
+        logger.info(user_evals)
 
         entities = list(MiniEntity.objects.values_list('eid', flat=True))
         num_entities = len(entities)

@@ -116,6 +116,7 @@ class Classifier(object):
             p_label[0] = 10
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         return Action(int(p_label[0]))  # API changes here
 <<<<<<< HEAD
 
@@ -384,6 +385,9 @@ class Classifier(object):
 >>>>>>> 35e14f1... refactor
 =======
         logger.debug("Classified as: %d\n",p_label[0])
+=======
+        logger.info("Classified as: %d\n",p_label[0])
+>>>>>>> a5e1d14... set console logger to info level
 
         return Action(int(p_label[0]))
 >>>>>>> 50f6d3e... fix find_number

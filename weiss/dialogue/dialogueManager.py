@@ -104,12 +104,12 @@ class DialogueManager(object):
             query = query_obj.query
         else:
             query = str(request.POST.get('queryinput', None))
-        logger.debug("query:%s" % query)
+        logger.info("query:%s" % query)
 
         flow = request.session.get('flow', None)
 
         if flow is None:
-            logger.debug("No such flow %s" % query_obj)
+            logger.info("No such flow %s" % query_obj)
             return None
 
         decision = self.planner.plan(query, flow)
@@ -123,12 +123,12 @@ class DialogueManager(object):
         """
         flow.action = decision['aid']
         action = flow.action
-        logger.debug(action.name)
+        logger.info(action.name)
 
         if query is None:
             query = action.name + " : " + decision['keywords']
 
-        logger.debug("Dispatch action: %s, %s" % (action.value, action.name))
+        logger.info("Dispatch action: %s, %s" % (action.value, action.name))
 
         flow.start_line(action, query)
 

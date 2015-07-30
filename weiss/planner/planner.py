@@ -81,14 +81,14 @@ class Planner(object):
 
     def _range_selected(self, query, arguments, step, entities):
         if step == Step.RangeInitiative:
-            logger.debug("RangeInitiative")
+            logger.info("RangeInitiative")
             self._parser.type_recognition(query, arguments)
             if arguments['tid'] == Type.Unknown:
                 arguments['aid'] = Action.UnknownAction
             else:
                 arguments['aid'] = Action.EntityConfirmation
         elif step == Step.TypeSelected:
-            logger.debug("TypeSelected")
+            logger.info("TypeSelected")
             self._parser.type_recognition(query, arguments)
             if arguments['tid'] != Type.Unknown:
                 arguments['aid'] = Action.TypeSelection
@@ -132,7 +132,7 @@ class Planner(object):
                 arguments['aid'] = Action.EntitySelection
         elif arguments['aid'] == Action.NextSummary:
             sentiment = self._parser.calculate_sentiment(query)
-            logger.debug(sentiment)
+            logger.info(sentiment)
             if sentiment < -1: 
                 arguments['aid'] = Action.NextNegativeSummary
             elif sentiment > 1: 

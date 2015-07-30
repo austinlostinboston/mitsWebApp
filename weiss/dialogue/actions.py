@@ -30,14 +30,14 @@ def nextRandomEntity(flow, decision):
     """
     next_tid = flow.tid
     curr_eid = flow.eid
-    logger.debug("next ran entity with next_tid: %s, curr_eid: %s" % (next_tid, curr_eid))
+    logger.info("next ran entity with next_tid: %s, curr_eid: %s" % (next_tid, curr_eid))
     eids = Entity.objects.filter(tid=next_tid).values_list('eid', flat=True)
     new_eid = curr_eid
     while new_eid == curr_eid:
         new_eid = random.sample(eids, 1)[0]
 
     flow.eid = new_eid
-    logger.debug("next ran entity has decided next eid: %s" % new_eid)
+    logger.info("next ran entity has decided next eid: %s" % new_eid)
 
     """ Handle by Response Generator
     entity = Entity.objects.get(eid=new_eid)
@@ -58,7 +58,7 @@ def nextRandomCmt(flow, decision):
         Void    Returns:
     """
     curr_eid = flow.eid
-    logger.debug("next ran cmt with curr_eid: %s" % curr_eid)
+    logger.info("next ran cmt with curr_eid: %s" % curr_eid)
     if curr_eid is None:
         num_cmt = Comment.objects.count()
         idx = random.randint(0, num_cmt - 1)
@@ -76,12 +76,12 @@ def nextRandomCmt(flow, decision):
     try:
         res = Comment.objects.get(cid=idx)
     except Comment.DoesNotExist:
-        logger.debug("Object does not exsit. Can not happen!!")
+        logger.info("Object does not exsit. Can not happen!!")
         return nextRandomPositiveCmt(session, decision)
 
     session['curr_eid'] = res.eid.eid
     """
-    logger.debug("next ran cmt has decided to talk about c:%s" % (idx))
+    logger.info("next ran cmt has decided to talk about c:%s" % (idx))
     flow.transit(State.CommentSelected)
     return
 
@@ -101,7 +101,7 @@ def nextRandomPositiveCmt(flow, decision):
     curr_eid = flow.eid
     curr_cid = flow.cid
 
-    logger.debug("next ran positive cmt with curr_eid: %s, curr_cid: %s" % (curr_eid, curr_cid))
+    logger.info("next ran positive cmt with curr_eid: %s, curr_cid: %s" % (curr_eid, curr_cid))
 
     if curr_eid is None:
         logger.info("No eid given")
@@ -124,11 +124,11 @@ def nextRandomPositiveCmt(flow, decision):
     try:
         res = Comment.objects.get(cid=idx)
     except Comment.DoesNotExist:
-        logger.debug("Object does not exsit. Can not happen!!")
+        logger.info("Object does not exsit. Can not happen!!")
         return nextRandomPositiveCmt(curr_eid, curr_cid)
     """
     flow.cid = idx
-    logger.debug("next ran pos cmt has decided to talk about %s" % idx)
+    logger.info("next ran pos cmt has decided to talk about %s" % idx)
     flow.transit(State.CommentSelected)
     return
 
@@ -211,7 +211,7 @@ def nextRandomNegativeCmt(flow, decision):
         logger.info("No eid given")
         return
 
-    logger.debug("next ran negative cmt with curr_eid: %s, curr_cid: %s" % (curr_eid, curr_cid))
+    logger.info("next ran negative cmt with curr_eid: %s, curr_cid: %s" % (curr_eid, curr_cid))
     idxs = Comment.objects.filter(Q(eid=curr_eid), Q(sentiment__lt=0)).values_list('cid', flat=True)
     idx = curr_cid
     if len(idxs) == 0:
@@ -227,11 +227,11 @@ def nextRandomNegativeCmt(flow, decision):
     try:
         res = Comment.objects.get(cid=idx)
     except Comment.DoesNotExist:
-        logger.debug("Object does not exsit. Can not happen!!")
+        logger.info("Object does not exsit. Can not happen!!")
         return nextRandomPositiveCmt(session, decision)
     """
     flow.cid = idx
-    logger.debug("next ran neg cmt has decided to talk about %s" % idx)
+    logger.info("next ran neg cmt has decided to talk about %s" % idx)
     flow.transit(State.CommentSelected)
     return
 
@@ -256,13 +256,13 @@ def nextRandomOppositeCmt(flow, decision):
     else:
         curr_sentiment = comment.sentiment
 
-    logger.debug("next ran oppo cmt with curr_sentiment: %s" % curr_sentiment)
+    logger.info("next ran oppo cmt with curr_sentiment: %s" % curr_sentiment)
     if curr_sentiment > 0:
         return nextRandomNegativeCmt(flow, decision)
     elif curr_sentiment < 0:
         return nextRandomPositiveCmt(flow, decision)
     else:
-        logger.debug("Weiss does not talk about 0 sentiment comment, but Weiss would give one")
+        logger.info("Weiss does not talk about 0 sentiment comment, but Weiss would give one")
         return nextRandomPositiveCmt(flow, decision)
 
 
@@ -309,7 +309,7 @@ def entitySelection(flow, decision):
         Void
     """
     curr_tid = flow.tid
-    logger.debug("curr tid : %s" % curr_tid)
+    logger.info("curr tid : %s" % curr_tid)
     """
     if decision.has_key("tid"):
         curr_tid = decision["tid"]
@@ -319,7 +319,7 @@ def entitySelection(flow, decision):
         # select by first 3 keywords
         keywords = decision["keywords"]
 
-        logger.debug(keywords)
+        logger.info(keywords)
         if len(keywords) >= 3:
             keywords = keywords[:3]
 
