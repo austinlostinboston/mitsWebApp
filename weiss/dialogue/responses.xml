@@ -49,15 +49,15 @@
     <action id="7" name="EntitySelection">
       <message id="02.07.test">EntitySelected: Entity [entity] selected.</message>
       <message id="02.07.01">Sure, I know about [entity]. What would you like to know?</message>
-      <message id="02.07.02">We can talk about [entity]. </message>
-      <message id="02.07.03"></message>
+      <message id="02.07.02">Yes, let'st talk about about [entity]. </message>
+      <message id="02.07.03">Why of course, the [entity] is great choice. Ask me about it.</message>
     </action>
 
     <action id="10" name="UnknownQuery">
       <message id="02.10.test">EntitySelected: Unknown Query</message>
       <message id="02.10.01">I'm afraid I know nothing about [entity].</message>
-      <message id="02.10.02">Sorry, I don't have any information on that.</message>
-      <message id="02.10.03"></message>
+      <message id="02.10.02">Sorry, I don't have any information on [entity].</message>
+      <message id="02.10.03">I'm really sure what you want me to do.</message>
     </action>
 
     <action id="11" name="EntityConfirmation">
@@ -69,30 +69,30 @@
 
     <action id="21" name="NextRandomSummary">
       <message id="02.21.test">EntitySelected: Chose random summary [summary].</message>
-      <message id="02.21.01">Since I didn't understand that, I decided to pick a summary. It is "[summary]"</message>
-      <message id="02.21.02"></message>
-      <message id="02.21.03"></message>
+      <message id="02.21.01">Since I didn't understand that, I thought I would show you this "[summary]"</message>
+      <message id="02.21.02">I didn't get that, we'll start of with "[summary]"</message>
+      <message id="02.21.03">My bad, we'll talk about this "[summary]"</message>
     </action>
 
     <action id="22" name="NextOppositeSummary">
       <message id="02.22.test">EntitySelected: Chose opposite summary [summary].</message>
-      <message id="02.22.01">This summary shows a different point of view "[summary]"</message>
-      <message id="02.22.02"></message>
-      <message id="02.22.03"></message>
+      <message id="02.22.01">Here's a different opinion "[summary]"</message>
+      <message id="02.22.02">This person doesn't agree "[summary]"</message>
+      <message id="02.22.03">A different point of view says "[summary]"</message>
     </action>
 
     <action id="23" name="NextPositiveSummary">
       <message id="02.23.test">EntitySelected: Chose positive summary.</message>
       <message id="02.23.01">This is a positive point of view. "[summary]"</message>
-      <message id="02.23.02"></message>
-      <message id="02.23.03"></message>
+      <message id="02.23.02">A positive opinion says "[summary]"</message>
+      <message id="02.23.03">This person liked it, they said "[summary]"</message>
     </action>
 
     <action id="24" name="NextNegativeSummary">
       <message id="02.24.test">EntitySelected: Chose negative summary.</message>
       <message id="02.24.01">This is a negative point of view. "[summary]"</message>
-      <message id="02.24.02"></message>
-      <message id="02.24.03"></message>
+      <message id="02.24.02">A negative opinion says "[summary]"</message>
+      <message id="02.24.03">This person didn't like it, they said "[summary]"</message>
     </action>
   </state>
 
@@ -100,71 +100,71 @@
     <action id="1" name="NextRandomComment">
       <message id="03.01.test">CommentSelected: Next random comment</message>
       <message id="03.01.01">Fine, since you can't make a decision we'll talk about [body].</message>
-      <message id="03.01.02"></message>
-      <message id="03.01.03"></message>
+      <message id="03.01.02">Fine, since you can't make a decision we'll talk about [body].</message>
+      <message id="03.01.03">Fine, since you can't make a decision we'll talk about [body].</message>
     </action>
 
     <action id="2" name="NextOppositeComment">
       <message id="03.02.test">CommentSelected: Next opposite comment</message>
       <message id="03.02.01">However, an opposing opinion is "[body]"</message>
-      <message id="03.02.02"></message>
-      <message id="03.02.03"></message>
+      <message id="03.02.02">However, an opposing opinion is "[body]"</message>
+      <message id="03.02.03">However, an opposing opinion is "[body]"</message>
     </action>
 
     <action id="3" name="NextPositiveComment">
       <message id="03.03.test">CommentSelected: Next positive comment</message>
       <message id="03.03.01">A positive Polly said "[body]"</message>
-      <message id="03.03.02"></message>
-      <message id="03.03.03"></message>
+      <message id="03.03.02">A positive Polly said "[body]"</message>
+      <message id="03.03.03">A positive Polly said "[body]"</message>
     </action>
 
     <action id="4" name="NextNegativeComment">
       <message id="03.04.test">CommentSelected: Next negative comment</message>
       <message id="03.04.01">A negative Nancy said "[body]"</message>
-      <message id="03.04.02"></message>
-      <message id="03.04.03"></message>
+      <message id="03.04.02">A negative Nancy said "[body]"</message>
+      <message id="03.04.03">A negative Nancy said "[body]"</message>
     </action>
 
     <action id="6" name="SentimentStatistics">
       <message id="03.06.test">CommentSelected: This is sentiment stats</message>
       <message id="03.06.01">This [type] is [popularity]. [percent] of it's reviews said something nice.</message>
-      <message id="03.06.02"></message>
-      <message id="03.06.03"></message>
+      <message id="03.06.02">The [type], [entity] seems to be [popularity]. [percent] liked it.</message>
+      <message id="03.06.03">[percent] liked the [type], [entity].</message>
     </action>
 
     <action id="10" name="UnknownQuery">
       <message id="03.10.test">CommentSelected: Unknown Query</message>
       <message id="03.10.01">I'm really not sure what comment to give you.</message>
-      <message id="03.10.02"></message>
-      <message id="03.10.03"></message>
+      <message id="03.10.02">I'm really not sure what comment to give you.</message>
+      <message id="03.10.03">I'm really not sure what comment to give you.</message>
     </action>
 
     <action id="21" name="NextRandomSummary">
-      <message id="03.21.test">CommentSelected: Next random Summary</message>
-      <message id="03.21.01">Fine, since you can't make a decision we'll talk about [summary].</message>
-      <message id="03.21.02"></message>
-      <message id="03.21.03"></message>
+      <message id="03.21.test">EntitySelected: Chose random summary [summary].</message>
+      <message id="03.21.01">Since I didn't understand that, I thought I would show you this "[summary]"</message>
+      <message id="03.21.02">I didn't get that, we'll start of with "[summary]"</message>
+      <message id="03.21.03">My bad, we'll talk about this "[summary]"</message>
     </action>
 
     <action id="22" name="NextOppositeSummary">
-      <message id="03.22.test">CommentSelected: Next opposite Summary</message>
-      <message id="03.22.01">This summary shows a different point of view "[summary]"</message>
-      <message id="03.22.02"></message>
-      <message id="03.22.03"></message>
+      <message id="03.22.test">EntitySelected: Chose opposite summary [summary].</message>
+      <message id="03.22.01">Here's a different opinion "[summary]"</message>
+      <message id="03.22.02">This person doesn't agree "[summary]"</message>
+      <message id="03.22.03">A different point of view says "[summary]"</message>
     </action>
 
     <action id="23" name="NextPositiveSummary">
-      <message id="03.23.test">CommentSelected: Next positive Summary</message>
+      <message id="03.23.test">EntitySelected: Chose positive summary.</message>
       <message id="03.23.01">This is a positive point of view. "[summary]"</message>
-      <message id="03.23.02"></message>
-      <message id="03.23.03"></message>
+      <message id="03.23.02">A positive opinion says "[summary]"</message>
+      <message id="03.23.03">This person liked it, they said "[summary]"</message>
     </action>
 
     <action id="24" name="NextNegativeSummary">
-      <message id="03.24.test">CommentSelected: Next negative Summary</message>
+      <message id="03.24.test">EntitySelected: Chose negative summary.</message>
       <message id="03.24.01">This is a negative point of view. "[summary]"</message>
-      <message id="03.24.02"></message>
-      <message id="03.24.03"></message>
+      <message id="03.24.02">A negative opinion says "[summary]"</message>
+      <message id="03.24.03">This person didn't like it, they said "[summary]"</message>
     </action>
   </state>
 
@@ -172,28 +172,38 @@
     <action id="5" name="NextRandomEntity">
       <message id="04.05.test">RangeSelected: Next random entity with current type. There were [num_entities] [types] found. The first few are [list_5].</message>
       <message id="04.05.01.t">There are [num_entities] [types] that might interest you. Please choose between [types].</message>
-      <message id="04.05.01.e">There are [num_entities] [types] that might interest you. Here are [list_entities]; [list_10]. Pick one.</message>
-      <message id="04.05.02"></message>
-      <message id="04.05.03"></message>
+      <message id="04.05.02.t">There are [num_entities] [types] that might interest you. Please choose between [types].</message>
+      <message id="04.05.03.t">There are [num_entities] [types] that might interest you. Please choose between [types].</message>
+      <message id="04.05.01.e">There are [num_entities] [types] that might interest you. Here are [list_entities]; [list_5]. Pick one.</message>
+      <message id="04.05.02.e">There are [num_entities] [types] that might interest you. Here are [list_entities]; [list_5]. Pick one.</message>
+      <message id="04.05.03.e">There are [num_entities] [types] that might interest you. Here are [list_entities]; [list_5]. Pick one.</message>
     </action>
 
     <action id="7" name="EntitySelected">
       <message id="04.07.test">RangeSelected: Entity selection. There were [num_entities] [types] found. The first few are [list_5].</message>
       <message id="04.07.01.t">There are [num_entities] [types] that might interest you. Please choose between [types].</message>
+       <message id="04.07.02.t">Since there are [num_entiteis] [types], please choose between between [types].</message>
+      <message id="04.07.03.t">I've narrowed it down to [num_entiteis] [types], do you want to talk about [types]?</message>
       <message id="04.07.01.e">There are [num_entities] [types] that might interest you. Here are [list_entities]; [list_5]. Pick one.</message>
-      <message id="04.07.02"></message>
-      <message id="04.07.03"></message>
+      <message id="04.07.02.e">Since there's more than one possible [types], please pick one from the list. [list_5].</message>
+      <message id="04.07.03.e">I've narrowed it down to [list_5], please pick one.</message>
     </action>
 
     <action id="10" name="UknownQuery">
       <message id="04.10.test">RangeSelected: Unknown Query.</message>
       <message id="04.10.01">Hmm, I don't see that option in the list. Please pick one of the options in the list.</message>
+      <message id="04.10.02">Hmm, I don't see that option in the list. Please pick one of the options in the list.</message>
+      <message id="04.10.03">Hmm, I don't see that option in the list. Please pick one of the options in the list.</message>
       <message id="04.10.01.t">You need to pick between [types].</message>
+      <message id="04.10.02.t">First, you need to choose between [types].</message>
+      <message id="04.10.03.t">Please, say [type] before moving on.</message>
     </action>
 
     <action id="11" name="EntityConfirmation">
       <message id="04.11.test">RangeSelected: Entity Confirmation [type]</message>
       <message id="04.11.01.e">There are [num_entities] [types] that might interest you. Here are [list_entities]; [list_5]. Pick one.</message>
+      <message id="04.11.02.e">Since there's more than one possible [types], please pick one from the list. [list_5].</message>
+      <message id="04.11.03.e">Ive narrowed it down to [list_5], please pick one.</message>
     </action>
   </state>
 </responses>
