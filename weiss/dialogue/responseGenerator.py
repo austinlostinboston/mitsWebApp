@@ -263,8 +263,8 @@ def buildResponse(response, msgParts):
         print "[replacers]" + str(replacers)
 
         for part in replacers:
-            print msgParts[str(part)]
-            print "[" + str(part) + "]"
+            #print msgParts[str(part)]
+            #print "[" + str(part) + "]"
             response = response.replace("[" + str(part) + "]", msgParts[str(part)])
 
     return response
