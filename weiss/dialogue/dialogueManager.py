@@ -142,7 +142,7 @@ class DialogueManager(object):
         except Exception as e:
             response = "Failed to generate response. Please check the log"
             logger.error("%s", e.message)
-            traceback.print_stack()
+            print traceback.format_exc()
 
         flow.end_line(response)
 
