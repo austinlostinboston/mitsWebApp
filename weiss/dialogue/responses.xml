@@ -8,7 +8,7 @@
     </action>
 
     <action id="10" name="UnknownAction">
-      <message id="00.10.test">SystemInitiative: Uknown action.</message>
+      <message id="00.10.test">SystemInitiative: Unknown action.</message>
       <message id="00.10.01">Was that even English?</message>
       <message id="00.10.02">I didn't quite get that. Please repeat that.</message>
       <message id="00.10.03">We're just getting started, let's try that again.</message>
@@ -40,7 +40,7 @@
     </action>
 
     <action id="6" name="SentimentStatistics">
-      <message id="02.06.test">EntitySelected: This is sentinment stats</message>
+      <message id="02.06.test">EntitySelected: This is sentiment stats</message>
       <message id="02.06.01">This [type] is [popularity]. [percent] of it's reviews said something nice.</message>
       <message id="02.06.02"></message>
       <message id="02.06.03"></message>
@@ -63,7 +63,7 @@
     <action id="11" name="EntityConfirmation">
       <message id="02.11.test">EntitySelected: [entity] Confirmation</message>
       <message id="02.11.01">I see you picked [entity]. What would you like to know?</message>
-      <message id="02.11.02">[entity], nice choice! Anything specifc you want to know?</message>
+      <message id="02.11.02">[entity], nice choice! Anything specific you want to know?</message>
       <message id="02.11.03"></message>
     </action>
 
@@ -112,21 +112,21 @@
     </action>
 
     <action id="3" name="NextPositiveComment">
-      <message id="03.03.test">CommentSelected: Next positive momment</message>
+      <message id="03.03.test">CommentSelected: Next positive comment</message>
       <message id="03.03.01">A positive Polly said "[body]"</message>
       <message id="03.03.02"></message>
       <message id="03.03.03"></message>
     </action>
 
     <action id="4" name="NextNegativeComment">
-      <message id="03.04.test">CommentSelected: Next negative momment</message>
+      <message id="03.04.test">CommentSelected: Next negative comment</message>
       <message id="03.04.01">A negative Nancy said "[body]"</message>
       <message id="03.04.02"></message>
       <message id="03.04.03"></message>
     </action>
 
     <action id="6" name="SentimentStatistics">
-      <message id="03.06.test">CommentSelected: This is sentinment stats</message>
+      <message id="03.06.test">CommentSelected: This is sentiment stats</message>
       <message id="03.06.01">This [type] is [popularity]. [percent] of it's reviews said something nice.</message>
       <message id="03.06.02"></message>
       <message id="03.06.03"></message>

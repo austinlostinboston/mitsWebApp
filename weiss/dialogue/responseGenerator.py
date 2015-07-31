@@ -349,25 +349,26 @@ def placeSentiment(response, sentiment_stats):
 def placeSentiment(sentiment_stats, msgParts):
 >>>>>>> f55e7d7... refactored response generator. Stable with a few issues.
     if sentiment_stats:
-        total = sentiment_stats.num_all
-        pos = sentiment_stats.num_pos
-        neu = sentiment_stats.num_neu
-        neg = total - (pos + neu)
-        percent = float('%.2f' % (pos / (total * 1.00)))
-        popular = None
-        if percent > 0.9 and percent <= 1.00:
-            popular = "very popular."
-        elif percent > 0.65 and percent <= 0.89:
+        percent = float(sentiment_stats.num_pos) / sentiment_stats.num_all
+        if percent > .9:
+            popular = "very popular"
+        elif percent > .65:
             popular = "liked by most"
-        elif percent > 0.35 and percent <= 0.64:
-            popular =  "is an even split among reviewers."
-        elif percent > 0.1 and percent <= 0.34:
+        elif percent > .35:
+            popular = "is an even split among reviewers"
+        elif percent > .1:
             popular = "not liked by many"
-        else: 
+        else:
             popular = "basically hated by everyone"
 
+<<<<<<< HEAD
         msgParts['popularity'] = popular
         msgParts['percent'] = str(int(percent*100)) + '%'
+=======
+        response = response.replace("[popularity]", popular)
+        percent_str = "%.0f%%" % (percent * 100)
+        response = response.replace("[percent]", percent_str)
+>>>>>>> fec3f15... refine sentiment logic for res gen
 
         # response = response.replace("[popularity]", popular)
         # response = response.replace("[percent]", str(int(percent*100)) + '%')
