@@ -2,9 +2,17 @@
 
 <responses>
   <state id="0" name="SystemInitiative">
+    <action id="7" name="EntitySelection">
+      <message id="00.07.01">Really, we've just started are you're already having problems.</message>
+      <message id="00.07.02">Really, we've just started are you're already having problems.</message>
+      <message id="00.07.03">Really, we've just started are you're already having problems.</message>
+    </action>
+
     <action id="9" name="Greeting">
       <message id="00.09.test">Test Mode Activated: Hi I'm Weiss. What would you like to talk about, movies? news? or restaurants?</message>
       <message id="00.09.01">Hi I'm Weiss. What would you like to talk about, movies? news? or restaurants?</message>
+      <message id="00.09.02">Hi I'm Weiss. What would you like to talk about, movies? news? or restaurants?</message>
+      <message id="00.09.03">Hi I'm Weiss. What would you like to talk about, movies? news? or restaurants?</message>
     </action>
 
     <action id="10" name="UnknownAction">
@@ -19,8 +27,8 @@
     <action id="8" name="TypeSelection">
       <message id="01.08.test">TypeSelected: Type [type] selected.</message>
       <message id="01.08.01">Sure, now describe or name a [type] you want to talk about?</message>
-      <message id="01.08.02">Absolutely, let's talk about [types]. </message>
-      <message id="01.08.03">Let's talk about [types].</message>
+      <message id="01.08.02">Absolutely, let's talk about [types]. Which one?</message>
+      <message id="01.08.03">Good, [types] it is. What would you like to know?</message>
     </action>
 
     <action id="10" name="UnknownAction">
@@ -41,9 +49,10 @@
 
     <action id="6" name="SentimentStatistics">
       <message id="02.06.test">EntitySelected: This is sentiment stats</message>
+      <message id="02.06.test">CommentSelected: This is sentiment stats</message>
       <message id="02.06.01">This [type] is [popularity]. [percent] of it's reviews said something nice.</message>
-      <message id="02.06.02"></message>
-      <message id="02.06.03"></message>
+      <message id="02.06.02">The [type], [entity] seems to be [popularity]. [percent] liked it.</message>
+      <message id="02.06.03">[percent] liked the [type], [entity].</message>
     </action>
 
     <action id="7" name="EntitySelection">
@@ -64,7 +73,7 @@
       <message id="02.11.test">EntitySelected: [entity] Confirmation</message>
       <message id="02.11.01">I see you picked [entity]. What would you like to know?</message>
       <message id="02.11.02">[entity], nice choice! Anything specific you want to know?</message>
-      <message id="02.11.03"></message>
+      <message id="02.11.03">Ah yes, [entity], one of my personal favorites. What do you want to know?</message>
     </action>
 
     <action id="21" name="NextRandomSummary">
@@ -174,9 +183,9 @@
       <message id="04.05.01.t">There are [num_entities] [types] that might interest you. Please choose between [types].</message>
       <message id="04.05.02.t">There are [num_entities] [types] that might interest you. Please choose between [types].</message>
       <message id="04.05.03.t">There are [num_entities] [types] that might interest you. Please choose between [types].</message>
-      <message id="04.05.01.e">There are [num_entities] [types] that might interest you. Here are [list_entities]; [list_5]. Pick one.</message>
-      <message id="04.05.02.e">There are [num_entities] [types] that might interest you. Here are [list_entities]; [list_5]. Pick one.</message>
-      <message id="04.05.03.e">There are [num_entities] [types] that might interest you. Here are [list_entities]; [list_5]. Pick one.</message>
+      <message id="04.05.01.e">There are [num_entities] [types] that might interest you. [list_5]. Pick one.</message>
+      <message id="04.05.02.e">There are [num_entities] [types] that might interest you. [list_5]. Pick one.</message>
+      <message id="04.05.03.e">There are [num_entities] [types] that might interest you. [list_5]. Pick one.</message>
     </action>
 
     <action id="7" name="EntitySelected">
@@ -184,7 +193,7 @@
       <message id="04.07.01.t">There are [num_entities] [types] that might interest you. Please choose between [types].</message>
        <message id="04.07.02.t">Since there are [num_entiteis] [types], please choose between between [types].</message>
       <message id="04.07.03.t">I've narrowed it down to [num_entiteis] [types], do you want to talk about [types]?</message>
-      <message id="04.07.01.e">There are [num_entities] [types] that might interest you. Here are [list_entities]; [list_5]. Pick one.</message>
+      <message id="04.07.01.e">There are [num_entities] [types] that might interest you. [list_5]. Pick one.</message>
       <message id="04.07.02.e">Since there's more than one possible [types], please pick one from the list. [list_5].</message>
       <message id="04.07.03.e">I've narrowed it down to [list_5], please pick one.</message>
     </action>
@@ -201,7 +210,7 @@
 
     <action id="11" name="EntityConfirmation">
       <message id="04.11.test">RangeSelected: Entity Confirmation [type]</message>
-      <message id="04.11.01.e">There are [num_entities] [types] that might interest you. Here are [list_entities]; [list_5]. Pick one.</message>
+      <message id="04.11.01.e">There are [num_entities] [types] that might interest you. [list_5]. Pick one.</message>
       <message id="04.11.02.e">Since there's more than one possible [types], please pick one from the list. [list_5].</message>
       <message id="04.11.03.e">Ive narrowed it down to [list_5], please pick one.</message>
     </action>
