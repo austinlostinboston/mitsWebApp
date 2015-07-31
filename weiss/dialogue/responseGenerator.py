@@ -122,7 +122,9 @@ def responseHandler(flow, test=False):
     if test:
         rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".test"
     else:
-        rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".01" + rid
+
+        mid = str("%02d" % (random.randint(1,3)))
+        rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + "." + mid + rid
 
     ## prints out current flow object
     print flow 
@@ -217,6 +219,8 @@ def responseHandler(flow, test=False):
         msgParts['types'] = typeList(types)
     if range_type == 'entity':
         msgParts['types'] = pluralType(type_name)
+    if range_type is None:
+        msgParts['types'] = pluralType(type_name)
     msgParts['num_entities'] = str(num_entities)
     msgParts['entity'] = str(entity_name)
 
@@ -224,7 +228,7 @@ def responseHandler(flow, test=False):
         msgParts['summary'] = buildSummary(summary_body, 3)
     else:
         msgParts['summary'] = comment_body
-        
+
     if num_entities > 5:
         msgParts['list_entities'] = 5
     else:
@@ -268,11 +272,11 @@ def listify(str_list, length):
         first_n = str_list[0:length]
         for i, item in enumerate(first_n):
             if i < len(first_n) - 1:
-                text_list += item.name + ", "
+                text_list += str(i+1) +". " + item.name + ", "
             else:
-                text_list += "and " + item.name
+                text_list += "and " + str(i+1) +". " + item.name
 
-        return text_list
+        return unicode(text_list)
     else:
         return str(None)
 
@@ -401,24 +405,35 @@ def typeList(types):
 
 
 def buildSummary(summary_body, sentence_num):
-    print "[summar] " + summary_body 
-    if summary_body:
-        sentences = summary_body.split("\n")
-        ranked_sentences = []
-        sum_str = ''
+    regex = re.compile(r'\d+\#')
 
-        for sentence in sentences:
-            rank_sent = sentence.split('#')
-            ranked_sentences.append(rank_sent)
+    ## Check to see if body is summary or just comment.
+    if regex.search(summary_body) is not None:
 
-        ranked_sentences = sorted(ranked_sentences)
-        print ranked_sentences
+        print "[summar] " + summary_body 
+        if summary_body:
+            sentences = summary_body.split("\n")
+            ranked_sentences = []
+            sum_str = ''
 
-        for sent in ranked_sentences[0:sentence_num]:
-            print sent
-            sum_str += sent[1] + " "
+            for sentence in sentences:
+                rank_sent = sentence.split('#')
+                ranked_sentences.append([int(rank_sent[0]),rank_sent[1]])
 
-        return sum_str
+            ranked_sentences = sorted(ranked_sentences)
+            print ranked_sentences
+
+            for sent in ranked_sentences[0:sentence_num]:
+                print sent
+                sum_str += sent[1] + " "
+
+            return sum_str
+        else:
+            return str(None)
     else:
+<<<<<<< HEAD
         return str(None)
 >>>>>>> f55e7d7... refactored response generator. Stable with a few issues.
+=======
+        return summary_body
+>>>>>>> 8982d58... fixed a few issues with response generator and added number lists
