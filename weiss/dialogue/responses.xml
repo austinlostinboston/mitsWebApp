@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-2121"?>
 
 <responses>
   <state id="0" name="SystemInitiative">
@@ -148,21 +148,21 @@
 
     <action id="22" name="NextOppositeSummary">
       <message id="03.22.test">CommentSelected: Next opposite Summary</message>
-      <message id="03.22.01">Fine, since you can't make a decision we'll talk about [summary].</message>
+      <message id="03.22.01">This summary shows a different point of view "[summary]"</message>
       <message id="03.22.02"></message>
       <message id="03.22.03"></message>
     </action>
 
     <action id="23" name="NextPositiveSummary">
       <message id="03.23.test">CommentSelected: Next positive Summary</message>
-      <message id="03.23.01">Fine, since you can't make a decision we'll talk about [summary].</message>
+      <message id="03.23.01">This is a positive point of view. "[summary]"</message>
       <message id="03.23.02"></message>
       <message id="03.23.03"></message>
     </action>
 
     <action id="24" name="NextNegativeSummary">
       <message id="03.24.test">CommentSelected: Next negative Summary</message>
-      <message id="03.24.01">Fine, since you can't make a decision we'll talk about [summary].</message>
+      <message id="03.24.01">This is a negative point of view. "[summary]"</message>
       <message id="03.24.02"></message>
       <message id="03.24.03"></message>
     </action>
