@@ -188,6 +188,7 @@
     <action id="10" name="UknownQuery">
       <message id="04.10.test">RangeSelected: Unknown Query.</message>
       <message id="04.10.01">Hmm, I don't see that option in the list. Please pick one of the options in the list.</message>
+      <message id="04.10.01.t">You need to pick between [types].</message>
     </action>
 
     <action id="11" name="EntityConfirmation">

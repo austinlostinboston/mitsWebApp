@@ -219,8 +219,12 @@ def responseHandler(flow, test=False):
         msgParts['types'] = pluralType(type_name)
     msgParts['num_entities'] = str(num_entities)
     msgParts['entity'] = str(entity_name)
-    msgParts['body'] = comment_body
-    msgParts['summary'] = buildSummary(summary_body, 3)
+
+    if summary_body:
+        msgParts['summary'] = buildSummary(summary_body, 3)
+    else:
+        msgParts['summary'] = comment_body
+        
     if num_entities > 5:
         msgParts['list_entities'] = 5
     else:
@@ -397,6 +401,7 @@ def typeList(types):
 
 
 def buildSummary(summary_body, sentence_num):
+    print "[summar] " + summary_body 
     if summary_body:
         sentences = summary_body.split("\n")
         ranked_sentences = []
