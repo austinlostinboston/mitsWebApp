@@ -410,6 +410,7 @@ def buildSummary(summary_body, sentence_num):
         print ranked_sentences
 
         for sent in ranked_sentences[0:sentence_num]:
+            print sent
             sum_str += sent[1] + " "
 
         return sum_str
