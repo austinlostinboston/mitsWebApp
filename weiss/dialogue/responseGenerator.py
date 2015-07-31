@@ -209,8 +209,12 @@ def responseHandler(flow, test=False):
 =======
 >>>>>>> 63918f7... continuing adding to response generator
     print "[Response ID]: " + str(rsp_id)
+<<<<<<< HEAD
     response = soup.find('message',{'id':rsp_id}).text
 >>>>>>> ac51fe6... response gen working minimally
+=======
+    response = soup.find('message', {'id': rsp_id}).text
+>>>>>>> e4cf556... minor syntac change
 
     ## Create dictionary of any needed parts for the message
     msgParts = {}
@@ -272,9 +276,9 @@ def listify(str_list, length):
         first_n = str_list[0:length]
         for i, item in enumerate(first_n):
             if i < len(first_n) - 1:
-                text_list += str(i+1) +". " + item.name + ", "
+                text_list += str(i+1) + ". " + item.name + ", "
             else:
-                text_list += "and " + str(i+1) +". " + item.name
+                text_list += "and " + str(i+1) + ". " + item.name
 
         return unicode(text_list)
     else:
