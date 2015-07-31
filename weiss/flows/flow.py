@@ -140,8 +140,8 @@ class Flow(object):
         self._entity = None
         self.cid = None
         self._type = None
-        self.next_pos_rank = 0
-        self.next_neg_rank = 0
+        self.next_pos_rank = 1
+        self.next_neg_rank = 1
 
     @property
     def entity(self):
@@ -164,8 +164,8 @@ class Flow(object):
         self._type = None
         self.cid = None
         self.summary = None
-        self.next_pos_rank = 0
-        self.next_neg_rank = 0
+        self.next_pos_rank = 1
+        self.next_neg_rank = 1
 
     @property
     def cid(self):
@@ -281,7 +281,7 @@ class Flow(object):
 
     @next_pos_rank.setter
     def next_pos_rank(self, new_next_pos_rank):
-        self._next_neg_rank = new_next_pos_rank
+        self._next_pos_rank = new_next_pos_rank
 
     @property
     def next_neg_rank(self):

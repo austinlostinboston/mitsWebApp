@@ -199,6 +199,8 @@ def next_summary(flow, decision):
 
     curr_comment = flow.comment
 
+    logger.info("handle next summary, curr_comment is %s" % curr_comment)
+
     if curr_comment is None:
         return next_positive_summary(flow, decision)
     if curr_comment.sentiment > 0:
