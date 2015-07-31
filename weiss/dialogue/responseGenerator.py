@@ -230,7 +230,7 @@ def responseHandler(flow, test=False):
         msgParts['summary'] = comment_body
 
     if num_entities > 5:
-        msgParts['list_entities'] = 5
+        msgParts['list_entities'] = str(5)
     else:
         msgParts['list_entities'] = num_entities
 
@@ -261,7 +261,7 @@ def buildResponse(response, msgParts):
         for part in replacers:
             print msgParts[str(part)]
             print "[" + str(part) + "]"
-            response = response.replace("[" + str(part) + "]", str(msgParts[str(part)]))
+            response = response.replace("[" + str(part) + "]", msgParts[str(part)])
 
     return response
 

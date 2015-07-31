@@ -137,13 +137,12 @@ class DialogueManager(object):
 
         executor(flow, decision)  # transition happens inside
 
-        response = responseHandler(flow)
-        # try:
-        #     response = responseHandler(flow)
-        # except Exception as e:
-        #     response = "Failed to generate response. Please check the log"
-        #     logger.error("%s", e.message)
-        #     print traceback.format_exc()
+        try:
+            response = responseHandler(flow)
+        except Exception as e:
+            response = "Failed to generate response. Please check the log"
+            logger.error("%s", e.message)
+            print traceback.format_exc()
 
         flow.end_line(response)
 
