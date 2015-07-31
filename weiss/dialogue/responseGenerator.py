@@ -74,7 +74,7 @@ def responseHandler(flow, test=False):
 
     if summary:
         summary_body = summary.body
-        print "[summary]" + summary_body
+        # print "[summary]" + summary_body
     else:
         summary_body = None
 
@@ -244,7 +244,6 @@ def responseHandler(flow, test=False):
     placeSentiment(sent_stats, msgParts)
 
     response = buildResponse(response, msgParts)
-    
 
     print "[RESPONSE] " + response.encode('utf8')
 
@@ -414,7 +413,7 @@ def buildSummary(summary_body, sentence_num):
     ## Check to see if body is summary or just comment.
     if regex.search(summary_body) is not None:
 
-        print "[summar] " + summary_body 
+        # print "[summar] " + summary_body
         if summary_body:
             sentences = summary_body.split("\n")
             ranked_sentences = []
@@ -425,10 +424,10 @@ def buildSummary(summary_body, sentence_num):
                 ranked_sentences.append([int(rank_sent[0]),rank_sent[1]])
 
             ranked_sentences = sorted(ranked_sentences)
-            print ranked_sentences
+            # print ranked_sentences
 
             for sent in ranked_sentences[0:sentence_num]:
-                print sent
+                # print sent
                 sum_str += sent[1] + " "
 
             return sum_str
