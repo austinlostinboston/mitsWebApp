@@ -48,6 +48,10 @@ def responseHandler(flow, test=False):
     eid = flow.eid
     tid = flow.tid
     entities = flow.entities
+    if flow.type:
+        type_name = flow.type.name.lower()
+    else:
+        type_name = None
     types = flow.types
 
 <<<<<<< HEAD
@@ -69,7 +73,10 @@ def responseHandler(flow, test=False):
     summary = flow.summary
 
     if summary:
-        print "[summary]" + str(summary)
+        summary_body = summary.body
+        print "[summary]" + summary_body
+    else:
+        summary_body = None
 
     ## Handle when entity is none or present
     if entity_object:
@@ -110,7 +117,6 @@ def responseHandler(flow, test=False):
     else:
         range_type = None
         rid = ''
-
 
     ## Change message used for tests
     if test:
@@ -204,58 +210,81 @@ def responseHandler(flow, test=False):
     response = soup.find('message',{'id':rsp_id}).text
 >>>>>>> ac51fe6... response gen working minimally
 
-    if "[" in response and "]" in response:
-        ## Types
-        if "[type]" in response:
-            response = response.replace("[type]", flow.type.name.lower())
-        if "[types]" in response:
-            if range_type == 'type':
-                response = response.replace("[types]", typeList(types))
-            if range_type == 'entity':
-                response = response.replace("[types]", pluralType(flow.type.name.lower()))
+    ## Create dictionary of any needed parts for the message
+    msgParts = {}
+    msgParts['type'] = type_name
+    if range_type == 'type':
+        msgParts['types'] = typeList(types)
+    if range_type == 'entity':
+        msgParts['types'] = pluralType(type_name)
+    msgParts['num_entities'] = str(num_entities)
+    msgParts['entity'] = str(entity_name)
+    msgParts['body'] = comment_body
+    msgParts['summary'] = buildSummary(summary_body, 3)
+    if num_entities > 5:
+        msgParts['list_entities'] = 5
+    else:
+        msgParts['list_entities'] = num_entities
 
-        ## Entities
-        if "[num_entities]" in response:
-            response = response.replace("[num_entities]", str(num_entities))
-        if "[entity]" in response:
-            response = response.replace("[entity]", str(entity_name))
+    msgParts['list_5'] = listify(entities, 5)
 
-        regex = re.compile(r'\[list\-(\d+)\]')
-        
-        if regex.search(response) is not None:
-            ent_list_length = regex.findall(response)[0]
+    ## Sentiment
+    placeSentiment(sent_stats, msgParts)
 
-            if len(entities) >= ent_list_length:
-                list_entities = len(entities)
-            else:
-                list_entities = ent_list_length
-
-            str_ent_list = ''
-            for entity in entities[:int(ent_list_length)]:
-                str_ent_list += entity.name + ", "
-                print str_ent_list
-            response = response.replace("[list-" + str(ent_list_length) + "]", str_ent_list)
-            response = response.replace("[list-entities]", str(list_entities))
-
-        ## Comments
-        if "[body]" in response:
-            response = response.replace("[body]", comment_body)
-
-        ## Sentiment
-        response = placeSentiment(response, sent_stats)
+    response = buildResponse(response, msgParts)
+    
 
     print "[RESPONSE] " + response.encode('utf8')
 
     return response
 
 
-def pluralType(type_ins):
-    type_name = type_ins.lower()
-    if type_name[-1] != "s":
-        type_name += "s"
-    if type_name == 'news':
-        type_name = 'news articles'
+def buildResponse(response, msgParts):
+    ## Extract only characters between [ and ]
+    regex = re.compile(r'\[(\w+)\]')
 
+    ## Only extract contents when the parse symbol is present
+    if regex.search(response) is not None:
+
+        ## Extract parts of response that need replaced
+        replacers = regex.findall(response)
+        print "[replacers]" + str(replacers)
+
+        for part in replacers:
+            print msgParts[str(part)]
+            print "[" + str(part) + "]"
+            response = response.replace("[" + str(part) + "]", str(msgParts[str(part)]))
+
+    return response
+
+
+def listify(str_list, length):
+    if str_list:
+        text_list = ''
+        first_n = str_list[0:length]
+        for i, item in enumerate(first_n):
+            if i < len(first_n) - 1:
+                text_list += item.name + ", "
+            else:
+                text_list += "and " + item.name
+
+        return text_list
+    else:
+        return str(None)
+
+def pluralType(type_ins):
+    if type_ins:
+        type_name = type_ins.lower()
+        if type_name[-1] != "s":
+            type_name += "s"
+        if type_name == 'news':
+            type_name = 'news articles'
+
+        return type_name
+    else:
+        return str(None)
+
+<<<<<<< HEAD
     return type_name
 <<<<<<< HEAD
 =======
@@ -315,6 +344,10 @@ def selectComment(cid, eid, tid, sentiment="="):
 >>>>>>> ac51fe6... response gen working minimally
 =======
 def placeSentiment(response, sentiment_stats):
+=======
+
+def placeSentiment(sentiment_stats, msgParts):
+>>>>>>> f55e7d7... refactored response generator. Stable with a few issues.
     if sentiment_stats:
         total = sentiment_stats.num_all
         pos = sentiment_stats.num_pos
@@ -333,13 +366,13 @@ def placeSentiment(response, sentiment_stats):
         else: 
             popular = "basically hated by everyone"
 
-        response = response.replace("[popularity]", popular)
-        response = response.replace("[percent]", str(int(percent*100)) + '%')
+        msgParts['popularity'] = popular
+        msgParts['percent'] = str(int(percent*100)) + '%'
 
-        return response
+        # response = response.replace("[popularity]", popular)
+        # response = response.replace("[percent]", str(int(percent*100)) + '%')
 
-    else:
-        return response
+        # return response
 
 <<<<<<< HEAD
 >>>>>>> 43d73d1... added to response generator
@@ -357,4 +390,28 @@ def typeList(types):
             type_list += ', '
 
     return type_list
+<<<<<<< HEAD
 >>>>>>> c7bfd37... added a type range response
+=======
+
+
+def buildSummary(summary_body, sentence_num):
+    if summary_body:
+        sentences = summary_body.split("\n")
+        ranked_sentences = []
+        sum_str = ''
+
+        for sentence in sentences:
+            rank_sent = sentence.split('#')
+            ranked_sentences.append(rank_sent)
+
+        ranked_sentences = sorted(ranked_sentences)
+        print ranked_sentences
+
+        for sent in ranked_sentences[0:sentence_num]:
+            sum_str += sent[1] + " "
+
+        return sum_str
+    else:
+        return str(None)
+>>>>>>> f55e7d7... refactored response generator. Stable with a few issues.
