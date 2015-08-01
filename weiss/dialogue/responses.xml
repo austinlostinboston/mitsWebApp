@@ -59,10 +59,14 @@
       <message id="02.07.test">EntitySelected: Entity [entity] selected.</message>
       <message id="02.07.01">Sure, I know about [entity]. What would you like to know?</message>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <message id="02.07.02">Yes, let'st talk about [entity]. </message>
 =======
       <message id="02.07.02">Yes, let's talk about about [entity]. </message>
 >>>>>>> e4c9770... fix typos
+=======
+      <message id="02.07.02">Yes, let's talk about [entity]. </message>
+>>>>>>> 3cb20ba... fix typos
       <message id="02.07.03">Why of course, the [entity] is great choice. Ask me about it.</message>
     </action>
 
@@ -195,7 +199,7 @@
     <action id="7" name="EntitySelected">
       <message id="04.07.test">RangeSelected: Entity selection. There were [num_entities] [types] found. The first few are [list_5].</message>
       <message id="04.07.01.t">There are [num_entities] [types] that might interest you. Please choose between [types].</message>
-      <message id="04.07.02.t">Since there are [num_entities] [types], please choose between between [types].</message>
+      <message id="04.07.02.t">Since there are [num_entities] [types], please choose between [types].</message>
       <message id="04.07.03.t">I've narrowed it down to [num_entities] [types], do you want to talk about [types]?</message>
       <message id="04.07.01.e">There are [num_entities] [types] that might interest you. [list_5]. Pick one.</message>
       <message id="04.07.02.e">Since there's more than one possible [types], please pick one from the list. [list_5].</message>
