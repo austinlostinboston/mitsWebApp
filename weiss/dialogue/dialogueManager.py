@@ -139,6 +139,7 @@ class DialogueManager(object):
 
         try:
             response = responseHandler(flow)
+            response = self.html_parser.unescape(response)
         except Exception as e:
             response = "Failed to generate response. Please check the log"
             logger.error("%s", e.message)
@@ -180,6 +181,4 @@ class DialogueManager(object):
             num_keep = len(lines) - num_greeting
             lines = lines[:num_keep]
 
-        for line in lines:
-            line.response = self.html_parser.unescape(line.response)
         return lines
