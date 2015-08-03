@@ -153,6 +153,11 @@ class DialogueManager(object):
 
         try:
             response = responseHandler(flow)
+            response = response.replace("\\\\","\\")
+            response = response.replace("\\","");
+            response = response.replace("\\r", "\r");
+            response = response.replace("\\n", "\n");
+            response = response.replace("\\t", "\t");
             response = self.html_parser.unescape(response)
         except Exception as e:
             response = "Failed to generate response. Please check the log"
