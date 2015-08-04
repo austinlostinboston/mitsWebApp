@@ -58,7 +58,7 @@
     <action id="7" name="EntitySelection">
       <message id="02.07.test">EntitySelected: Entity [entity] selected.</message>
       <message id="02.07.01">Sure, I know about [entity]. What would you like to know?</message>
-      <message id="02.07.02">Yes, let'st talk about about [entity]. </message>
+      <message id="02.07.02">Yes, let'st talk about [entity]. </message>
       <message id="02.07.03">Why of course, the [entity] is great choice. Ask me about it.</message>
     </action>
 
