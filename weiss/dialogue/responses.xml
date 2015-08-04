@@ -24,6 +24,13 @@
   </state>
 
   <state id="1" name="TypeSelected">
+    <action id="7" name="EntitySelection">
+      <message id="01.07.test">EntitySelected: Entity [entity] selected.</message>
+      <message id="01.07.01">Sure, I know about [entity]. What would you like to know?</message>
+      <message id="01.07.02">Yes, let's talk about [entity]. </message>
+      <message id="01.07.03">Why of course, the [entity] is great choice. Ask me about it.</message>
+    </action>
+
     <action id="8" name="TypeSelection">
       <message id="01.08.test">TypeSelected: Type [type] selected.</message>
       <message id="01.08.01">Sure, now describe or name a [type] you want to talk about?</message>
