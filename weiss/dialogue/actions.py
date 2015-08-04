@@ -1,4 +1,19 @@
 """
+Copyright 2015 Austin Ankney, Ming Fang, Wenjun Wang and Yao Zhou
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
 This module provides:
     a fixed number of actions that weiss supports
 
@@ -382,18 +397,6 @@ def sentimentStats(flow, decision):
         num_neu = Comment.objects.filter(query).count()
         num_all = Comment.objects.filter(eid=curr_eid).count()
         flow.sentiment_stats = num_pos, num_neu, num_all
-        """Handle by res gen
-        if percent > .9:
-            return "Almost everyone thought it was good."
-        elif percent > .65:
-            return "Most of the people thought it was good."
-        elif percent > .35:
-            return "It was an even split between positive and negative reviews."
-        elif percent > .1:
-            return "Most of the people thought it wasn't good."
-        else:
-            return "Almost everyone thought it was bad."
-        """
 
 
 def greeting(flow, decision):
