@@ -64,7 +64,10 @@ def responseHandler(flow, test=False):
     tid = flow.tid
     entities = flow.entities
     if flow.type:
-        type_name = flow.type.name.lower()
+        if flow.type.name.lower() == 'news':
+            type_name = 'news article'
+        else:
+            type_name = flow.type.name.lower()
     else:
         type_name = None
     types = flow.types
@@ -139,7 +142,7 @@ def responseHandler(flow, test=False):
     else:
 
         mid = str("%02d" % (random.randint(1,3)))
-        rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + "." + mid + rid
+        rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + "." + '01' + rid
 
     ## prints out current flow object
     print flow 
