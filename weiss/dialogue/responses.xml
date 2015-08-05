@@ -99,7 +99,7 @@
       <message id="02.21.03">Here's a random summary: "[summary]"</message>
 =======
       <message id="02.21.01">Someone said "[summary]"</message>
-      <message id="02.21.02">Another opinion says we'll start of with "[summary]"</message>
+      <message id="02.21.02">Another opinion says "[summary]"</message>
       <message id="02.21.03">This person says "[summary]"</message>
 >>>>>>> 189d49d... change some phrases
     </action>
