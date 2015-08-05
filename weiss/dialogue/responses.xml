@@ -93,9 +93,15 @@
 
     <action id="21" name="NextRandomSummary">
       <message id="02.21.test">EntitySelected: Chose random summary [summary].</message>
+<<<<<<< HEAD
       <message id="02.21.01">Since you can't make up your mind, I'll show you this. "[summary]"</message>
       <message id="02.21.02">How about this comment "[summary]"</message>
       <message id="02.21.03">Here's a random summary: "[summary]"</message>
+=======
+      <message id="02.21.01">Someone said "[summary]"</message>
+      <message id="02.21.02">Another opinion says we'll start of with "[summary]"</message>
+      <message id="02.21.03">This person says "[summary]"</message>
+>>>>>>> 189d49d... change some phrases
     </action>
 
     <action id="22" name="NextOppositeSummary">
@@ -166,6 +172,7 @@
     <action id="21" name="NextRandomSummary">
       <message id="03.21.test">EntitySelected: Chose random summary [summary].</message>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <message id="03.21.01">This person says "[summary]"</message>
       <message id="03.21.02">How about this comment "[summary]"</message>
       <message id="03.21.03">Here's a random summary: "[summary]"</message>
@@ -174,6 +181,11 @@
       <message id="03.21.02">I didn't get that, we'll start of with "[summary]"</message>
       <message id="03.21.03">My bad, we'll talk about this "[summary]"</message>
 >>>>>>> 25bd83b... refactor stop words
+=======
+      <message id="03.21.01">Another opinion said "[summary]"</message>
+      <message id="03.21.02">This person says "[summary]"</message>
+      <message id="03.21.03">Someone says "[summary]"</message>
+>>>>>>> 189d49d... change some phrases
     </action>
 
     <action id="22" name="NextOppositeSummary">
