@@ -65,15 +65,7 @@
     <action id="7" name="EntitySelection">
       <message id="02.07.test">EntitySelected: Entity [entity] selected.</message>
       <message id="02.07.01">Sure, I know about [entity]. What would you like to know?</message>
-<<<<<<< HEAD
-<<<<<<< HEAD
-      <message id="02.07.02">Yes, let'st talk about [entity]. </message>
-=======
-      <message id="02.07.02">Yes, let's talk about about [entity]. </message>
->>>>>>> e4c9770... fix typos
-=======
       <message id="02.07.02">Yes, let's talk about [entity]. </message>
->>>>>>> 3cb20ba... fix typos
       <message id="02.07.03">Why of course, the [entity] is great choice. Ask me about it.</message>
     </action>
 
@@ -93,15 +85,9 @@
 
     <action id="21" name="NextRandomSummary">
       <message id="02.21.test">EntitySelected: Chose random summary [summary].</message>
-<<<<<<< HEAD
-      <message id="02.21.01">Since you can't make up your mind, I'll show you this. "[summary]"</message>
-      <message id="02.21.02">How about this comment "[summary]"</message>
-      <message id="02.21.03">Here's a random summary: "[summary]"</message>
-=======
       <message id="02.21.01">Someone said "[summary]"</message>
       <message id="02.21.02">Another opinion says "[summary]"</message>
       <message id="02.21.03">This person says "[summary]"</message>
->>>>>>> 189d49d... change some phrases
     </action>
 
     <action id="22" name="NextOppositeSummary">
@@ -171,21 +157,9 @@
 
     <action id="21" name="NextRandomSummary">
       <message id="03.21.test">EntitySelected: Chose random summary [summary].</message>
-<<<<<<< HEAD
-<<<<<<< HEAD
-      <message id="03.21.01">This person says "[summary]"</message>
-      <message id="03.21.02">How about this comment "[summary]"</message>
-      <message id="03.21.03">Here's a random summary: "[summary]"</message>
-=======
-      <message id="03.21.01">Since I didn't understan that, I thought I would show you this "[summary]"</message>
-      <message id="03.21.02">I didn't get that, we'll start of with "[summary]"</message>
-      <message id="03.21.03">My bad, we'll talk about this "[summary]"</message>
->>>>>>> 25bd83b... refactor stop words
-=======
       <message id="03.21.01">Another opinion said "[summary]"</message>
       <message id="03.21.02">This person says "[summary]"</message>
       <message id="03.21.03">Someone says "[summary]"</message>
->>>>>>> 189d49d... change some phrases
     </action>
 
     <action id="22" name="NextOppositeSummary">

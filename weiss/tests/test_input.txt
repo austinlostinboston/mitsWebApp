@@ -21,26 +21,9 @@
 
 
 
-<<<<<<< HEAD
-# Start with System Initiative
-
-<<<<<<< HEAD
-1#Let's talk about movie#0#8
-2#I'm hungry for chinese food#0#7
-3#What's a bad review?#3#4
-4#Is this place any good?#2#3
->>>>>>> 1c69829... avoid test harness from stopping running if one case failed in the middle; add color print
-=======
-=======
 # Start with System Initiative, sid =  #0
-<<<<<<< HEAD
-restaurant#0#8
->>>>>>> 85c9b34... a little format for test_input.txt
-Let's talk about movie#0#8
-=======
 restaurant#0#8#2
 Let's talk about movie#0#8#3
->>>>>>> 69df819... add test for type id
 I'm hungry for chinese food#0#7
 news#0#8#1
 where can i get pizza?#0#7
@@ -72,9 +55,6 @@ What was something positive?#2#3
 Is this place any good?#2#6
 How do people think?#2#6
 Do people like it ?#2#6
-<<<<<<< HEAD
->>>>>>> b4fde78... add test cases
-=======
 Anything bad about it?#2#4
 Give me a positive comment.#2#3
 Say some bad words.#2#4
@@ -95,15 +75,7 @@ Can I talk about restaurant instead?#2#8#2
 What's a bad review?#3#4
 Any different ideas?#3#2
 Let's talk about something else#3#5
-<<<<<<< HEAD
-Let's talk about another movie#3#8
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 6e6df71... add test cases
-=======
-=======
 Let's talk about another movie#3#5
->>>>>>> 2b46763... update model and test cases
 Another comment#3#1
 any italian food recommendation#3#7
 what do people think#3#6
@@ -119,12 +91,3 @@ Is there any opposite idea ?#3#2
 Does anyone think it differently ?#3#2
 What do people of the other side say ?#3#2
 One more comment#3#1
-<<<<<<< HEAD
-One comment#2#1
->>>>>>> 4476f96... add test cases
-=======
-Let's talk about news articles#0#8
-Let's talk about greece#1#7
->>>>>>> 725d394... add more test cases
-=======
->>>>>>> 85c9b34... a little format for test_input.txt

@@ -18,41 +18,24 @@ import random
 import os
 import re
 
-# Import from weiss
-from weiss.models import Action, Types, Comment, Entity
+## Import from weiss
+from weiss.models import Action, Type, Types, State, Comment, Entity
 from django.db.models import Q
 from bs4 import BeautifulSoup
 
-<<<<<<< HEAD
-
-def responseHandler(flow):
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
 def responseHandler(flow, test=False):
->>>>>>> 63918f7... continuing adding to response generator
     ## Get directory
     cur_dir = os.path.dirname(__file__)
->>>>>>> ac51fe6... response gen working minimally
 
     ## read responses.xml to memory
     soup = BeautifulSoup(open(cur_dir + '/responses.xml'))
 
     ## Set response
-=======
-    # Set response
->>>>>>> 7991b98...  a lot syntax change
     response = 'Empty response: We are experiencing problems, sorry!'
 
-<<<<<<< HEAD
-    # Grab information from flow
-    userid = flow.user
-=======
     ## Grab information from flow
     user = flow.user  # a str, None for unregistered user
     user_id = flow.user_id  # a int
->>>>>>> adbee11... seperate user id and user name
     state = flow.state
     sid = state.sid.value
     action = flow.action
@@ -72,19 +55,7 @@ def responseHandler(flow, test=False):
         type_name = None
     types = flow.types
 
-<<<<<<< HEAD
     ## Text variables
-<<<<<<< HEAD
-    type = flow.type
-    entity_name = flow.entity
-    comment_body = flow.comment
-=======
-    # Handle the different actions
-    if action is Action.NextRandomComment:
-        comment_ob = selectComment(cid, eid, tid)
-        response = "One person said \" %s \"" % (comment_ob.body)
->>>>>>> 7991b98...  a lot syntax change
-=======
     entity_object = flow.entity
     comment_object = flow.comment
     sent_stats = flow.sentiment_stats
@@ -108,12 +79,7 @@ def responseHandler(flow, test=False):
     else:
         comment_body = None
     
-<<<<<<< HEAD
->>>>>>> 26ca79b... unset test option in response generator. added responses.
-
-=======
     ## Grabs num of entities
->>>>>>> c7bfd37... added a type range response
     if entities is None:
         num_entities = 0
     else:
@@ -147,92 +113,8 @@ def responseHandler(flow, test=False):
     ## prints out current flow object
     print flow 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    
-
-    # ## Handle the different actions
-    # if action is Action.NextRandomComment:
-    #     #comment_ob = selectComment(flow, cid, eid, tid)
-    #     response = "One person said \" %s \"" % (comment_ob.body)
-=======
-    elif action is Action.NextRandomEntity:
-        entity_ob = selectEntity(eid, tid)
-        response = "With such little information, I'll pick to talk about %s." % (entity_ob.name)
-
-    elif action is Action.SentimentStats:
-        response = "Stats will go here."
->>>>>>> 7991b98...  a lot syntax change
-
-
-    # if action is Action.NextPositiveComment:
-    #     #comment_ob = selectComment(flow, cid, eid, tid, sentiment='+')
-    #     response = "One person said \" %s \"" % (comment_ob.body)
-
-<<<<<<< HEAD
-
-    # if action is Action.NextNegativeComment:
-    #     #comment_ob = selectComment(flow, cid, eid, tid, sentiment='-')
-    #     response = "One person said \" %s \"" % (comment_ob.body)
-=======
-    elif action is Action.Greeting:
-        # Hnadled elsewhere
-        pass
-
-    elif action is Action.EntityConfirmation:
-        # Not implemented yet
-        pass
->>>>>>> 7991b98...  a lot syntax change
-
-
-    # if action is Action.NextRandomEntity:
-    #     #entity_ob = selectEntity(flow, eid, tid)
-    #     response = "With such little information, I guess we'll just talk about %s." % (entity_ob.name)
-
-
-    # if action is Action.SentimentStats and eid is not None:
-    #     response = "Stats about " + str(eid) + " will go here."
-    # else:
-    #     response = "You need to first tell what you would like to hear stats about."
-
-<<<<<<< HEAD
-
-    # if action is Action.EntitySelection and str(state) is 'RangeSelected':
-    #     response = "There are " + num_entities + " possible matching " + pluralType(type_name) + ". " \
-    #         "They are..." 
-    #     for entity in entities:
-    #         response += ", " + entity.name
-    # else:
-    #     #entity_ob = selectEntity(flow, eid, tid)
-    #     response = "Absolutely, let's talk about %s." % entity_name
-
-
-    # if action is Action.TypeSelection:
-    #     #type_ob = selectType(flow, tid)
-    #     response = "It sounds like you want to talk about %s." % type_name
-
-    # if action is Action.Greeting:
-    #     ## Handled elsewhere
-    #     pass
-
-    # if action is Action.EntityConfirmation:
-    #     ## Not implemented yet
-    #     pass
-
-    # if action is Action.UnknownAction:
-    #     response = "Sorry, could you not be a bimbo and ask a better question."
-=======
-    rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + ".01"
-=======
->>>>>>> 63918f7... continuing adding to response generator
     print "[Response ID]: " + str(rsp_id)
-<<<<<<< HEAD
-    response = soup.find('message',{'id':rsp_id}).text
->>>>>>> ac51fe6... response gen working minimally
-=======
     response = soup.find('message', {'id': rsp_id}).text
->>>>>>> e4cf556... minor syntac change
 
     ## Create dictionary of any needed parts for the message
     msgParts = {}
@@ -313,70 +195,8 @@ def pluralType(type_ins):
     else:
         return str(None)
 
-<<<<<<< HEAD
-    return type_name
-<<<<<<< HEAD
-=======
-def selectType(tid):
-    """
-    Returns a type object from database
-    """
-    return Types.objects.get(tid=tid)
-
-
-def selectEntity(eid, tid):
-    """
-    Returns random/specified entity object from database.
-    """
-    if eid is None:
-        if tid is None:
-            eids = Entity.objects.all().values_list('eid', flat=True)
-        else:
-            eids = Entity.objects.filter(tid=tid).values_list('eid', flat=True)
-        entity = random.sample(eids, 1)[0]
-    else:
-        entity = eid
-
-    return Entity.objects.get(eid=entity)
-
-
-def selectComment(cid, eid, tid, sentiment="="):
-    """
-    Returns a comment based on tid, eid, tid, and sentimnet (+/-/=)
-    """
-    q = Q(tid=tid)
-
-    if cid is None:
-        if eid is not None:
-            pass
-        else:
-            q = q & Q(eid=eid)
-        if sentiment == "=":
-            q = q & Q(sentiment=0)
-        elif sentiment == "+":
-            q = q & Q(sentiment__gt=0)
-        elif sentiment == "-":
-            q = q & Q(sentiment__lt=0)
-        else:
-            pass
-
-        cids = Comment.objects.filter(q).values_list('cid', flat=True)
-        comment = random.sample(cids, 1)[0]
-    else:
-        comment = cid
-
-    return Comment.objects.get(cid=comment)
->>>>>>> 7991b98...  a lot syntax change
-=======
-
-<<<<<<< HEAD
->>>>>>> ac51fe6... response gen working minimally
-=======
-def placeSentiment(response, sentiment_stats):
-=======
 
 def placeSentiment(sentiment_stats, msgParts):
->>>>>>> f55e7d7... refactored response generator. Stable with a few issues.
     if sentiment_stats:
         percent = float(sentiment_stats.num_pos) / sentiment_stats.num_all
         if percent > .9:
@@ -390,23 +210,14 @@ def placeSentiment(sentiment_stats, msgParts):
         else:
             popular = "basically hated by everyone"
 
-<<<<<<< HEAD
         msgParts['popularity'] = popular
         msgParts['percent'] = str(int(percent*100)) + '%'
-=======
-        response = response.replace("[popularity]", popular)
-        percent_str = "%.0f%%" % (percent * 100)
-        response = response.replace("[percent]", percent_str)
->>>>>>> fec3f15... refine sentiment logic for res gen
 
         # response = response.replace("[popularity]", popular)
         # response = response.replace("[percent]", str(int(percent*100)) + '%')
 
         # return response
 
-<<<<<<< HEAD
->>>>>>> 43d73d1... added to response generator
-=======
 
 def typeList(types):
     type_list = ''
@@ -420,9 +231,6 @@ def typeList(types):
             type_list += ', '
 
     return type_list
-<<<<<<< HEAD
->>>>>>> c7bfd37... added a type range response
-=======
 
 
 def buildSummary(summary_body, sentence_num):
@@ -452,9 +260,4 @@ def buildSummary(summary_body, sentence_num):
         else:
             return str(None)
     else:
-<<<<<<< HEAD
-        return str(None)
->>>>>>> f55e7d7... refactored response generator. Stable with a few issues.
-=======
         return summary_body
->>>>>>> 8982d58... fixed a few issues with response generator and added number lists

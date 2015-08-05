@@ -14,12 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 Flow
+
 Flow represents the context for a user. Each instance contains:
     1. information about the user
     2. state information
-<<<<<<< HEAD
-    3. misc
-=======
     3. current action
     4. current entity or entities
     5. current query
@@ -28,8 +26,8 @@ Flow represents the context for a user. Each instance contains:
     8. current comment
 
 
->>>>>>> 227bccf... format refines
 Author: Ming Fang
+
 """
 import logging
 import uuid
@@ -108,6 +106,7 @@ class Flow(object):
     @property
     def action(self):
         """Getter for current action
+
         It is of type models.Action enum
         """
         assert (isinstance(self._action, Action))
@@ -123,6 +122,7 @@ class Flow(object):
     @property
     def entities(self):
         """Getter for current range of entities
+
         elements are of type models.Entity
         """
         return self._entities
@@ -229,6 +229,7 @@ class Flow(object):
     @property
     def type(self):
         """Getter for current type
+
         of type models.Type
         """
         if self._type is not None:
@@ -450,19 +451,8 @@ class Flow(object):
         """
         logger.info("Keep %s, entities = %s" % (idx, self.entities))
         assert (idx < len(self.entities))
-<<<<<<< HEAD
-        self.entity = self.entities[idx]
-<<<<<<< HEAD
-        self.entities = [self.entity]
-=======
-        self.entities = [self.entity]
-<<<<<<< HEAD
->>>>>>> 2e0cee4... a lot syntax changes
-=======
-=======
         self.entities = [self.entities[idx]]
         self.entity = self.entities[0]
->>>>>>> 10b06d8... fix keep method
 
     def rank(self):
         """Rank the entities
@@ -494,9 +484,6 @@ class Flow(object):
                                aid=aid,
                                eid=self.entity,
                                time=timezone.now())
-<<<<<<< HEAD
->>>>>>> f6651f7... refactor action util
-=======
 
     def size(self):
         """Get the size of the entities
@@ -554,10 +541,7 @@ class Flow(object):
                                       self.type,
                                       self.entity)
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 903a145... fix inner class is not seriliazble problems
 class SentimentStats(object):
     def __init__(self, num_pos, num_neu, num_all):
         self._num_pos = num_pos
@@ -579,23 +563,9 @@ class SentimentStats(object):
     @property
     def num_all(self):
         return self._num_all
-<<<<<<< HEAD
-=======
 
     def __str__(self):
         return "Pos: %s, Neu: %s, Neg: %s, All: %s" % (self.num_pos,
                                                        self.num_neu,
                                                        self.num_neg,
                                                        self.num_all)
->>>>>>> 903a145... fix inner class is not seriliazble problems
-
-    def __str__(self):
-        return "Pos: %s, Neu: %s, Neg: %s, All: %s" % (self.num_pos,
-                                                       self.num_neu,
-                                                       self.num_neg,
-                                                       self.num_all)
-<<<<<<< HEAD
-
->>>>>>> 264440e... a lot of bug fixes, new request and response logic is working
-=======
->>>>>>> 0d650a1... refine keyword matching logic, now we can handle keyword matching pretty well
