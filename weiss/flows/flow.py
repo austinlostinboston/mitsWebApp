@@ -384,6 +384,14 @@ class Flow(object):
         else:
             base = Q()
 
+        # before the first, we try to match all keywords as a whole
+        q = base
+        keyword = " ".join(keywords)
+        q &= Q(name__icontains=keyword)
+        self.entities = Entity.objects.filter(q)
+        if self.transit_under_range():
+            return True
+
         # first, we try to match first 3 key words by title
         q = base
         for keyword in keywords:
@@ -406,6 +414,14 @@ class Flow(object):
             base = Q(tid=self.tid)
         else:
             base = Q()
+
+        # before the first, we try to match all keywords as a whole
+        q = base
+        keyword = " ".join(keywords)
+        q &= Q(name__icontains=keyword)
+        self.entities = Entity.objects.filter(q)
+        if self.transit_under_range():
+            return True
 
         # failed, we try to match first 3 key words by description
         q = base
