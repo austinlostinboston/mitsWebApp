@@ -142,7 +142,7 @@ def responseHandler(flow, test=False):
     else:
 
         mid = str("%02d" % (random.randint(1,3)))
-        rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + "." + '01' + rid
+        rsp_id = str("%02d" % (sid)) + "." + str("%02d" % (aid)) + "." + mid + rid
 
     ## prints out current flow object
     print flow 
