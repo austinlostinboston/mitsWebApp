@@ -165,9 +165,15 @@
 
     <action id="21" name="NextRandomSummary">
       <message id="03.21.test">EntitySelected: Chose random summary [summary].</message>
+<<<<<<< HEAD
       <message id="03.21.01">This person says "[summary]"</message>
       <message id="03.21.02">How about this comment "[summary]"</message>
       <message id="03.21.03">Here's a random summary: "[summary]"</message>
+=======
+      <message id="03.21.01">Since I didn't understan that, I thought I would show you this "[summary]"</message>
+      <message id="03.21.02">I didn't get that, we'll start of with "[summary]"</message>
+      <message id="03.21.03">My bad, we'll talk about this "[summary]"</message>
+>>>>>>> 25bd83b... refactor stop words
     </action>
 
     <action id="22" name="NextOppositeSummary">

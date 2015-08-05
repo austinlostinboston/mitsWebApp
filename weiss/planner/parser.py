@@ -47,15 +47,13 @@ class Parser(object):
             sentiment[word] = int(score)
         return sentiment
 
-
-    def calculate_sentiment(self,query):
-    	tokens = nltk.word_tokenize(query)
+    def calculate_sentiment(self, query):
+        tokens = nltk.word_tokenize(query)
         score = 0
         for token in tokens:
             if token in self._sentiment:
                 score += self._sentiment[token]
         return score
-
 
     def entity_recognition(self, query, arguments):
         """Parse query and extract keywords
@@ -71,18 +69,22 @@ class Parser(object):
 
         tuples = []
 
-        for i in tags:
-            if ((i[1][:2] == 'NN' or i[1][:2] == 'JJ')
-                and i[0] not in self._stopwords
-                and self._stemmer.stem(i[0]) not in self._type_words['movie']
-                and self._stemmer.stem(i[0]) not in self._type_words['article']
-                and self._stemmer.stem(i[0]) not in self._type_words['restaurant']):
-                tuples.append(i[0])
+        for tag in tags:
+            if tag[0] in self._stopwords:
+                continue
+            stemmed = self._stemmer.stem(tag[0])
+            if stemmed in self._type_words['movie']:
+                continue
+            if stemmed in self._type_words['article']:
+                continue
+            if stemmed in self._type_words['restaurant']:
+                continue
+            if tag[1][:2] == 'NN' or tag[1][:2] == 'JJ':
+                tuples.append(tag[0])
 
         if len(tuples) > 0:
             arguments['keywords'] = tuples
             logger.info("Here are the keywords: %s" % arguments['keywords'])
-
 
     def _set_type_words(self):
         """Initialize synonymy words of movie, article and restaurant
