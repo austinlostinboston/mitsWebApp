@@ -3,9 +3,9 @@
 <responses>
   <state id="0" name="SystemInitiative">
     <action id="7" name="EntitySelection">
-      <message id="00.07.01">Really? we've just started and you're already having problems.</message>
-      <message id="00.07.02">Really? we've just started and you're already having problems.</message>
-      <message id="00.07.03">Really? we've just started and you're already having problems.</message>
+      <message id="00.07.01">Really? we've just started and you're already having problems. Remember I only know about Pittsburgh restaurants, movies, and news articles.</message>
+      <message id="00.07.02">Really? we've just started and you're already having problems. Remember I only know about Pittsburgh restaurants, movies, and news articles.</message>
+      <message id="00.07.03">Really? we've just started and you're already having problems. Remember I only know about Pittsburgh restaurants, movies, and news articles.</message>
     </action>
 
     <action id="9" name="Greeting">
@@ -93,9 +93,9 @@
 
     <action id="21" name="NextRandomSummary">
       <message id="02.21.test">EntitySelected: Chose random summary [summary].</message>
-      <message id="02.21.01">Since I didn't understand that, I thought I would show you this "[summary]"</message>
-      <message id="02.21.02">I didn't get that, we'll start of with "[summary]"</message>
-      <message id="02.21.03">My bad, we'll talk about this "[summary]"</message>
+      <message id="02.21.01">Since you can't make up your mind, I'll show you this. "[summary]"</message>
+      <message id="02.21.02">How about this comment "[summary]"</message>
+      <message id="02.21.03">Here's a random summary: "[summary]"</message>
     </action>
 
     <action id="22" name="NextOppositeSummary">
@@ -123,9 +123,9 @@
   <state id="3" name="CommentSelected">
     <action id="1" name="NextRandomComment">
       <message id="03.01.test">CommentSelected: Next random comment</message>
-      <message id="03.01.01">Fine, since you can't make a decision we'll talk about [body].</message>
-      <message id="03.01.02">Fine, since you can't make a decision we'll talk about [body].</message>
-      <message id="03.01.03">Fine, since you can't make a decision we'll talk about [body].</message>
+      <message id="03.01.01">Since you can't make up your mind, I'll show you this. "[comment]"</message>
+      <message id="03.01.02">How about this comment "[comment]"</message>
+      <message id="03.01.03">Here's a random comment: "[comment]"</message>
     </action>
 
     <action id="2" name="NextOppositeComment">
@@ -165,9 +165,9 @@
 
     <action id="21" name="NextRandomSummary">
       <message id="03.21.test">EntitySelected: Chose random summary [summary].</message>
-      <message id="03.21.01">Since I didn't understand that, I thought I would show you this "[summary]"</message>
-      <message id="03.21.02">I didn't get that, we'll start of with "[summary]"</message>
-      <message id="03.21.03">My bad, we'll talk about this "[summary]"</message>
+      <message id="03.21.01">This person says "[summary]"</message>
+      <message id="03.21.02">How about this comment "[summary]"</message>
+      <message id="03.21.03">Here's a random summary: "[summary]"</message>
     </action>
 
     <action id="22" name="NextOppositeSummary">
@@ -206,10 +206,10 @@
     <action id="7" name="EntitySelected">
       <message id="04.07.test">RangeSelected: Entity selection. There were [num_entities] [types] found. The first few are [list_5].</message>
       <message id="04.07.01.t">There are [num_entities] [types] that might interest you. Please choose between [types].</message>
-      <message id="04.07.02.t">Since there are [num_entities] [types], please choose between [types].</message>
+      <message id="04.07.02.t">Since there are [num_entities] [type], please choose between [types].</message>
       <message id="04.07.03.t">I've narrowed it down to: [num_entities] [types], do you want to talk about [types]?</message>
       <message id="04.07.01.e">There are [num_entities] [types] that might interest you. The top matches are: [list_5]. Pick one.</message>
-      <message id="04.07.02.e">Since there's more than one possible [types], please pick one from the list. [list_5].</message>
+      <message id="04.07.02.e">Since there's more than one possible [type], please pick one from the list. [list_5].</message>
       <message id="04.07.03.e">I've narrowed it down to: [list_5], please pick one.</message>
     </action>
 
@@ -226,7 +226,7 @@
     <action id="11" name="EntityConfirmation">
       <message id="04.11.test">RangeSelected: Entity Confirmation [type]</message>
       <message id="04.11.01.e">There are [num_entities] [types] that might interest you. The top matches are: [list_5]. Pick one.</message>
-      <message id="04.11.02.e">Since there's more than one possible [types], please pick one from the list. [list_5].</message>
+      <message id="04.11.02.e">Since there's more than one possible [type], please pick one from the list. [list_5].</message>
       <message id="04.11.03.e">I've narrowed it down to: [list_5], please pick one.</message>
     </action>
   </state>
