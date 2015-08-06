@@ -15,6 +15,21 @@ To install dependencies, type `sudo pip install -r requirements.txt`
 > - **liblinear**
 > - **termcolor**
 
+
+## Development
+###  Environment Setup 
+
+We use `Intellij IDEA` for our development. Before creating project, please install all needed plug-in to enable `Intellij IDEA` to work with Git repositories and `Python` and have correctly configured your SSH keys in Github to enable passwordless access. Note that we also use `liblinear`, and its installation is slightly different, please refer to the `Installation` section for details.
+
+> 1.    Select File -> New -> Projects from Version Control -> Git.
+> 2.    When the next panel comes up, put in the path to the Github repository into the URI
+> field under Location:    `git@github.com:austinlostinboston/mitsWebApp.git`. Click
+> Clone.
+> 3.    In the next panel you can select which branches you wish to clone from the remote repository. You most likely only need to clone
+> `master`. Click Next.
+> 4.    Install requirment packages as needed.
+
+
 ## Installation 
 
 ### liblinear
@@ -70,15 +85,3 @@ The response format:
     `{ "response" : response }`
 
     
-## Development
-###  Environment Setup 
-
-We use `Intellij IDEA` for our development. Before creating project, please install all needed plug-in to enable `Intellij IDEA` to work with Git repositories and `Python` and have correctly configured your SSH keys in Github to enable passwordless access.
-
-> 1.    Select File -> New -> Projects from Version Control -> Git.
-> 2.    When the next panel comes up, put in the path to the Github repository into the URI
-> field under Location:    `git@github.com:austinlostinboston/mitsWebApp.git`. Click
-> Clone.
-> 3.    In the next panel you can select which branches you wish to clone from the remote repository. You most likely only need to clone
-> `master`. Click Next.
-> 4.    Install requirment packages as needed.
