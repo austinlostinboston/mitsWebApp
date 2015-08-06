@@ -14,6 +14,10 @@ To install dependencies, type `sudo pip install -r requirements.txt`
 > - **python-igraph**
 > - **liblinear**
 > - **termcolor**
+> - **enum34**
+> - **djangorestframework**
+> - **beautifulsoup4**
+> - **fuzzy**
 
 
 ## Development
