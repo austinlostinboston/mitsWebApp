@@ -70,7 +70,7 @@ The response format:
     `{ "response" : response }`
 
     
-
+## Development
 ###  Environment Setup 
 
 We use `Intellij IDEA` for our development. Before creating project, please install all needed plug-in to enable `Intellij IDEA` to work with Git repositories and `Python` and have correctly configured your SSH keys in Github to enable passwordless access.
