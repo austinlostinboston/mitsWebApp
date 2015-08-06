@@ -55,9 +55,6 @@ url: `/api/init`
     
 Request requirement:
     method `GET`
-
-The response format:
-    `{ "fid" : fid }`
     
 ### Send a query
     
@@ -67,17 +64,21 @@ Request requirement
     method `POST`
     
 The request format:
-    `{ "fid" : fid, "query" : query }`
+    `{ "query" : query }`
     
 The response format:
     `{ "response" : response }`
 
-### End a dialogue
     
-url: `/api/close`
-    
-Request requirement
-    method `POST`
-    
-The request format:
-    `{ "fid" : fid }`
+
+###  Environment Setup 
+
+We use `Intellij IDEA` for our development. Before creating project, please install all needed plug-in to enable `Intellij IDEA` to work with Git repositories and `Python` and have correctly configured your SSH keys in Github to enable passwordless access.
+
+> 1.    Select File -> New -> Projects from Version Control -> Git.
+> 2.    When the next panel comes up, put in the path to the Github repository into the URI
+> field under Location:    `git@github.com:austinlostinboston/mitsWebApp.git`. Click
+> Clone.
+> 3.    In the next panel you can select which branches you wish to clone from the remote repository. You most likely only need to clone
+> `master`. Click Next.
+> 4.    Install requirment packages as needed.
